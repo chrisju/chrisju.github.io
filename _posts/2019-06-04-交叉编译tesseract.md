@@ -57,7 +57,7 @@ make clean && make && make install
 ```
 export PKG_CONFIG_PATH=/home/zww/t/cross/zlib/lib/pkgconfig:/home/zww/t/cross/png/lib/pkgconfig:/home/zww/t/cross/jpeg/lib/pkgconfig:/home/zww/t/cross/leptonica/lib/pkgconfig
 export LDFLAGS="-L/home/zww/t/cross/zlib/lib -L/home/zww/t/cross/png/lib -L/home/zww/t/cross/jpeg/lib/ -L/home/zww/t/cross/leptonica/lib "
-./configure --host=mips64el-linux CC=mips64el-linux-gcc CXX=mips64el-linux-g++ --prefix="/home/zww/t/cross/tesseract"
+./configure  LIBS="-ljpeg -lz -lpng" --host=mips64el-linux CC=mips64el-linux-gcc CXX=mips64el-linux-g++    --prefix="/home/zww/t/cross/tesseract"
 make clean && make && make install
 ```
 

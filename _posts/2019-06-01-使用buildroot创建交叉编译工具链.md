@@ -2,7 +2,7 @@
 layout:     post
 title:      使用buildroot创建交叉编译工具链
 subtitle:   
-date:       2019-06-04
+date:       2019-06-01
 author:     zz
 header-img: img/post-bg-younai.jpg
 catalog: true
