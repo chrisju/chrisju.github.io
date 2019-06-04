@@ -61,3 +61,6 @@ export LDFLAGS="-L/home/zww/t/cross/zlib/lib -L/home/zww/t/cross/png/lib -L/home
 make clean && make && make install
 ```
 
+## 备注
+使用configure配置时--host参数若不带操作系统类型（如使用--host=mips64el），则不会编译出动态库。
+
