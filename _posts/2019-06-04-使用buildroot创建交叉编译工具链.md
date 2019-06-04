@@ -19,23 +19,18 @@ tags:
 
 ## 配置
 buildroot配置起来和配置内核的界面及方法一样。  
-buildroot预置了很多平台的配置文件（在configs/文件夹下），可以在预置配置上修改，也可以直接修改。
+buildroot预置了很多平台的配置文件（configs/下），可以在预置配置上修改，也可以直接修改。
 
 #### 使用预置配置文件
-```
-make <预置配置文件名>
-例如 make qemu_mips64r6el_malta_defconfig
-```
+`make <预置配置文件名>`  
+例如 `make qemu_mips64r6el_malta_defconfig`
 
 #### 调整配置
-```
-make menuconfig
-首先检查Target options正确不正确，然后检查Toolchain，这里可以选择支持c++，支持openMP，支持wchar等等。
-```
+`make menuconfig`
+首先检查`Target options`正确不正确，然后检查`Toolchain`。`Toolchain`里可以选择支持c++，支持openMP，支持wchar等等。
 
 ## 编译
-编译前可能需要安装一些支持： `sudo apt install kernel-package linux-kernel-generic kernel-common`
-
+编译前可能需要安装一些支持： `sudo apt install kernel-package linux-kernel-generic kernel-common`  
 在我的电脑上必须 `export LANG=C` 才能编译通过
 
 ## 使用
