@@ -11,8 +11,9 @@ tags:
     - 交叉编译
 ---
 
-> 在linuxmint19上交叉编译mips64的libtesseract.so及liblept.so
-> 类似 <https://www.wandouip.com/t5i227081/> ，不过在我电脑上完善了一下。tesseract的版本为3.05.02
+> 在linuxmint19上交叉编译mips64的libtesseract.so及liblept.so  
+> 类似 <https://www.wandouip.com/t5i227081/> ，不过在我电脑上完善了一下
+> tesseract的版本为3.05.02
 
 ## 准备
 * 下载zlib <http://www.zlib.net/> 版本1.2.11
@@ -26,6 +27,37 @@ tags:
 ```
 export CC=mips64el-linux-gcc
 ./configure --shared  --prefix="/home/zww/t/cross/zlib
-make && make install
+make clean && make && make install
+```
+
+## 编译jpeg
+```
+./configure --host=mips64el-linux CC=mips64el-linux-gcc  --enable-shared --enable-static --prefix="/home/zww/t/cross/jpeg"
+make clean && make && make install
+```
+
+## 编译libpng
+```
+./configure CC=mips64el-linux-gcc CFLAGS="-I/home/zww/t/cross/zlib/include" LDFLAGS="-L/home/zww/t/cross/zlib/lib" --build=mips64el-linux  --host=mips64el --prefix=/home/zww/t/cross/png
+make clean && make && make install
+```
+
+## 编译leptonica
+```
+export PKG_CONFIG_PATH=/home/zww/t/cross/zlib/lib/pkgconfig:/home/zww/t/cross/png/lib/pkgconfig:/home/zww/t/cross/jpeg/lib/pkgconfig:$PKG_CONFIG_PATH
+export ZLIB_CFLAGS="-I/home/zww/t/cross/zlib/include"
+export JPEG_CFLAGS="-I/home/zww/t/cross/jpeg/include"
+export LIBPNG_CFLAGS="-I/home/zww/t/cross/png/include"
+export LDFLAGS="-L/home/zww/t/cross/zlib/lib -L/home/zww/t/cross/png/lib -L/home/zww/t/cross/jpeg/lib/ "
+./configure LIBS="-ljpeg -lz -lpng" --host=mips64el-linux CC=mips64el-linux-gcc CXX=mips64el-linux-g++    --prefix="/home/zww/t/cross/leptonica"
+make clean && make && make install
+```
+
+## 编译tesseract
+```
+export PKG_CONFIG_PATH=/home/zww/t/cross/zlib/lib/pkgconfig:/home/zww/t/cross/png/lib/pkgconfig:/home/zww/t/cross/jpeg/lib/pkgconfig:/home/zww/t/cross/leptonica/lib/pkgconfig
+export LDFLAGS="-L/home/zww/t/cross/zlib/lib -L/home/zww/t/cross/png/lib -L/home/zww/t/cross/jpeg/lib/ -L/home/zww/t/cross/leptonica/lib "
+./configure --host=mips64el-linux CC=mips64el-linux-gcc CXX=mips64el-linux-g++ --prefix="/home/zww/t/cross/tesseract"
+make clean && make && make install
 ```
 
