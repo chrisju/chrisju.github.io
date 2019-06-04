@@ -18,8 +18,7 @@ tags:
 在 <https://buildroot.org/download> 下载任意一个压缩包并解压
 
 ## 配置
-buildroot配置起来和配置内核的界面及方法一样。
-
+buildroot配置起来和配置内核的界面及方法一样。  
 buildroot预置了很多平台的配置文件（在configs/文件夹下），可以在预置配置上修改，也可以直接修改。
 
 #### 使用预置配置文件
