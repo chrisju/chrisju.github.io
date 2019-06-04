@@ -4,7 +4,7 @@ title:      使用buildroot创建交叉编译工具链
 subtitle:   
 date:       2019-06-04
 author:     zz
-header-img: img/post-bg-cook.jpg
+header-img: img/post-bg-younai.jpg
 catalog: true
 tags:
     - linux
@@ -15,15 +15,30 @@ tags:
 > 使用buildroot创建所需的交叉编译工具链（toolchain）
 
 ## 下载
-在 https://buildroot.org/download 下载任意一个压缩包并解压
- Xcode 控制台中在输出 NSArray、NSSet、NSDictionary 时，其中的中文字符会变成Unicode编码 如`"\U67cf\U8367"`.
- 
-我们通过分类重写这些类的输出方法即可实现在控制台输出中文：
- 
-	 - (NSString *)descriptionWithLocale:(id)locale indent:(NSUInteger)level
+在 <https://buildroot.org/download> 下载任意一个压缩包并解压
 
 ## 配置
+buildroot配置起来和配置内核的界面及方法一样。
+
+buildroot预置了很多平台的配置文件（在configs/文件夹下），可以在预置配置上修改，也可以直接修改。
+
+#### 使用预置配置文件
+```
+make <预置配置文件名>
+例如 make qemu_mips64r6el_malta_defconfig
+```
+
+#### 调整配置
+```
+make menuconfig
+首先检查Target options正确不正确，然后检查Toolchain，这里可以选择支持c++，支持openMP，支持wchar等等。
+```
+
 ## 编译
+编译前可能需要安装一些支持： `sudo apt install kernel-package linux-kernel-generic kernel-common`
+
+在我的电脑上必须 `export LANG=C` 才能编译通过
+
 ## 使用
 先看看效果：
 
