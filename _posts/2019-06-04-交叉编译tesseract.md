@@ -38,9 +38,10 @@ make clean && make && make install
 
 ## 编译libpng
 ```
-./configure CC=mips64el-linux-gcc CFLAGS="-I/home/zww/t/cross/zlib/include" LDFLAGS="-L/home/zww/t/cross/zlib/lib" --build=mips64el-linux  --host=mips64el --prefix=/home/zww/t/cross/png
+./configure CC=mips64el-linux-gcc CPPFLAGS="-I/home/zww/t/cross/zlib/include" LDFLAGS="-L/home/zww/t/cross/zlib/lib" --host=mips64el --prefix=/home/zww/t/cross/png
 make clean && make && make install
 ```
+备注：--host若设为mips64el-linux则configure会失败，不知道什么问题
 
 ## 编译leptonica
 ```
