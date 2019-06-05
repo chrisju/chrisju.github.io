@@ -9,6 +9,7 @@ catalog: true
 tags:
     - linux
     - 交叉编译
+    - 编程
 ---
 
 > 在linuxmint19上交叉编译mips64的libtesseract.so及liblept.so  

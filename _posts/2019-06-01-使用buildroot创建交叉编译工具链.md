@@ -10,6 +10,7 @@ tags:
     - linux
     - buildroot
     - 交叉编译
+    - 编程
 ---
 
 > 使用buildroot创建所需的交叉编译工具链（toolchain）
