@@ -41,4 +41,5 @@ buildroot预置了很多平台的配置文件（configs/下），可以在预置
 例： `./configure --host=mips64el-linux CC=mips64el-linux-gcc  --enable-shared --enable-static --prefix="/home/zww/t/cross/jpeg"`
 
 ## 备注
-使用configure配置时--host参数若不带操作系统类型（如使用--host=mips64el），则不会编译出动态库。
+* 使用configure配置时--host参数若不带操作系统类型（如使用--host=mips64el），则不会编译出动态库。  
+* 使用file命令可以查看编译出来的二进制文件的架构信息  
