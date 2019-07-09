@@ -12,7 +12,7 @@ tags:
     - 编程
 ---
 
-> 在linuxmint19上使用龙芯编译器交叉编译mips64rw的libtesseract.so及liblept.so  
+> 在linuxmint19上使用龙芯编译器交叉编译mips64el的libtesseract.so及liblept.so  
 > 参考 <https://www.wandouip.com/t5i227081/> 
 > tesseract的版本为3.05.01
 
