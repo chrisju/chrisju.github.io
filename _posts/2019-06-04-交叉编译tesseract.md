@@ -24,6 +24,15 @@ tags:
 * 下载tesseract <https://github.com/tesseract-ocr/tesseract/archive/3.05.02.tar.gz> 版本3.05.01
 * 创建一个文件夹存放编译结果: `mkdir /home/zww/t/cross`
 
+## 配置环境变量
+```
+export PATH=/home/zww/Downloads/mips/mips-loongson-linux-gnu/2019.01-15/bin:$PATH
+export CC=mips-linux-gnu-gcc
+export CXX=mips-linux-gnu-g++
+export CFLAGS="-mips64r2 -mabi=64"
+export CPPFLAGS="-mips64r2 -mabi=64"
+```
+
 ## 编译zlib
 ```
 export CC=mips-linux-gnu-gcc
@@ -33,7 +42,7 @@ make clean && make && make install
 
 ## 编译jpeg
 ```
-./configure  LIBS="-lz" --host=mips64el-linux-gnu CC=mips-linux-gnu-gcc  --enable-shared --prefix="/home/zww/t/cross/jpeg"
+./configure  LDFLAGS="-L/home/zww/t/cross/zlib/lib"  LIBS="-lz" --host=mips64el-linux-gnu CC=mips-linux-gnu-gcc  --enable-shared --prefix="/home/zww/t/cross/jpeg"
 make clean && make && make install
 ```
 
