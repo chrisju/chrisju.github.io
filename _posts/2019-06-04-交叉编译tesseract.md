@@ -65,6 +65,8 @@ make clean && make && make install
 
 ## 编译tesseract
 ```
+sudo apt install autoconf automake libtool pkg-config
+./autogen.sh
 export PKG_CONFIG_PATH=/home/zww/t/cross/zlib/lib/pkgconfig:/home/zww/t/cross/png/lib/pkgconfig:/home/zww/t/cross/jpeg/lib/pkgconfig:/home/zww/t/cross/leptonica/lib/pkgconfig
 # LDFLAGS需明确指定-mips64r2 -mabi=64，否则会编译32位的。。
 export LDFLAGS="-L/home/zww/t/cross/zlib/lib -L/home/zww/t/cross/png/lib -L/home/zww/t/cross/jpeg/lib/ -L/home/zww/t/cross/leptonica/lib  -mips64r2 -mabi=64"
@@ -73,6 +75,13 @@ export LDFLAGS="-L/home/zww/t/cross/zlib/lib -L/home/zww/t/cross/png/lib -L/home
 # 编辑libtool，将其中的so及lib路径全部换为64位对应路径，相关变量：
 # compiler_lib_search_dirs  predep_objects  postdep_objects  compiler_lib_search_path
 make clean && make && make install
+```
+libtool:  
+```
+compiler_lib_search_dirs="/home/zww/Downloads/mips/mips-loongson-linux-gnu/2019.01-15/bin/../lib/gcc/mips-linux-gnu/7.3.1/64 /home/zww/Downloads/mips/mips-loongson-linux-gnu/2019.01-15/bin/../lib/gcc /home/zww/Downloads/mips/mips-loongson-linux-gnu/2019.01-15/bin/../lib/gcc/mips-linux-gnu/7.3.1/../../../../mips-linux-gnu/lib64 /home/zww/Downloads/mips/mips-loongson-linux-gnu/2019.01-15/bin/../mips-linux-gnu/libc//lib64 /home/zww/Downloads/mips/mips-loongson-linux-gnu/2019.01-15/bin/../mips-linux-gnu/libc//usr/lib64"
+predep_objects="/home/zww/Downloads/mips/mips-loongson-linux-gnu/2019.01-15/bin/../mips-linux-gnu/libc//usr/lib64/crti.o /home/zww/Downloads/mips/mips-loongson-linux-gnu/2019.01-15/bin/../lib/gcc/mips-linux-gnu/7.3.1//64/crtbeginS.o"
+postdep_objects="/home/zww/Downloads/mips/mips-loongson-linux-gnu/2019.01-15/bin/../lib/gcc/mips-linux-gnu/7.3.1/64/crtendS.o /home/zww/Downloads/mips/mips-loongson-linux-gnu/2019.01-15/bin/../mips-linux-gnu/libc//usr/lib64/crtn.o"
+compiler_lib_search_path="-L/home/zww/Downloads/mips/mips-loongson-linux-gnu/2019.01-15/bin/../lib/gcc/mips-linux-gnu/7.3.1/64 -L/home/zww/Downloads/mips/mips-loongson-linux-gnu/2019.01-15/bin/../lib/gcc -L/home/zww/Downloads/mips/mips-loongson-linux-gnu/2019.01-15/bin/../lib/gcc/mips-linux-gnu/7.3.1/../../../../mips-linux-gnu/lib64 -L/home/zww/Downloads/mips/mips-loongson-linux-gnu/2019.01-15/bin/../mips-linux-gnu/libc//lib64 -L/home/zww/Downloads/mips/mips-loongson-linux-gnu/2019.01-15/bin/../mips-linux-gnu/libc//usr/lib64"
 ```
 
 
