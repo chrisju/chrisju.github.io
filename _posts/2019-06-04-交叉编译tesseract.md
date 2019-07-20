@@ -21,7 +21,7 @@ tags:
 * 下载jpeg <http://www.ijg.org/> 版本v9
 * 下载libpng <https://github.com/glennrp/libpng/archive/v1.2.58.tar.gz> 版本1.2.58
 * 下载leptonica <http://www.leptonica.org/> 版本1.76.0
-* 下载tesseract <https://github.com/tesseract-ocr/tesseract/archive/3.05.02.tar.gz> 版本3.05.01
+* 下载tesseract <https://github.com/tesseract-ocr/tesseract/archive/3.05.02.tar.gz> 版本3.05.02
 * 创建一个文件夹存放编译结果: `mkdir /home/zww/t/cross`
 
 ## 配置环境变量
