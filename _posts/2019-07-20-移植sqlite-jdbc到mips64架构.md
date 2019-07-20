@@ -22,6 +22,7 @@ tags:
 1. 需要有交叉编译环境
 2. 修改Makefile.common，添加mips64支持，并将target强行设定为Linux-mips64el
 3. `mvn clean && mvn compile`，最后失败没事，只要so编译出来就行  
+
 ```
 --- a/Makefile.common
 +++ b/Makefile.common
