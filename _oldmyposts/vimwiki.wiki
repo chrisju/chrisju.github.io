@@ -1,0 +1,58 @@
+== vimwiki ==
+*2013-08-19 17:55:14*
+_linux_
+`vim`
+`vimwiki`
+----
+%toc
+* `:h vimwiki` 查看vimwiki帮助
+* `:VimwikiAll2HTML` 编译文件夹下所有wiki文件 
+* `:VimwikiTable 3 12` 创建3列12行(含标题行)的表
+=== 常用语法 ===
+* `%nohtml` 加入这个标记不会生成html
+* `----` 4个'-'会产生分割线
+* `%%` 开头的为注释,不会生成html代码
+==== 字体 ====
+{{{
+  *bold text*
+  _italic text_
+  ~~strikeout text~~
+  `code (no syntax) text`
+  super^script^
+  sub,,script,,
+}}}
+====== 示例 ======
+  *bold text*
+  _italic text_
+  ~~strikeout text~~
+  `code (no syntax) text`
+  super^script^
+  sub,,script,,
+==== 链接 ====
+* `[[static_blog]]` 内部链接 预览:[[static_blog]]
+* `[http://reverland.bitbucket.org/wiki.html 一个vimwiki用户]` 外部链接 预览:[http://reverland.bitbucket.org/wiki.html 一个vimwiki用户]
+* 图片基本等同于普通链接
+==== 列表 ====
+`*`和`#`可产生列表
+{{{
+1:
+* 师父领进门
+* 修行靠个人
+* 我一看形势：转行搞IT了
+2:
+# 师父领进门
+# 修行靠个人
+# 我一看形势：转行搞IT了
+}}}
+====== 示例1 ======
+* 师父领进门
+* 修行靠个人
+* 我一看形势：转行搞IT了
+====== 示例2 ======
+# 师父领进门
+# 修行靠个人
+# 我一看形势：转行搞IT了
+==== 编辑时的按键 ====
+# 在词条上敲回车键，可以编辑这个词条
+# 使用 Tab 键，可以跳到下一个维基词条或链接，使用 Shift-Tab 跳到上一个
+# 在标题上点击 - 和 =，可以提升和降低标题层级

@@ -1,0 +1,51 @@
+== python代码 ==
+*2011-04-29 19:51:49*
+_编程_
+`python`
+----
+%toc
+==== 调用c函数时`char***`的处理 ====
+  {{{class="brush: py"
+    outtab = pointer(c_char_p())
+    len = c_int()
+    test2('sb2',pointer(outtab),byref(len))
+    for i in range(len.value):
+        print outtab[i]
+  }}}
+==== 将字典按键排序输出 ====
+# 按键反序:
+  {{{class="brush: py"
+  #pids is a dict
+  for k,v in sorted(pids.items(),reverse=True):
+     print(k,v)
+  }}}
+==== 一个按加入顺序排序的dict ====
+  {{{class="brush: py"
+class OrderedDict(dict):
+    '''
+    >>> d = dict()
+    >>> d['a']=1
+    >>> d['b']=2
+    >>> d['c']=3
+    >>> d.items()
+    [('a', 1), ('c', 3), ('b', 2)]
+    >>> d = OrderedDict()
+    >>> d['a'] = 1
+    >>> d['b'] = 2
+    >>> d['c'] = 3
+    >>> list(d.items())
+    [('a', 1), ('b', 2), ('c', 3)]
+    '''
+    def __init__(self, *args, **kw):
+        super(OrderedDict, self).__init__(*args, **kw)
+        self.ordered_keys = [] #self.keys()
+
+    def __setitem__(self, key, value):
+        if not key in self:
+            self.ordered_keys.append(key)
+        super(OrderedDict, self).__setitem__(key, value)
+
+    def items(self):
+        for key in self.ordered_keys:
+            yield key, self[key]
+  }}}

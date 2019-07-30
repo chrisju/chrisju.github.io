@@ -1,0 +1,17 @@
+== python虚拟运行环境 ==
+*2013-10-22 15:06:54*
+_编程_
+`python`
+`venv`
+----
+{{{class="brush: bash"
+$ sudo easy_install virtualenv
+$ virtualenv -p python3.3 ./venv3.3 #在./venv3.3/下创建python3.3的虚拟环境
+$ . venv3.3/bin/activate #激活虚拟环境(同 `source venv3.3/bin/activate`)
+...
+$ deactivate #离开虚拟环境
+}}}
+* 使用虚拟环境可以在python2的系统中运行python3的脚本
+* 可以在独立环境中运行easy_install和pip
+* ~/.bashrc用 `alias venvpy3.3='. ~/venv3.3/bin/activate'`
+* 可参考 `virtualenv --help`

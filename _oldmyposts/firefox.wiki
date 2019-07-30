@@ -1,0 +1,13 @@
+== firefox ==
+*2013-10-12 18:13:11*
+_linux_
+`firefox`
+----
+%toc
+=== telnet到firefox ===
+# [https://github.com/bard/mozrepl/wiki mozrepl] (*推荐*)
+  * 可以有[https://developer.mozilla.org/en-US/docs/Chrome chrome权限](需在about:config打开`devtools.chrome.enabled`开关)
+# [https://addons.mozilla.org/zh-CN/firefox/addon/remote-control/ Remote Control]
+==== 使用示例 ====
+# `echo 'window.location="http://163.com"' | nc localhost 32000`
+# `echo 'window.location="file:///mnt/DATA/vimwiki/blog/index.html"' | nc localhost 4242` (仅限mozrepl)

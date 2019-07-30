@@ -1,0 +1,51 @@
+== LAMP ==
+*2011-09-29 17:48:15*
+_linux_
+`lamp`
+`apache`
+----
+%toc
+* 目录浏览 (访问文件夹) <br />
+  在目录内建立`.htaccess`文件,内容为`Options FollowSymLinks Indexes`
+  
+* 开启调试
+  {{{class="brush: bash"
+  在/etc/apache2/httpd.conf中加入:
+  php_flag  display_errors        on
+  php_value error_reporting       2039
+  }}}
+  
+* 配置https
+  {{{class="brush: bash"
+HTTPS为HTTP下加了SSL安全层。将apache2添加支持SSL即可。
+
+    1) 创建目录, 放置认证文件
+            $ sudo mkdir /etc/apache2/ssl
+
+    2) 生成认证文件apache.pem
+            $ sudo openssl req -new -x509 -days 365 -nodes -out /etc/apache2/ssl/apache.pem -keyout /etc/apache2/ssl/apache.pem
+
+    3) Enable Apache mod_ssl
+            $ sudo a2enmod ssl
+
+    4) 配置使监听443端口SSL连接
+            $ sudo vi /etc/apache2/sites-available/default
+
+        将原有内容，监听80端口的配置复制一份在下面，改端口为443，并添加所示两行。
+        <VirtualHost *:80>
+        ...
+        ...
+        </VirtualHost>
+        修改后如下:
+        <VirtualHost *:80>
+        ...
+        ...
+        </VirtualHost>
+        <VirtualHost *:443>
+        ...
+        ...
+        SSLEngine on
+        SSLCertificateFile /etc/apache2/ssl/apache.pem
+        </VirtuaHost>
+    5) 重启 apache2 即可。
+  }}}

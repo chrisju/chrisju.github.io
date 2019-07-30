@@ -1,0 +1,106 @@
+== 定时备份.git文件夹 ==
+*2012-10-29 18:46:34*
+_编程_
+`git`
+----
+%toc
+=== crontab ===
+`8 20 * * * /mnt/DATA/proj/py/backuper/backuper.py`
+
+=== backuper.py ===
+{{{class="brush: py"
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+'''
+作用: 备份.git文件夹
+usage: ./backuper.py 推荐加入crontab
+CONFIG_FILE示例:
+BACKUPDIR = '/mnt/DATA/proj/BACKUP/'
+TASK_FILE可用`ls |sed "s:^:`pwd`/:"`产生,每行一个项目文件夹:
+/mnt/DATA/proj/eclipse/ani
+/mnt/DATA/proj/eclipse/animalchess
+'''
+
+import sys
+import os
+import time
+
+CONFIG_FILE = '/mnt/DATA/proj/py/backuper/config.cfg'
+TASK_FILE = '/mnt/DATA/proj/py/backuper/projs.txt'
+
+BACKUPDIR = ''
+BACKUPNAME = ''
+TEMPNAME = ''
+
+def getdir(o_dir):
+
+    d_dir = os.path.join(o_dir, '.git')
+    print d_dir
+    if os.path.exists(d_dir):
+        return d_dir
+
+def getnames(o_dir):
+
+    global BACKUPNAME, TEMPNAME
+    name = os.path.split(o_dir)[1]
+    BACKUPNAME = os.path.join(BACKUPDIR, name + '.git' + '.tar.gz')
+    TEMPNAME = BACKUPNAME + str(time.time())
+
+
+def doConfig():
+
+    if os.path.exists(CONFIG_FILE):
+        dic = {}
+        exec(open(CONFIG_FILE).read()) in dic
+        global BACKUPDIR
+        BACKUPDIR = dic['BACKUPDIR']
+
+    #if len(BACKUPDIR) == 0:
+    #    print 'BAD ' + CONFIG_FILE
+
+def backupdir(d):
+
+    para = os.path.split(d)
+    cmd = 'tar -czf %s -C %s %s' % (TEMPNAME, para[0], para[1])
+    print cmd
+    if os.system(cmd) == 0:
+        if os.path.exists(BACKUPNAME):
+            os.remove(BACKUPNAME)
+        os.rename(TEMPNAME, BACKUPNAME)
+    if os.path.exists(TEMPNAME):
+        os.remove(TEMPNAME)
+
+def doLine(taskdir):
+
+    if os.path.exists(taskdir):
+        getnames(taskdir)
+        d = getdir(taskdir)
+        if d:
+            backupdir(d)
+
+def work():
+
+    if os.path.exists(TASK_FILE):
+        for line in open(TASK_FILE).xreadlines():
+            line = line[:len(line)-len(os.linesep)]
+            doLine(line)
+
+
+if __name__ == '__main__':
+
+    doConfig()
+    print BACKUPDIR
+    work()
+}}}
+=== config.cfg ===
+{{{class="brush: py"
+BACKUPDIR = '/mnt/DATA/proj/BACKUP/'
+}}}
+=== projs.txt ===
+{{{class="brush: py"
+/mnt/DATA/proj/eclipse/ImageViewer
+/mnt/DATA/proj/eclipse/luandroid
+/mnt/DATA/proj/eclipse/luandroid_basic.7z
+/mnt/DATA/proj/eclipse/LuaRunner
+}}}

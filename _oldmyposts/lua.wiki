@@ -1,0 +1,203 @@
+== lua ==
+*2013-09-25 15:40:52*
+_编程_
+`lua`
+----
+%toc
+=== 语法 ===
+* 函数的可变参数
+  {{{class="brush: lua"
+  5.1之前: 直接用arg[1]等表示
+  5.1: 使用...代替arg
+  5.2: 需要自己打包 local arg = table.pack(...) 然后用arg[1],#arg等
+  }}}
+=== lua安装 ===
+* 提示"luaconf.h:275: fatal error: readline/readline.h: No such file or directory"
+`sudo apt-get install libreadline6 libreadline6-dev`
+* 测试安装<br>
+test.lua:
+{{{class="brush: lua"
+# i am test
+print('hello world');
+}}}
+使用 `lua test.lua` 测试效果<br>
+=== c调用lua ===
+test.c:
+{{{class="brush: lua"
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+
+int main()
+{
+    lua_State *L = lua_open();
+    luaL_openlibs(L);
+    luaL_dofile(L,"test.lua");
+    lua_close(L);
+    return 0;
+}
+}}}
+Makefile:
+{{{class="brush: lua"
+all: test.c
+	gcc -I/usr/local/include/ -L/usr/local/lib/ -ldl -lm -DLUA_USE_READLINE test.c /usr/local/lib/liblua.a -o test
+}}}
+使用 `./test test.lua` 测试效果
+=== c源码调用lua ===
+加入lua的src中的所有c文件至Makefile, 除了lua.c和luac.c <br>
+Makefile:
+{{{class="brush: lua"
+SRC = \
+lua/lapi.c \
+lua/lauxlib.c \
+lua/lbaselib.c \
+lua/lcode.c \
+lua/ldblib.c \
+lua/ldebug.c \
+lua/ldo.c \
+lua/ldump.c \
+lua/lfunc.c \
+lua/lgc.c \
+lua/linit.c \
+lua/liolib.c \
+lua/llex.c \
+lua/lmathlib.c \
+lua/lmem.c \
+lua/loadlib.c \
+lua/lobject.c \
+lua/lopcodes.c \
+lua/loslib.c \
+lua/lparser.c \
+lua/lstate.c \
+lua/lstring.c \
+lua/lstrlib.c \
+lua/ltable.c \
+lua/ltablib.c \
+lua/ltm.c \
+lua/lundump.c \
+lua/lvm.c \
+lua/lzio.c \
+lua/print.c \
+
+all: test.c
+	gcc -Ilua/ -lm test.c $(SRC) -o test
+
+}}}
+* 运行时出错,提示 `PANIC: unprotected error in call to Lua API (no calling environment)`
+{{{class="brush: lua"
+使用
+luaL_openlibs(L);//lua5.1.3+
+代替
+luaopen_base(L);//lua5
+luaopen_table(L);
+luaopen_io(L);
+luaopen_string(L);
+luaopen_math(L);
+...
+}}}
+
+=== Android NDK 使用lua ===
+Android.mk
+{{{class="brush: lua"
+LOCAL_PATH:= $(call my-dir)
+
+## lua
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := lua
+LOCAL_ARM_MODE   := arm
+LOCAL_CFLAGS    := -Werror -DLUA_USE_LINUX
+LOCAL_LDLIBS := -lm
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/lua
+LOCAL_SRC_FILES :=  \
+lua/lapi.c \
+lua/lauxlib.c \
+lua/lbaselib.c \
+lua/lcode.c \
+lua/ldblib.c \
+lua/ldebug.c \
+lua/ldo.c \
+lua/ldump.c \
+lua/lfunc.c \
+lua/lgc.c \
+lua/linit.c \
+lua/liolib.c \
+lua/llex.c \
+lua/lmathlib.c \
+lua/lmem.c \
+lua/loadlib.c \
+lua/lobject.c \
+lua/lopcodes.c \
+lua/loslib.c \
+lua/lparser.c \
+lua/lstate.c \
+lua/lstring.c \
+lua/lstrlib.c \
+lua/ltable.c \
+lua/ltablib.c \
+lua/ltm.c \
+lua/lundump.c \
+lua/lvm.c \
+lua/lzio.c \
+lua/print.c \
+
+include $(BUILD_STATIC_LIBRARY)
+
+
+## main
+include $(CLEAR_VARS)
+
+LOCAL_MODULE    := luandroid
+LOCAL_ARM_MODE   := arm
+LOCAL_CFLAGS    := -Werror
+LOCAL_STATIC_LIBRARIES := lua
+LOCAL_LDLIBS := -llog
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/lua/
+LOCAL_SRC_FILES :=  jni.c 
+
+include $(BUILD_SHARED_LIBRARY)
+}}}
+jni.c
+{{{class="brush: lua"
+#include <string.h>
+#include <jni.h>
+
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+
+#include <android/log.h>
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR  , "zz", __VA_ARGS__)
+
+void load (const char *filename, int *width, int *height) {
+    lua_State *L = lua_open();
+    luaL_openlibs(L);
+
+    if (luaL_loadfile(L, filename) || lua_pcall(L, 0, 0, 0))
+        LOGE( "cannot run configuration file: %s",
+              lua_tostring(L, -1));
+
+    lua_getglobal(L, "width");
+    lua_getglobal(L, "height");
+    if (!lua_isnumber(L, -2))
+        LOGE("`width' should be a number\n");
+    if (!lua_isnumber(L, -1))
+        LOGE("`height' should be a number\n");
+    *width = (int)lua_tonumber(L, -2);
+    *height = (int)lua_tonumber(L, -1);
+
+    lua_close(L);
+}
+
+jstring
+Java_com_zzfreedom_luandroid_Luandroid_loadluaconfig( JNIEnv* env,
+                                                  jobject thiz, jstring path )
+{
+    int w,h;
+    char s[256];
+    const char *pathl = (*env)->GetStringUTFChars(env, path, 0);
+    load (pathl, &w, &h);
+    sprintf(s,"w=%d\nh=%d\n",w,h);
+    return (*env)->NewStringUTF(env, s);
+}
+}}}

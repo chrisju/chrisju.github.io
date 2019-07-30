@@ -1,0 +1,10 @@
+== fctix ==
+*2013-11-07 17:01:25*
+_linux_
+`fcitx`
+----
+%toc
+=== 使用自定义词库 ===
+* 参考: http://forum.ubuntu.org.cn/viewtopic.php?t=364764
+* [http://ys-l.ys168.com/2.0/84308731/ihVIgMh385J3L553KQJU/%E3%80%8Cfcitx%EF%BC%8D%E6%90%9C%E7%8B%97%E3%80%8D%E5%90%88%E5%B9%B6%E8%AF%8D%E5%BA%93%EF%BC%882012-06-17%EF%BC%89.7z 下载]
+* 替换后重启fcitx

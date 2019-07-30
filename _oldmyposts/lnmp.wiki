@@ -1,0 +1,52 @@
+== lnmp ==
+*2016-10-27 22:57:53*
+_linux_
+`lnmp`
+`nginx`
+----
+%toc
+=== 添加网站 ===
+# 在`/usr/local/nginx/conf/vhost`文件夹下新建conf文件
+# 如 blog.conf:
+{{{class="brush: bash"
+server
+        {
+                listen 80;
+                #listen [::]:80;
+                server_name blog.zzbalabala.com;
+                index index.html index.php;
+                root  /home/wwwroot/blog.zzbalabala.com;
+
+                include none.conf;
+                #error_page   404   /404.html;
+                location ~ [^/]\.php(/|$)
+                        {
+                                # comment try_files $uri =404; to enable pathinfo
+                                try_files $uri =404;
+                                fastcgi_pass  unix:/tmp/php-cgi.sock;
+                                fastcgi_index index.php;
+                                include fastcgi.conf;
+                                #include pathinfo.conf;
+                        }
+
+                location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$
+                        {
+                                expires      30d;
+                        }
+
+                location ~ .*\.(js|css)?$
+                        {
+                                expires      12h;
+                        }
+
+                access_log off;
+        }
+}}}
+=== 重定向网站 ===
+# 将blog.zzbalabala.com重定向到blog.moez.win
+{{{class="brush: bash"
+                server_name blog.moez.win blog.zzbalabala.com;
+                if ($host != 'blog.moez.win') {
+                rewrite ^/(.*)$ http://blog.moez.win/$1 permanent;
+            }
+}}}

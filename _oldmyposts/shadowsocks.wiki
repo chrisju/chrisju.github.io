@@ -1,0 +1,39 @@
+== shadowsocks ==
+*2013-11-13 17:16:32*
+_linux_
+`shadowsocks`
+`fuckgfw`
+----
+%toc
+项目地址: https://github.com/clowwindy/shadowsocks
+=== 安装配置服务端和客户端 ===
+# 服务端和客户端都需要安装shadowsocks:
+{{{class="brush: bash"
+apt-get install python-pip
+pip install shadowsocks
+}}}
+# 在server的/opt/shadowsocks下建立config.json,内容如下:
+{{{class="brush: bash"
+{
+    "server":"my_server_ip",
+    "server_port":8388,
+    "local_port":1080,
+    "password":"barfoo!",
+    "timeout":600,
+    "method":"table"
+}
+}}}
+# 在/opt/shadowsocks下运行`ssserver`
+# 拷贝config.json到客户端:
+{{{class="brush: bash"
+scp root@xxx.xxx.xxx.xxx:/opt/shadowsocks/config.json /opt/shadowsocks/config.json
+}}}
+# 在客户端的/opt/shadowsocks下运行`sslocal`
+# ok.至此已在127.0.0.1:1080创建socks5代理
+*服务端极耗内存 有空试下c实现*
+=== 使用c实现 ===
+* *可以解决python实现的内存问题*
+* 项目地址: https://github.com/madeye/shadowsocks-libev
+* 照着文档编译安装 很简单
+* *配置文件通用*
+* 启动服务端`ss-server -c /opt/shadowsocks/config.json`

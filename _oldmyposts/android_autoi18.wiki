@@ -1,0 +1,78 @@
+== android用脚本提取固定字符串转为使用string.xml ==
+*2013-11-08 17:00:58*
+_android_
+`python`
+`i18`
+----
+* 本例是要把`appendMonitorLog("xxxxx")`格式的字符串提取出来写入string.xml 不同需求更改正则表达式
+* 脚本所做工作:
+  # 将java文件中匹配的字符串转为使用string id
+  # 在string.xml加入对应项
+{{{class="brush: python"
+#!/usr/bin/python
+# coding=utf8
+
+import os,sys,re
+
+srcdir='src/main/java/com/sangame/xx/android/'
+xml='res/values/strings.xml'
+xmlsf='\n    <string name="{0}">{1}</string>\n'
+stridf='message{0}'
+rbf='MonitorService.getService().getResources().getString(R.string.{0})'
+sp=r'(?P<pre>appendMonitorLog\()"(.+?)"(?P<end>\))' #按需修改
+
+def add2xml(strid,msg):
+    xmls = xmlsf.format(strid,msg)
+    with open(xml) as f:
+        s = f.read()
+    p=r'(\n)(?P<end>\n</resources>)'
+    s = re.sub(p,xmls+'\g<end>',s)
+    with open(xml,'w') as f:
+        f.write(s)
+
+startid=100
+i=startid
+msgs=[]
+def getstrid(msg):
+    if msg in msgs:
+        return stridf.format(msgs.index(msg)+startid)
+    else:
+        global i
+        msgs.append(msg)
+        strid=stridf.format(i)
+        i = i + 1
+        add2xml(strid,msg)
+        return strid
+
+
+for root,dirs,files in os.walk(srcdir):
+    for file in files:
+        p = os.path.join(root,file)
+        print(p)
+        with open(p) as f:
+            s=f.read()
+
+        m=re.findall(sp,s)
+        count = len(m)
+        print(m)
+
+        if m:
+            for j in range(len(m)):
+                strid=getstrid(m[j][1])
+                rb=rbf.format(strid)
+                if j == 0:
+                    ns,n=re.subn(sp,'\g<pre>'+rb+'\g<end>',s,count=1)
+                else:
+                    ns,n=re.subn(sp,'\g<pre>'+rb+'\g<end>',ns,count=1)
+            with open(p,'w') as f:
+                f.write(ns)
+}}}
+若是少量漏网的可以另外处理,比如
+{{{class="brush: python"
+        m=re.findall(sp,s)
+        for s in m:
+            if '+' in s:
+                print(p)
+                print(s)
+        continue
+}}}

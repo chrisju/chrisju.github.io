@@ -1,0 +1,35 @@
+== goagent ==
+*2013-1-11 15:08:39*
+_linux_
+`goagent`
+----
+%toc
+=== 用php空间作为goagent的跳板 ===
+goagent版本: 2.1.10dev
+
+参考:
+
+http://code.google.com/p/goagent/wiki/FAQ
+
+http://allinfa.com/goagent-php-host-new-v184.html
+
+http://www.haigeer2201.com/goagent.html
+
+
+1. 搭建好可用goagent和可用php空间
+
+2. 若设密码:修改server/php/index.php的`$__password__`
+
+3. 上传index.php到空间某位置
+
+4. 访问此index.php页面,如果没有问题的话，说明部署成功。
+
+5. 修改local/proxy.ini的[paas]模块, 设置fetchserver和password, 并使enable = 1, isphp设不设都能连, 应该设为1比较好吧
+{{{class="brush: bash"
+[paas]
+enable = 1
+password = 1111
+listen = 127.0.0.1:8088
+isphp = 1
+fetchserver = http://ab.ccdd.ee/ff/
+}}}

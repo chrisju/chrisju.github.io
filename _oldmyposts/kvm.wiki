@@ -1,0 +1,61 @@
+== kvm ==
+*2013-03-18 15:43:17*
+_linux_
+`kvm`
+`虚拟机`
+----
+%toc
+=== 检查硬件支持 ===
+`$ grep -E "(vmx|svm)" --color=always /proc/cpuinfo` 如果运行后没有显示，那么你的处理器不支持硬件虚拟化，你不能使用KVM。
+=== 基本使用 ===
+{{{class="brush: bash"
+sudo apt-get install qemu-kvm qemu-utils libvirt-bin ubuntu-vm-builder bridge-utils
+
+"创建磁盘镜像 (磁盘文件实际大小不是创建参数的大小 而是实际使用到的大小
+qemu-img create -f qcow2 ubuntu32.qcow2 38G
+
+"安装
+"-m 内存 单位M
+"-cdrom 将参数作为光驱内容
+"-boot d 表示从光驱启动
+"-vga std 可以免驱动支持较高分辨率
+kvm -hda ubuntu32.qcow2 -m 1024 -cdrom /mnt/DATA/down/ubuntu-12.10-desktop-i386.iso -boot d -vga std
+
+"使用(可单向访问主机或外网 可使用scp传共享文件)
+kvm -hda ubuntu32.qcow2 -m 1024 -vga std -net nic -net user
+}}}
+=== 挂载qcow2文件 ===
+{{{class="brush: bash"
+# modprobe nbd max_part=63
+# qemu-nbd -c /dev/nbd0 image.qcow2
+# mount /dev/nbd0p1 /mnt/image
+}}}
+用完后
+{{{class="brush: bash"
+# umount /mnt/image
+# qemu-nbd -d /dev/nbd0
+}}}
+=== 开机加载kvm模块 ===
+sudo vi /etc/moudles 加入
+{{{class="brush: bash"
+modprobe kvm
+modprobe kvm_intel
+}}}
+=== clone虚拟机 ===
+`sudo virt-clone -o win7_32 --auto-clone`
+=== 声音 ===
+启动命令需要配置`QEMU_AUDIO_DRV`环境变量并启用声卡 示例:
+`QEMU_AUDIO_DRV=alsa kvm -hda win7_32.qcow2 -m 1024 -vga std -net nic -net user -usb -usbdevice tablet -soundhw all`
+=== qcow2镜像扩容 ===
+扩大5G: `qemu-img resize win7_32.qcow2 +5G`
+* 注意`+`和`5G`中间不能有空格
+* 要把win7分区调大还需要去磁盘管理中做扩展卷的操作,扩展后重启下就OK了
+=== libvirt ===
+* 可能需要安装spice `sudo apt-get install qemu-kvm-spice python-spice-client-gtk`
+* 导入到libvirt虚拟机管理器中 (man virt-install
+`sudo virt-install -n u32 -r 2048 --os-variant=ubuntuquantal --disk path=/mnt/DATA/soft/kvms/ubuntu_1210_ia32/ubuntu32.qcow2,device=disk,format=qcow2 --vnc --noautoconsole --import`
+* *这样导入后用libvirt运行虚拟机很慢 不知道什么原因* `[老猫] KVM必须开virtio和writeback cache [老猫] 要不然当然会慢`
+=== 参考 ===
+https://wiki.archlinux.org/index.php/KVM#How_to_use_KVM
+http://wiki.ubuntu.org.cn/Kvm%E6%95%99%E7%A8%8B
+http://www.linux-kvm.org/page/Networking

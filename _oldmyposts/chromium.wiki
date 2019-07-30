@@ -1,0 +1,11 @@
+== chromium ==
+*2013-6-3 14:55:14*
+`chromium`
+`chrome`
+----
+%toc
+=== 查看插件源码 ===
+* ~/.config/chromium/Default/Extensions/下有各插件源码
+* 插件id可在扩展程序管理里插件看到 即访问网站按钮对应链接的最后一段
+=== flash坏掉 ===
+chromium自带flash插件 坏掉需要重装chromium 不要手动安装flashplugin

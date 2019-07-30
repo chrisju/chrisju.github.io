@@ -1,0 +1,51 @@
+== 音视频处理 ==
+*2013-08-09 21:44:38*
+_linux_
+`多媒体`
+`ffmpeg`
+----
+%toc
+=== 拼接flv类视频 ===
+[https://github.com/chrisju/FLVCopyCat FLVCopyCat]
+* 支持hlv
+* 不耗时 渣本拼接90M的hlv耗时2s
+=== 转换hlv为mp4 ===
+`ffmpeg -i out.hlv -vcodec copy -acodec copy -f mp4 out.mp4`
+* 秒转
+* 可能会提示加"-strict -2", 照做就是
+=== 转换psp支持的视频格式 ===
+* 缩略图: `ffmpeg -i 3.hlv -f image2 -ss 10 -vframes 10 -s 160x120 -an 3.thm` 提示错误不用管 生成就行了
+* [http://psp.abang.com/od/beginner/a/vediotype_n2.htm PSP支持的格式]
+* 主要为MP4-AVC, 扩展名.mp4 编码格式：H.264 分辨率有720*480,480*272,320*240
+<div style="display:none">
+* 转换步骤: (参考[http://unixboy.iteye.com/blog/157898])
+# 自定义编译faac [http://hivelocity.dl.sourceforge.net/project/faac/faac-src/faac-1.28/faac-1.28.tar.gz 下载]
+  {{{class="brush: bash"
+$ ./configure --prefix=/usr/local --enable-shared --with-mp4v2
+$ vi common/mp4v2/mpeg4ip.h "注释掉126行strcasestr的声明
+$ make
+$ make check
+$ sudo make install
+  }}}
+# 自定义编译faad2 [http://superb-dca2.dl.sourceforge.net/project/faac/faad2-src/faad2-2.7/faad2-2.7.zip 下载]
+  {{{class="brush: bash"
+autoreconf -vif
+./configure  --prefix=/usr/local  --with-mpeg4ip
+$ make
+$ make check
+$ sudo make install
+  }}}
+# 自定义编译ffmpeg [http://ffmpeg.org/download.html 下载]
+  * 注: 现在的ffmpeg已经自带AAC解码 不再需要faad依赖了
+  {{{class="brush: bash"
+$ sudo pacman -S lame xvidcore libvorbis libogg libass
+$ ./configure --enable-shared --enable-libfaac --enable-libx264 --enable-pthreads --enable-libmp3lame --enable-libxvid --enable-libvorbis --enable-libass  --enable-gpl --enable-nonfree --prefix=/usr/local
+$ make
+  }}}
+# 转换: `myffmpeg  -i out.mp4 -f psp -r 29.97 -b 1000k -ar 24000 -ab 64k -strict -2 -s 320x240 M4V00021.MP4`
+</div>
+=== 分解gif文件和制作mpeg电影 ===
+{{{class="brush: bash"
+convert -deconstruct foo.gif bar.jpg
+convert *.jpg foo.mpeg
+}}}

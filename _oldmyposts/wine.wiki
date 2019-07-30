@@ -1,0 +1,22 @@
+== wine ==
+*2013-10-06 23:45:07*
+_linux_
+`wine`
+----
+%toc
+=== purge wine ===
+{{{class="brush: bash"
+rm -f ~/.local/share/mime/packages/x-wine*
+rm -f ~/.local/share/applications/wine-extension*
+rm -f ~/.local/share/icons/hicolor/*/*/application-x-wine-extension*
+rm -f ~/.local/share/mime/application/x-wine-extension*
+
+rm -rf .wine
+
+rm -f ~/.config/menus/applications-merged/wine*  
+rm -rf ~/.local/share/applications/wine  
+rm -f ~/.local/share/desktop-directories/wine*  
+rm -f ~/.local/share/icons/????_*.{xpm,png}  
+rm -f ~/.local/share/icons/*-x-wine-*.{xpm,png}
+}}}
+* 参考: http://wiki.winehq.org/FAQ#head-ddc6f242056eb1a4fe566c9434d15fd8b64606aa

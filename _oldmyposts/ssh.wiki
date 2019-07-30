@@ -1,0 +1,23 @@
+== ssh ==
+*2013-3-19 18:15:26*
+_linux_
+`ssh`
+----
+%toc
+=== 使ssh忽略known_hosts文件 ===
+在 ~/.ssh/config 里添加
+{{{class="brush: bash"
+StrictHostKeyChecking no
+UserKnownHostsFile /dev/null
+}}}
+重启ssh服务(ubuntu系的是sudo /etc/init.d/ssh restart)
+=== ssh,scp命令不用输密码 ===
+# 创建rsa_key
+{{{class="brush: bash"
+$ ssh-keygen -b 1024 -t rsa  //全回车
+}}}
+# 将key加入对方的记录里 (*多client时需要添加在后面*)
+{{{class="brush: bash"
+scp ~/.ssh/id_rsa.pub winter@192.168.0.110:/home/winter/.ssh/authorized_keys
+}}}
+* 有次这样操作了仍然无法免密登录, 后来查到是.ssh文件夹的权限问题:"ssh会检查当前home主目录和~/.ssh目录的权限，这些目录只能当前用户有写权限，不能有组的写权限。"

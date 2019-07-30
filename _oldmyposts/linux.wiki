@@ -1,0 +1,136 @@
+== linux ==
+*2013-09-25 13:32:34*
+_linux_
+`linux`
+----
+%toc
+=== 命令 ===
+* 查看系统发行版本 `cat /etc/issue`
+* 记录命令耗时: `time`后接原命令, 如 `time find .`
+* 进制转换 16->10 printf %d 0x4e00
+* 进制转换 10->16 printf %x 19782
+* 查看进程内存使用情况 `cat /proc/[pid]/statm`
+* 查看端口占用情况 `netstat -ntlp|grep 46989`
+* 在多个文件中替换文本
+  {{{class="brush: bash"
+  sed -i "s/MyUtil\.Fav/Fav/g" `grep -rl "MyUtil.Fav" ./`
+  }}}
+* 查看so函数名列表 `nm -D libluandroid.so`
+* pkg-config --modversion gtk+-2.0 查看包版本信息
+* 显示内存中的字符串
+  `sudo dd if=/dev/mem | cat | strings`
+* Rip audio from a video file.
+  `mplayer -ao pcm -vo null -vc dummy -dumpaudio -dumpfile <output-file> <input-file>`
+* 杀死占用文件或文件系统的进程们
+  `fuser -k [filename|filesystem]`
+* 把文件名中的空格替换为_
+  `rename 'y/ /_/' *`
+* 拷贝目录下所有png图片到目标文件夹
+  `find .|grep \.png$|xargs -I '{}' cp  '{}' pic/`
+* 查找相同文件,基于文件大小和md5
+  `find -not -empty -type f -printf "%s\n" | sort -rn | uniq -d | xargs -I{} -n1 find -type f -size {}c -print0 | xargs -0 md5sum | sort | uniq -w32 --all-repeated=separate`
+* 录制屏幕
+  `ffmpeg -f x11grab -s 1440x900 -r 25 -i :0.0 -sameq /tmp/out.mpg`
+* 查看登录失败记录
+  `grep "Failed password for root" /var/log/auth.log | awk '{print $11}' | sort | uniq -c | sort -nr | more`
+* 调整权限文件和文件夹设置
+  `chmod -R o-r,o-w,o-x dir/`
+==== comm ====
+对2个已排序文件逐行比较, 默认输出三列, 第一列为文件1独有, 第二列为文件2独有, 第三列为共有. 用参数-1/-2/-3分别可去除1/2/3列的输出
+* `comm -12 1 2` 输出文件1和2的共有行 (仅输出第三列)
+==== split ====
+分割文件
+* `split -l 10240 -d -a 3 --additional-suffix=.txt xxx xxx_` 将xxx分为xxx_000.txt xxx_001.txt等 每行10240行
+* `-l` 每段行数
+* `-b` 每段字节数
+* `-d` 用数字编号
+* `-a` 后缀位数 默认2位
+* `--additional-suffix=<suffix>` 后缀 较老的split不支持这个选项
+==== xargs ====
+每行作为一组参数传递给别的命令
+* `ls read3_0*|xargs -n1 -t -I {} mv {} {}.fq`
+* `-n num ` 每次传入参数个数 默认所有(即一行) 没传完就继续传(一行传多次)
+* `-I {}` 将参数赋给占位符`{}`
+* `-t` 执行前会打印每条命令
+* `-p` 执行每条命令前询问i, 输入`y`或`Y`才会执行
+* `-a file` 以文件作为输入而非`stdin`
+* `-d delim` 指定分隔字符
+* `-0` `--null` 以`\0`代替空格,引号,斜杠分割参数, 空格等会包含在参数中
+==== grep ====
+* `-`和`.` 用单引号加转义符 如`grep -rn '\-bb\.ee'`
+=== 命令行删除乱码文件 ===
+# 用 `ls -li` 显示文件节点号
+# `find ./ -inum 1445610 -print -exec rm {} \; #1445610是上一步获取的文件节点号`
+=== 查询系统安装时间 ===
+`$ sudo passwd -S root` 看root用户的创建时间
+=== 查看硬件信息 ===
+* *查看系统硬件简易信息* `inxi` 如源上没有可以`wget https://inxi.googlecode.com/svn/trunk/inxi`
+* *查看系统硬件详细信息* `inxi -F`
+==== 查看原始信息 ====
+* 主板 `dmidecode|less` 找到`Base Board`块
+* CPU `cat /proc/cpuinfo|grep 'model name'`
+* CPU位长 `cat /proc/cpuinfo|grep flags`
+  {{{class="brush: bash"
+  如果找到lm, 则说明你的CPU是64位的. lm是long mode的意思.
+  Long Mode - 64位CPU
+  Real Mode - 16位CPU
+  Protected Mode - 32位CPU
+  }}}
+* 内存 `cat /proc/meminfo |grep MemTotal`
+* 硬盘 `cat /proc/scsi/scsi`
+* 显卡 `lspci |grep VGA`
+=== alias中使用'符号 ===
+将`'`替换成`'\''`
+=== 制作系统安装U盘(usb install) ===
+* archlinux: `# dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx && sync`
+* debian: `# cat debian.iso > /dev/sdb; sync`
+=== apt ===
+* 查找命令所在包: `dpkg -S [cmd]` 可配合 `dpkg -l|grep [cmd]`
+* pkg-config --modversion gtk+-2.0 查看包版本信息
+* 查看linux内置程序源码
+  {{{class="brush: bash"
+  进入准备存放源码的文件夹
+  sudo apt-get install dpkg-dev
+  apt-get source coreutils
+  就会在当前文件夹看到源码文件夹
+  }}}
+* 查看最近安装的软件包
+  {{{class="brush: bash"
+cat  /var/log/apt/history.log |grep "\sinstall\s" |tail
+  }}}
+=== 更新grub ===
+# `sudo cp /boot/grub/grub.cfg /boot/grub/grub.cfg.bak`
+# `sudo grub-mkconfig -o /boot/grub/grub.cfg`
+=== 工具 ===
+* 文件比较GUI工具: `kdiff3-qt` (有KDE环境可以直接使用`kdiff3`)
+=== iptables ===
+{{{class="brush:bash"
+#添加屏蔽IP
+#禁止此IP访问服务器
+iptables -I INPUT -s 1.2.3.4 -j DROP
+或
+iptables -A INPUT -s 1.2.3.4 -j DROP
+#禁止服务器访问此IP
+iptables -A OUTPUT -d 1.2.3.4 -j DROP
+如果要封某个网段：
+iptables -I INPUT -s 1.2.3.0/24 -j DROP
+
+#清空屏蔽IP
+iptables -t filter -D INPUT -s 1.2.3.4 -j DROP
+iptables -t filter -D OUTPUT -d 1.2.3.4 -j DROP
+
+#一键清空所有规则
+iptables -F
+
+#查看
+iptables -L INPUT
+或
+iptables -L
+或
+iptables-save（此命令将保存规则，下次开机自动执行）
+
+#处理IP碎片数量,防止攻击,允许每秒100个
+iptables -A FORWARD -f -m limit --limit 100/s --limit-burst 100 -j ACCEPT
+#设置ICMP包过滤,允许每秒1个包,限制触发条件是10个包
+iptables -A FORWARD -p icmp -m limit --limit 1/s --limit-burst 10 -j ACCEPT 
+}}}

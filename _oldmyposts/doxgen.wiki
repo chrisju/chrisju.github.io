@@ -1,0 +1,96 @@
+== doxgen代码注释 ==
+*2010-10-27 15:39:35*
+_编程_
+`doxgen`
+----
+%toc
+=== 个人doxgen注释规范 ===
+注释风格：
+{{{class="brush: c"
+/// 这是一个简洁型的注释
+
+///< 这是一个对前面代码的注释
+
+空行分隔简易说明和详细说明
+
+    /**
+     * class或function的簡易說明...
+     *
+     * class或function的詳細說明...
+     * ...
+     */
+}}}
+常用指令：
+{{{class="brush: c"
+@author …	作者
+@brief …	摘要
+@file …	文件声明
+@version …	版本推荐使用$Id$
+@todo …	改进,可以指定针对的版本
+@var …	模块变量 说明
+@param p …	参数 p 说明
+@arg …	列表说明参数 信息
+@return …	返回值说明
+@retval …	返回值类型说明
+@note …	注解
+@attention …	注意
+@bug …	问题
+@warning …	警告
+@license …	版权
+@contact …	联系
+@type v …	模块变量类型v 说明
+@see …	参考资料
+@enum CMyclass::MyEnum	引用枚举
+@class CMyclass ”inc/myclass.h”	引用类
+@exception	可能产生的异常
+}}}
+全部指令：
+
+`a | addindex | addtogroup | anchor | arg | attention | author | b | brief | bug | c | callgraph | callergraph | category | class | code |cond | copybrief | copydetails | copydoc | date | def | defgroup | deprecated | details | dir | dontinclude | dot | dotfile | e | else |elseif | em | endcode | endcond | enddot | endhtmlonly | endif | endlatexonly | endlink | endmanonly | endmsc | endverbatim |endxmlonly | enum | example | exception | extends | f$ | f[ | f] | f{ | f} | file | fn | headerfile | hideinitializer | htmlinclude | htmlonly| if | ifnot | image | implements | include | includelineno | ingroup | internal | invariant | interface | latexonly | li | line | link |mainpage | manonly | memberof | msc | n | name | namespace | nosubgrouping | note | overload | p | package | page | par |paragraph | param | post | pre | private | privatesection | property | protected | protectedsection | protocol | public |publicsection | ref | relates | relatesalso | remarks | return | retval | sa | section | see | showinitializer | since | skip | skipline |struct | subpage | subsection | subsubsection | test | throw | tudo | tparam | typedef | union | until | var | verbatim | verbinclude |version | warning | weakgroup | xmlonly | xrefitem | $ | @ |  | & | ~ | < | > | # | % | "`
+
+注释示例：
+{{{class="brush: c"
+    /**
+     * 我的自訂類別說明 ...
+     */
+    class MyClass {
+        public:
+            int member1 ; ///< 第一個member說明 ...
+            int member2:  ///< 第二個member說明 ...
+            int member_function(int a, int b);
+    };
+
+    /**
+     * 自訂類別的member_funtion說明 ...
+     *
+     * @param a 參數a的說明
+     * @param b 參數b的說明
+     *
+     * @return 傳回a+b
+     * @see    func1() // 作为一个链接
+     * @note  此函数将导致地球爆炸 // 说明
+     */
+    int MyClass::member_function( int a, int b )
+    {
+        return a+b ;
+    }
+
+
+/********************************************************************
+
+	@file  socket_main.cpp
+
+	@brief 交易服务器程序进入点
+
+	@version 1.0
+
+	@date    2010/10/26 9:12
+
+	@author  zz
+
+	@contact zhuzhu101011@163.com
+
+	@license Copyright (c) 2010, zz工作室
+
+*********************************************************************/
+}}}

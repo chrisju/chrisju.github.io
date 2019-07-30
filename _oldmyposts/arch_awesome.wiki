@@ -1,0 +1,91 @@
+== archlinux安装及配置 ==
+*2013-03-16 17:37:35*
+_linux_
+`archlinux`
+`awesome`
+----
+%toc
+=== 安装 ===
+
+=== 配置 ===
+
+==== 网络 wicd ====
+参考[https://wiki.archlinux.org/index.php/Wicd_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87) arch的wiki]
+# `pacman -S wicd`
+# `pacman -S dhclient wpa_supplicant hicolor-icon-theme`
+# 
+{{{class="brush: bash"
+编辑/etc/rc.conf, 在network前加! 并添加wicd 
+在~/.xinitrc 添加启动wicd客户端 
+wicd-client &
+重启X 如 # rc.d restart slim
+}}}
+==== 电源管理 ====
+{{{class="brush: bash"
+sudo pacman -S gnome-power-manager
+sudo pacman -S gnome-control-center
+在~/.xinitrc 添加启动
+gnome-power-manager &
+}}}
+安装挂起
+{{{class="brush: bash"
+sudo pacman -S pm-utils
+在/etc/sudoers加入:
+%wheel ALL = (ALL) NOPASSWD: /usr/sbin/pm-suspend
+}}}
+普通用户使用关机重启支持
+{{{class="brush: bash"
+在/etc/sudoers加入:
+%wheel ALL = (ALL) NOPASSWD: /sbin/reboot
+%wheel ALL = (ALL) NOPASSWD: /sbin/halt
+}}}
+加入awesome菜单
+{{{class="brush: bash"
+mysysmenu = {
+   { "suspend", terminal .. " -e sudo pm-suspend" },
+   { "reboot", terminal .. " -e sudo reboot" },
+   { "halt", terminal .. " -e sudo halt" },
+}
+}}}
+==== 输入法 ibus ====
+参考[https://wiki.archlinux.org/index.php/Ibus arch的wiki]
+# `pacman -S ibus ibus-pinyin ibus-anthy`
+# 
+{{{class="brush: bash"
+在~/.xinitrc 添加启动wicd客户端
+export LANG=zh_CN.UTF-8
+export LC_ALL="zh_CN.UTF-8"
+ibus-daemon -d -x -r -n awesome
+}}}
+# urxvt下使用ibus:
+{{{class="brush: bash"
+在 .Xdefaults 添加
+  URxvt.inputMethod: ibus
+  URxvt.preeditType: OnTheSpot,None 
+}}}
+==== 各种乱码 ====
+参考[https://wiki.archlinux.org/index.php/Arch_Linux_%E4%B8%AD%E6%96%87%E5%8C%96_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87) arch的wiki]
+=== 技巧 ===
+* 查看最近安装的软件: `cat /var/log/pacman.log|grep installed |tail`
+==== 更改slim主题 ====
+* 主题下载: http://slim.berlios.de/themes01.php
+* 解压后放入 /usr/share/slim/themes
+* 修改 /etc/slim.conf : 修改 current_theme 为新主题名
+==== 查看窗口CLASS等信息 ====
+yaourt xprop,运行xprop,点击需要查看的窗口
+==== 截屏 ====
+在rc.lua的"Key bindings"处添加
+`    awful.key({ }, "Print", function () awful.util.spawn("scrot -e 'mv $f ~/pic/shot/ 2>/dev/null'") end),`
+==== 安装 Virtualbox ====
+安装对应的kernel headers
+如提示没有libGLU.so,安装 freeglut
+Virtualbox-管理-设定-Extensions里安装extension
+==== flash ====
+# `pacman -Sy flashplugin`
+# 开启/etc/adobe/mms.cfg里的`EnableLinuxHWVideoDecode=1`
+==== 获取最快源 ====
+{{{class="brush: bash"
+cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak2
+pacman -S reflector
+reflector -l 5 --sort rate --save /etc/pacman.d/mirrorlist
+}}}

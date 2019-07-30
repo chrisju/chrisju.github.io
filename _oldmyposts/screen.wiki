@@ -1,0 +1,62 @@
+== 类screen软件 ==
+*2013-10-29 17:41:24*
+_linux_
+`screen`
+`tmux`
+`byobu`
+----
+%toc
+常用推荐byobu, 否则推荐screen
+=== screen ===
+* 经典的终端复用软件
+* 功能较弱 使用简单
+* 远程操作保存终端示例:
+{{{class="brush: bash"
+登录后运行
+screen -R a  #恢复a会话 不存在则新建
+连接中断重新登录后 再运行一遍 会恢复原来那个终端环境
+}}}
+* *视觉和程序都不能判断当前是在screen下*
+* *注意: 不能在.bashrc中新建会话 会变成forkbomb 而且是登录就会触发的*
+=== tmux ===
+* 比screen功能强大
+* 能看出也能程序判断目前是在tmux下
+* 可以分割屏幕
+* [http://www.dayid.org/os/notes/tm.html 和screen的指令对照]
+=== byobu ===
+* 5.9后(可能更早)使用tmux作为后端
+==== 登入后自动进入byobu会话 ====
+在~/.bash_profile中，添加这么一行：
+{{{class="brush: bash"
+`echo $- | grep -qs i` && which byobu-launcher > /dev/null && byobu-launcher && exit
+}}}
+这样每次登陆远程机器后会自动attach进byobu.如果需要退出byobu,按Ctrl+A,Ctrl+D即可(无需放开Ctrl
+==== 配置窗格的切换快捷键为vim风格 ====
+编辑~/.byoburc.tmux:
+{{{class="brush: bash"
+set-window-option -g mode-keys vi
+bind C-h select-pane -L
+bind c-j select-pane -D
+bind C-k select-pane -U
+bind C-l select-pane -R
+}}}
+==== 常用操作 ====
+功能键为ctrl+a
+| 快捷键  | 功能                                          |
+|---------+-----------------------------------------------|
+| C-a ?   | help                                          |
+| C-a C-d | detach                                        |
+| C-a %   | 横向被切割 相当于vim的:vs                     |
+| C-a !   | 销毁panel                                     |
+| C-a C-h | 进入左边的panel                               |
+| C-a C-j | 进入下边的panel                               |
+| C-a C-k | 进入上边的panel                               |
+| C-a C-l | 进入右边的panel                               |
+| C-a C-c | 新建窗口                                      |
+| C-a k   | 销毁窗口                                      |
+| C-a "   | 选择窗口                                      |
+| C-a 0-9 | 进入该编号的窗口                              |
+| C-a [   | 进入copy模式,可以用pageup等滚动屏幕 Enter退出 |
+
+* `C-a` `|`  竖向被切割 相当于vim的:sp
+参考: http://imtx.me/archives/1693.html

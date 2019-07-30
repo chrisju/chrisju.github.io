@@ -1,0 +1,70 @@
+== gdb ==
+*2016-04-26 20:30:41*
+_cat_
+`tag`
+----
+%toc
+=== 命令 ===
+* `file <exec>` 载入二进制程序
+* `r` 可以带上参数 如果不是第一次运行 会自动使用上次的参数 要清空参数可以用`set args`
+* `c` 继续运行直到触发断点 可加参数表示跳过多少个断点
+* `b <filename:lineno>` 添加断点 如`b xx.c:33`
+* `d <breakindex>` 删除断点 不带断点编号则删除全部
+* `p <arg>` 打印变量或表达式值
+* `bt` 打印调用堆栈
+* `watch` 简写为`wa` 监视一个变量 变量被修改时停止 也是一种断点
+* `i b` 查看断点信息
+* `i args` 查看参数
+* `i locals` 查看局部变量
+=== 高级 ===
+* `p *<arg>` 打印指针所指内容 比如给一个结构体指针 可以打印出结构体内容
+* `p *(OCC_PARAM *)param` 强制转换指针并打印指针内容
+* `p *(int [4] *)tk` 强制转换为数组指针并打印内容
+* `whatis <VAR>` 查看变量VAR的类型
+* `finish` 退出当前函数
+* `until` 到指定代码处停止(退出当前函数时也会停止) 可用行号、函数名、内存地址等 同`b`
+* `commands <breakindex>`  进入断点后的自动操作 如
+  {{{class="brush: bash"
+(gdb) commands 1
+Type commands for when breakpoint 1 is hit, one per line.
+End with a line saying just "end".
+>silent 
+>printf "n = %d \n", n
+>continue
+>end
+  }}}
+* `define func` 宏(类似函数) 如
+  {{{class="brush: bash"
+define print_and_go
+print $arg0
+continue
+end
+  }}}
+* `return` 结束当前函数运行 返回表达式值
+* `jump` 跳过代码 `jump 555`跳到555行 `jump +10`跳过10行
+* `call func(a,b)` 强制调用函数 基本同`print func(a,b)`
+* `x` 查看内存值
+* `set` 设置内存值
+==== display ====
+* `display` 监视一个变量 每次停止自动打印出此变量
+* `undisplay [INDEX]` 取消监视一个变量 语法同`d`
+* `i display` 查看监视信息
+==== 断点 ====
+* `b xx.c:10 if x==3` 条件断点
+* `clear`  清除当前行的断点
+* `disable [breakindex]` 禁用断点 语法同`d`
+* `enable [breakindex]`  启用断点 语法同`d`
+==== watch ====
+* `rwatch` 监视一个变量 变量被读取时停止
+* `awatch` 监视一个变量 变量被读取或修改时停止
+* `watch *(int *)0x12345678` 监视指针0x12345678处存放的值
+* `watch x+y` 监视表达式的值
+* `watch i > 999`
+==== catch ====
+`catch [EVENT]` EVENT可以是以下值
+* throw：当程序抛出一个异常时；
+* catch：当程序捕获到一个异常时；
+* exec：当程序调用exec时；
+* fork：当程序调用fork时；
+* vfork：当程序调用vfork时；
+* syscall：当程序调用系统调用（system calls）时。

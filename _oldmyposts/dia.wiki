@@ -1,0 +1,16 @@
+== dia ==
+*2013-7-5 17:42:59*
+_linux_
+`dia`
+----
+=== 让dia支持fctix输入法 ===
+平台: Linux Mint
+需要取消dia的单窗口模式
+
+编辑 /usr/bin/dia
+
+修改为:
+
+`dia-normal "$@"`
+
+可能还有快捷键和`ctrl+space`冲突的问题 需要修改dia的快捷键绑定

@@ -1,0 +1,12 @@
+== 在linux运行东方系列游戏 ==
+*2013-10-25 21:38:03*
+_linux_
+`tuhou`
+`game`
+----
+%toc
+=== aur安装th07 ===
+* AUR的PKGBUILD依賴一個bin32-lha的不存在的包 其实这个包不需要
+* midi音效需要安裝開啓timidity++
+* 安装好后`cp -r /usr/share/th07/* ~/.th07`
+* aur还有th08

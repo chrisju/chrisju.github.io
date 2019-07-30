@@ -1,0 +1,17 @@
+== github ==
+*2013-10-25 10:24:45*
+_linux_
+`git`
+----
+%toc
+=== 常用命令 ===
+==== 导入本地.git到github ====
+# `git remote add origin https://github.com/username/Hello-World.git`
+# `git push -u origin master`
+==== 从父项目更新 ====
+# `git remote add upstream https://github.com/octocat/Spoon-Knife.git`
+# `git fetch upstream`
+# `git merge upstream/master`
+=== 取消提交 ===
+* `git push <remote> HEAD --force`
+* 例: `git push github github:master --force`

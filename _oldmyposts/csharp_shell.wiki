@@ -1,0 +1,65 @@
+== c#调用shell命令 ==
+*2013-10-11 18:27:21*
+_编程_
+`c#`
+`mono`
+`shell`
+----
+{{{class="brush: c#"
+	public struct ShellReturn
+	{
+		public int ret;
+		public string stdout;
+		public string stderr;
+	}
+	public static ShellReturn CallShellCommand (ArrayList cmds)
+	{
+		ShellReturn ret;
+		ProcessStartInfo pInfo = new ProcessStartInfo ();
+		pInfo.Arguments = "";
+		pInfo.FileName = "/bin/bash";
+		Process p = new Process ();
+		p.StartInfo = pInfo;
+		p.StartInfo.UseShellExecute = false;
+		p.StartInfo.RedirectStandardInput = true;
+		p.StartInfo.RedirectStandardOutput = true;
+		p.StartInfo.RedirectStandardError = true;
+		p.StartInfo.CreateNoWindow = true;
+		p.Start ();
+
+		StreamWriter myStreamWriter = p.StandardInput;
+		StreamReader sout = p.StandardOutput;
+		StreamReader serr = p.StandardError;
+//			myStreamWriter.WriteLine ("sudo useradd -d /home/wp -s /bin/bash -m wp");
+//			myStreamWriter.WriteLine ("sudo su root -c 'echo \"wp:wp\" | chpasswd'");
+//			myStreamWriter.WriteLine ("ls ~/.mozilla/");
+		foreach(string cmd in cmds)
+		{
+			myStreamWriter.WriteLine (cmd);
+		}
+		myStreamWriter.WriteLine ("exit $?");
+		p.StandardInput.Flush ();
+		p.WaitForExit ();
+
+		ret.stdout = sout.ReadToEnd ().ToString ();
+		ret.stderr = serr.ReadToEnd ().ToString ();
+		ret.ret = p.ExitCode;
+		p.Close ();
+		return ret;
+	}
+}}}
+调用:
+{{{class="brush: c#"
+	private string Test2 ()
+	{
+		ArrayList cmds = new ArrayList();
+		cmds.Add("ls ~");
+		cmds.Add("mkdir /var/tt");
+		ShellReturn r;
+		r = CallShellCommand (cmds);
+		return "exitcode: " + r.ret
+			+ "\nstdout:\n" + r.stdout 
+				+ "\nstderr:\n" + r.stderr;
+	}
+}}}
+

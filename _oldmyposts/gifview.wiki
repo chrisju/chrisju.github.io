@@ -1,0 +1,99 @@
+== android显示gif动画 ==
+*2013-09-23 11:50:04*
+_android_
+`android开发`
+`gif`
+`gifview`
+----
+一个支持缩放的gifview
+{{{class="brush: java"
+package com.sa.gifviewdemo;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Movie;
+import android.graphics.Rect;
+import android.view.View;
+
+public class GifView extends View {
+	private Movie mMovie;
+	private long movieStart;
+
+	private Rect src, dst;
+	private Bitmap tmpBitmap;
+	private Canvas tmpCanvas;
+
+	public GifView(Context context) {
+		super(context);
+	}
+
+	public void setGifResource(int resId) {
+		InputStream is = getContext().getResources().openRawResource(resId);
+		initializeView(is);
+	}
+	
+	public void setGifFile(File file) throws FileNotFoundException {
+	    // 必须使用BufferedInputStream并mark
+		int readlimit = 1024 * 64;
+		InputStream is = new BufferedInputStream(new FileInputStream(file), readlimit);
+		is.mark(readlimit);
+		initializeView(is);
+	}
+
+	private void initializeView(InputStream is) {
+		mMovie = Movie.decodeStream(is);
+		movieStart = 0;
+
+		// prepare to stretch
+		tmpBitmap = Bitmap.createBitmap(mMovie.width(), mMovie.height(),
+				Bitmap.Config.ARGB_8888);
+		tmpCanvas = new Canvas(tmpBitmap);
+		src = new Rect(0, 0, tmpBitmap.getWidth(), tmpBitmap.getHeight());
+		dst = new Rect(0, 0, 1, 1);
+
+		this.invalidate();
+	}
+
+	@Override
+	protected void onDraw(Canvas canvas) {
+		canvas.drawColor(Color.TRANSPARENT);
+		super.onDraw(canvas);
+		long now = android.os.SystemClock.uptimeMillis();
+		if (movieStart == 0) {
+			movieStart = now;
+		}
+		if (mMovie != null) {
+			int dur = mMovie.duration();
+			if (dur == 0) {
+				dur = 1200;
+			}
+			int relTime = (int) ((now - movieStart) % dur);
+			mMovie.setTime(relTime);
+
+			// stretch to fit view
+			mMovie.draw(tmpCanvas, 0, 0);
+			dst.right = dst.left + getWidth();
+			dst.bottom = dst.top + getHeight();
+			canvas.drawBitmap(tmpBitmap, src, dst, null);
+
+			this.invalidate();
+		}
+	}
+
+}
+}}}
+* *暂时只支持动态创建* layout创建支持可照参考链接自己添加
+* *不支持某些类型的gif* 如[[../res/a.gif]] 不清楚原因
+* 若`a.gif`的`mMovie.duration()`为0 会自己设置一个duration 但是图片还是不会变
+* 可以支持的如[[../res/miku.gif]]
+* *似乎有轻微的native内存泄露*
+==== 参考 ====
+* http://weavora.com/blog/2012/02/07/android-how-to-use-animated-gif/

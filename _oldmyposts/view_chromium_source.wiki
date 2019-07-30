@@ -1,0 +1,5 @@
+== linux查看chromium/chrome插件的源码 ==
+*2013-6-3 18:02:54*
+`chromium`
+----
+~/.config/chromium/Default/Extensions/下有各插件源码 插件id可在扩展程序管理里插件看到 即访问网站按钮对应链接的最后一段

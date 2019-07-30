@@ -1,0 +1,138 @@
+== git 培训 ==
+*2011-12-29 20:47:24*
+_编程_
+`git`
+----
+%toc
+
+=== 代码管理中的分支管理 ===
+[[../res/branch.png]]
+===== 永久分支 =====
+* *master*  团队成员从主分支(master)获得的都是处于可发布状态的代码
+* *develop* 能够获得最新开发进展的代码
+===== 临时分支 =====
+临时分支(辅助分支)是根据需要从master或develop产生的, 完成后就归到master或develop去并删除掉. 数量不限
+* *feature* 常用于开发一个独立的新功能. 每个新功能独立生成一个feature分支
+* *release* 通常负责"短期的发布前准备工作","小bug的修复工作","版本号等元信息的准备工作", 严禁并入新功能. 与此同时, develop分支又可以承接下一个新功能的开发工作了
+* *hotfix*  源于master的非预期关键BUG
+
+=== 我们使用git的好处和坏处 ===
+# SVN分支合并会遇到各种问题,包括额外的冲突和繁琐的操作 [http://www.kuqin.com/managetool/20110612/91868.html 详情]. 而git由于使用不同架构可以轻易的管理分支. git可以让你拥有多个本地分支, 他们可能是完全独立的. 而且建立,合并,切换和删除这些开发的支线只需要几秒钟的时间
+==== git其它好处 ====
+* 由于是分布式版本库 在连不上服务器情况下也能在本地仓库维护版本
+* 由于有本地仓库,可以作小步提交,不用顾虑他人,当然注释要写明是此次提交的临时性的不能下载的提交
+* 没有烦人的.svn文件夹
+==== 缺点====
+
+=== 使用git ===
+# *安装*
+{{{class="brush: bash"
+sudo apt-get install git
+}}}
+# *配置* <br>
+ 编辑 ~/.gitconfig
+{{{class="brush: bash"
+[user]
+	name = aa
+	email = aa@gmail.com
+[alias]
+    co = checkout
+    ci = commit -a
+    st = status
+    svnup = svn rebase --localtime
+    svncommit = svn dcommit --localtime
+    logweek = log --since=5.days
+[core]
+	excludesfile = ~/.gitignore
+}}}
+ user填入你的名字和邮箱,alias里可以自定义缩写 <br>
+ 编辑 ~/.gitignore 设置要忽略的文件和文件夹
+{{{class="brush: bash"
+# 此为注释 将被 Git 忽略
+#*.a       # 忽略所有 .a 结尾的文件
+#!lib.a    # 但 lib.a 除外
+#/abc     # 仅仅忽略项目根目录下的 TODO 文件，不包括 subdir/abc
+#build/    # 忽略 build/ 目录下的所有文件
+#doc/*.txt # 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt
+*.[oa]    # 忽略.o和.a文件
+*~
+*.swp
+.libs/
+*.so
+*.lo
+*.la
+*.pyc
+
+tags
+tmp/
+bin/
+obj/
+*.pro.user
+*.apk
+gen/
+libs/
+default.properties
+.svn/
+.DS_Store
+}}}
+# *从服务器克隆一个工程到本地*
+{{{class="brush: bash"
+git clone git@192.168.1.15:/opt/git/project.git
+}}}
+# 添加文件
+{{{class="brush: bash"
+git add path/to/file    #添加一个文件或文件夹
+git add .               #添加当前文件夹下所有文件,含子文件夹,忽略设置为忽略的
+git add -f path/to/file #强行添加设置为忽略的文件
+}}}
+# 提交所有更改到本地库
+{{{class="brush: bash"
+git ci -m"日志信息"
+}}}
+# 一些基本操作,详细的看 `git help` 以及 `git help {command}` {command}可以是log diff等等
+{{{class="brush: bash"
+git log     #提交记录,记录里commit后面的hash值是此次提交的标记,假设为12ab11...
+git show 12ab file1  #比较12ab的file1的内容修改
+git co 12ab     #切换到此次提交,要co回到最新就co本分支名字就行了 类似svn co
+git st              #查看当前状态 类似svn st
+git diff file1      #查看file1已作更改 类似svn diff
+git diff 112a ac32  #比较112a和ac32的差别
+git rm file1        #删除file1以及取消对其的控制 类似svndelete
+git reset --hard    #取消当前所做更改;类似svn revert
+}}}
+# 与版本服务器交互
+{{{class="brush: bash"
+git push    #上传当前分支到默认的服务器的默认分支 (clone的时候会自动设置
+git pull    #从默认的服务器的默认分支下载并合并
+git push orign dev      #上传到服务器的dev分支
+git pull origin fix:fix #下载服务器的fix分支为本地的fix分支 (会自动创建
+git branch -r       #查看服务器的分支状况
+}}}
+# 分支操作
+{{{class="brush: bash"
+git co -b newf  #从当前分支创建叫newf的新分支
+git co dev      #切换到dev分支
+git merge newf  #合并newf分支的更改到当前分支
+git branch -d newf  #删除newf分支
+git branch          #查看本地分支状况
+git diff dev..newf  #比较dev分支和newf分支的差别
+}}}
+# 一个示例
+{{{class="brush: bash"
+git clone git@192.168.1.15:/opt/git/project.git #首次下载
+git co dev          #可能会默认为dev分支,就不需要这个操作了
+git co -b newf      #建立一个新功能分支
+... 作修改操作,添加文件修改文件什么的,穿插n次 git ci -m"xx"
+git ci -m"xxxxxx"   #提交到本地库, 这个新功能差不多没有问题告一段落就合并到dev中
+git co dev          #切换回dev分支
+git merge newf      #合并newf分支的修改到dev中
+git branch -d newf  #删除newf分支
+git pull origin dev #从服务器更新dev分支
+git push origin dev #提交到dev
+}}}
+=== 推荐的教程 ===
+Git Magic: http://www-cs-students.stanford.edu/~blynn/gitmagic/intl/zh_tw/
+不过这个教程内容比较多
+也可以自己搜简要些的教程
+=== 参考 ===
+http://roclinux.cn/?p=2129

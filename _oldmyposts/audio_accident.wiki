@@ -1,0 +1,30 @@
+== 一起声音小事故 ==
+*2013-03-29 17:37:35*
+_linux_
+`linux`
+`多媒体`
+----
+%toc
+今天正在编译ffmpeg时 看到B站的空境更新了 就跑去看空境
+
+放了一会没声音 感觉不对劲 跑audacious下听歌 直接报错
+
+当下就慌了 以前给声音整过几次 苦不堪言
+
+从终端跑audacious,提示:
+
+`ALSA lib pcm_dmix.c:1022:(snd_pcm_dmix_open) unable to open slave`
+
+以及对话框提示: `snd_pcm_open failed: Device or resource busy`
+
+解决办法:
+
+`fuser /dev/snd/* /dev/dsp /dev/snd`
+
+查看占用资源的进程号(pid)
+
+然后用`ps aux|grep pid`看谁在搞鬼
+
+我这发现是wineqq在搞鬼…
+
+退出qq就好了

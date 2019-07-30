@@ -1,0 +1,9 @@
+== Dive Into Python3 中文版 epub电子书 ==
+*2013-11-12 11:33:16*
+_编程_
+`python`
+`ebook`
+----
+* 基于[http://woodpecker.org.cn/diveintopython3/index.html 啄木鸟汉化的《Dive Into Python3》]
+* 百度网盘下载: http://pan.baidu.com/s/1EHf5W
+* [http://zzbalabala.com/down/diveintopython3_zh_zz20131112.epub 本地下载]

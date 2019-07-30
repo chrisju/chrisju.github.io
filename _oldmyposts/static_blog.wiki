@@ -1,0 +1,37 @@
+== 静态博客相关 ==
+*2013-08-25 19:52:31*
+`blog`
+----
+%toc
+* vimwikiblog相关资源: https://github.com/chrisju/vimwikiblog
+* 会用到 评论, 代码高亮,vimwiki
+* 布局和配色参考: http://calvinlee.github.io/
+=== 评论 ===
+* [http://www.sp8417.com/disqus/ Disqus教程]
+* [http://blog.duoshuo.com/2012/03/custom-release-candidate/ 多说教程]
+==== 使用Disqus ====
+# 在 http://disqus.com/dashboard/ 添加一个站点
+# 在Choose your platform时选Universal Code, 根据提示”Place the following code where you’d like Disqus to load:”
+# 把对应代码填入想填入的部位
+===== 评论区显示较少内容 =====
+进网站的Settings, 选Discovery 第一项xxx level选最简单的
+===== 设置中文 =====
+Settings-General, Language选chinese
+=== 代码高亮 ===
+==== SyntaxHighlighter ====
+* [http://alexgorbatchev.com/SyntaxHighlighter/ 官网]
+* 参考: http://www.cnblogs.com/heyuquan/archive/2012/09/28/2707632.html
+=== Vimwiki ===
+* 评论和高亮可以用模板搞定
+* 模板参考: http://kalxd.gitcafe.com/navi/2013/05/02/hello-vimwiki/
+* 模板原理: ~/.vim/autoload/vimwiki/html.vim
+* 我的模板: https://github.com/chrisju/vimwikiblog/blob/master/config/vimwiki.tpl
+* 参考: https://code.google.com/p/vim-script-cn/source/browse/trunk/doc/vimwiki.cnx
+==== vimwiki网站 ====
+* [http://www.ruchee.com/code/tools/vimwiki_primer.html Ruchee的荒草园子]
+* [http://wiki.ktmud.com/ 丘迟的维基世界]
+* [http://reverland.bitbucket.org/ reverland的wiki]
+* [https://github.com/ruchee/backup2/blob/master/code/linux/vim/vimwiki_site.wiki VimWiki站点收集]
+=== 导出wordpress ===
+* 转为markdown: http://code.eoe.cn/15.html
+* 到blogger: http://briian.com/?p=9052

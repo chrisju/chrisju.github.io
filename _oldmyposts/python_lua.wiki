@@ -1,0 +1,14 @@
+== python调用lua ==
+*2013-10-22 16:02:17*
+_编程_
+`python`
+`lua`
+----
+%toc
+=== lunatic-python ===
+* [http://labix.org/lunatic-python lunatic-python主页(文档)]
+* [https://github.com/bastibe/lunatic-python github]
+* 可以支持python和lua互相多层调用
+=== lupa ===
+Python wrapper around LuaJIT
+[https://pypi.python.org/pypi/lupa/0.9]

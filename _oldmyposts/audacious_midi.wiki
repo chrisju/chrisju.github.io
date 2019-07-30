@@ -1,0 +1,21 @@
+== 配置Audacious播放MIDI ==
+*2013-07-29 17:38:44*
+_linux_
+`多媒体`
+----
+%toc
+`sudo apt-get install timidity`
+
+在audacious的首选项-插件-输入里设置AMIDI-PLUG
+
+选择alsa后端,选中timidity的端口, 混音控制器选PCM
+
+OK
+
+PS: 我因为测试播放的midi文件前几秒是无声的所以我…被坑了好久
+
+参考:
+
+http://linux-wiki.cn/wiki/zh-hk/%E6%92%AD%E6%94%BEMIDI
+
+http://co2-mindhorizon.org/blog/?p=292

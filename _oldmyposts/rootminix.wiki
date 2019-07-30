@@ -1,0 +1,18 @@
+== Minix Neo X5 Mini 4.2.2 root ==
+*2013-11-25 13:32:58*
+_android_
+`root`
+----
+* [http://zzbalabala.com/down/X5_Mini_v4.2.2_Root.7z 下载地址]
+* 原包出处: http://forum.xda-developers.com/showthread.php?t=2439878
+* 改动:
+  # 原包的bat少了个安装SuperSU.apk的语句
+  # 新加入了linux用的sh脚本(跟bat基本没差别)
+=== root步骤 ===
+==== linux ====
+# 要安装有adb 确保adb devices能看到设备(如果不识别请参考[http://blog.zzbalabala.com/blog/andev.html#toc_0.1.0.6 有些公司的设备adb devices找不到])
+# 运行TPSparkyRoot.sh(每次重启后一定要先在盒子点Connect PC连上后再操作
+==== win ====
+# 安装91手机助手安装盒子驱动
+# 盒子usb连接方式调到U盘模式 打开调试模式 确保adb devices能看到设备
+# 运行TPSparkyRoot.bat(每次重启后一定要先在盒子点Connect PC连上后再操作

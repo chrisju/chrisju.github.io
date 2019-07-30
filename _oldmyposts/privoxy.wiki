@@ -1,0 +1,18 @@
+== privoxy ==
+*2013-10-15 14:21:42*
+_linux_
+`privoxy`
+----
+%toc
+privoxy是个代理管理工具, 而不仅仅是socks代理转换成http代理的工具
+[http://www.lainme.com/doku.php/blog/2011/04/privoxy_%E5%B9%BF%E5%91%8A%E8%BF%87%E6%BB%A4%E5%92%8C%E8%87%AA%E5%8A%A8%E4%BB%A3%E7%90%86%E5%88%87%E6%8D%A2 这里]有
+分发规则用法
+=== 用privoxy控制goagent代理 ===
+* 浏览器上的代理插件或firefox之类自带的pac支持只能控制浏览器上的代理工作规则
+* privoxy可以提供全局控制<br>
+比如终端的http_proxy变量若设置为goagent代理,则代理会始终起作用. 假如对局域网连接不需要代理, 则需要设定规则 这时可以使用privoxy 在/etc/privoxy/config设置
+{{{class="brush: bash"
+forward   /      127.0.0.1:8087
+forward         192.168.*.*/     .
+}}}
+然后把http_proxy设到privoxy端口 `sudo service privoxy restart`即可

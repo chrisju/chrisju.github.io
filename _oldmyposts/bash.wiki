@@ -1,0 +1,70 @@
+== bash ==
+*2013-07-29 19:36:41*
+_linux_
+`bash`
+----
+%toc
+* 定义变量 a=werty
+* 使用变量 `$a` `${a}`
+=== 显示输入 ===
+`set -v` 打印输入
+`set +v` 关闭打印输入
+=== 调用编辑器编辑命令 ===
+`^X^E`
+=== sudo运行多个命令 ===
+`sudo su root -c 'echo "wp:wp" | chpasswd'`
+=== 搜索history时使用ctrl-s作为ctrl-r的反向搜索 ===
+{{{class="brush: bash"
+history搜索本来支持ctrl-s,只是因为快捷键冲突而失效
+原ctrl-s为冻结终端 禁用此特性可解决快捷键冲突
+在~/.bashrc加入
+stty -ixon
+}}}
+=== 忽略alias ===
+在命令前加'`\`' 如'`\ls .`'
+=== 文档字符串(HERE DOCUMENT) ===
+{{{class="brush: bash"
+cat << 'EOF' > /tmp/yourfilehere
+These contents will be written to the file.
+EOF
+tee newfile <<IAMEOF
+line 1
+line 2
+line 3
+IAMEOF
+}}}
+=== 字符串取前缀 ===
+{{{class="brush: bash"
+${filename%.sam*}
+}}}
+=== 参数判断 ===
+{{{class="brush: bash"
+#如果没有参数或第一个参数扩展名不是sam就报错
+if [ 0 -eq $# ] || [ "${1##*.}" != "sam" ]; then
+echo "ERROR: wrong command!"
+usage
+exit 1
+fi
+}}}
+=== 分阶段运行脚本 ===
+{{{class="brush: bash"
+beg=$1
+end=$2
+if [ -z $beg ]; then
+    beg=-99999
+fi
+if [ -z $end ]; then
+    end=99999
+fi
+echo "begin:" $beg "end:" $end
+
+if [ 1 -ge $beg ] && [ 1 -le $end ]; then
+    echo "1"
+fi
+if [ 3 -ge $beg ] && [ 3 -le $end ]; then
+    echo "3"
+fi
+if [ 11 -ge $beg ] && [ 11 -le $end ]; then
+    echo "11"
+fi
+}}}

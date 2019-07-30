@@ -1,0 +1,491 @@
+== 基因处理工具 ==
+*2016-05-18 10:31:49*
+`gene`
+`bwa`
+`sam`
+----
+%toc
+=== 数据下载及预处理 ===
+* 下载sratoolkit http://www.ncbi.nlm.nih.gov/Traces/sra/?view=software
+* 下载sra 1.使用本文后面提供的下载脚本 2.使用sratoolkit中的prefetch
+* `fastq-dump SRR001438.sra SRR001448.sra` sra转单端的fastq 可一次转多个
+* `fastq-dump --split-3 ERR1375575.sra` sra转双端的fastq 能得到xx_1.fastq和xx_2.fastq 一次只能转一个
+=== bwa ===
+短序比对工具. 输入fa(参考序列)和fq(待处理序列), 输出sam(比对结果)
+
+源码: https://github.com/lh3/bwa 版本0.7.13
+==== 使用方法 ====
+# `./bwa index xxx.fa` 建立索引
+# 序列比对
+  * `./bwa mem xxx.fa read1.fastq >aln-se.sam` single-end(单端)序列比对
+  * `./bwa mem -t 12 xxx.fa read1.fastq >aln-se.sam 2>mem_log` 12线程单端比对
+  * `./bwa mem xxx.fa read1.fastq read2.fastq >aln-pe.sam` paired-end序列比对
+=== samtools ===
+处理sam文件的工具. 源码: https://github.com/samtools/samtools 版本: 1.3.1
+==== 1.3.1编译出错 error: unknown type name 'WINDOW' ====
+CentOS6.5下遇到过这个错误. 使用`./configure LIBS=-ltinfo --enable-plugins --enable-libcurl --with-plugin-path=$PWD/htslib-1.3.1`可编译成功
+=== gatk ===
+GATK (全称The Genome Analysis Toolkit)是Broad Institute开发的用于二代重测序数据分析的一款软件，里面包含了很多有用的工具。
+
+下载: https://www.broadinstitute.org/gatk/download/ 版本: 3.5
+==== picard-tools-1.141 ====
+gatk会调用的一个库. 下载: https://sourceforge.net/projects/picard/ 版本: 1.141(这是java7支持的最后一个版本, 更新的版本需要使用java8)
+==== GATK3.5 已经提供了idx还提示 'An index is required, but none found' ====
+vcf和idx文件都不要使用.gz形式 用`gzip -d`解开压缩
+==== 报错 'The maximum allowed value for the cycle is xxx' ====
+不管报错是在BaseRecalibrator还是在PrintReads, 都是用BaseRecalibrator的`--maximum_cycle_value`参数调节. 这个参数可能会需要调到默认值的10倍以上
+=== DNA-Seq 分析实例 ===
+参考序列: ucsc.hg19.fasta 短序列:ERR003908.sra(paired-end)
+# 对参考序列建立bwt索引
+  {{{class="brush: bash"
+./bwa index ucsc.hg19.fasta
+  }}}
+# 从sra提取fastq 得到ERR003908_1.fastq和ERR003908_2.fastq
+  {{{class="brush: bash"
+fastq-dump --split-3 ERR003908.sra
+  }}}
+# bwa比对 开12个线程
+  {{{class="brush: bash"
+./bwa mem -t 12 ucsc.hg19.fasta ERR003908_1.fastq ERR003908_2.fastq >ucsc.hg19_ERR003908-pe.sam
+  }}}
+# 运行`tgatk-step-paired.sh`脚本, 进行sam处理和gatk分析流程(包含变异检测,最后生成.vcf文件)
+  {{{class="brush: bash"
+./tgatk-step-paired.sh ucsc.hg19_ERR003908-pe.sam
+  }}}
+=== 一些脚本 ===
+==== ncbi sra 下载脚本 ====
+* 可更改axel的`-s`参数进行调整速度限制(单位Byte)
+* 可把多个SRR_Acc_List用cat组合成一个然后下载
+{{{class="brush: py"
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+
+import sys, os
+import shutil
+
+
+if len(sys.argv) < 2 or sys:
+  print 'example: %s SRR061048' % (sys.argv[0])
+  print 'example: %s SRR_Acc_List.txt' % (sys.argv[0])
+
+def getsrr(ac):
+  ac = ac.strip(' \t\r\n')
+  fmt = 'ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/%s/%s/%s/%s.sra'
+  url = fmt % (ac[:3],ac[:6],ac,ac)
+  print('downloading '+url)
+  #cmd = 'wget -c %s -O %s.sra' % (url,ac)
+  cmd = 'axel -a -n 1 -s 800000 %s -o %s.sra  ' % (url,ac)
+  print cmd
+  os.system(cmd)
+
+
+ac = sys.argv[1]
+if os.path.exists(ac) and os.path.isfile(ac):
+  with open(ac) as f:
+      l = f.readlines()
+  for name in l:
+      getsrr(name)
+else:
+  getsrr(ac)
+}}}
+==== 批量bwa比对 ====
+对多个fa和多组read进行比对的批量处理工具
+{{{class="brush: py"
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+
+import sys, os
+import shutil as sh
+
+
+BWA = '/home/xxx/bwa/bwakit/bwa'
+
+def printhelp():
+    print('Usage:')
+    print('\t\t%s <command> <fa|fadir> [<fq|fqdir>]' % (sys.argv[0]))
+    print('\t\t%s index .' % (sys.argv[0]))
+    print('\t\t%s mem1 . ERR1357148.fastq' % (sys.argv[0]))
+    print('\t\t%s mem2 hg19/ ERR1357148.sra' % (sys.argv[0]))
+    print('\t\t%s mem2 hg19/ ../fastqdir/' % (sys.argv[0]))
+    print('\t\t%s indexmem1 hg19/ read3.fq' % (sys.argv[0]))
+    print('\t\tmem1: single fastq')
+    print('\t\tmem2: paired fastq. *_1.fastq and *_2.fastq must exist')
+    print('\t\tthread of mem must adjust in code in function "dealread"')
+
+def dealread(fapath, readpath):
+    fname1 = os.path.split(fapath)[1]
+    fname2 = os.path.split(readpath)[1]
+    print('dealing %s - %s' % (fname1, fname2) )
+    if fapath.endswith('_sec.fa'):
+        faname = fname1[:-7]
+    elif fapath.endswith('.fasta'):
+        faname = fname1[:-6]
+    elif fapath.endswith('.fa'):
+        faname = fname1[:-3]
+    else:
+        print('!!!!bad args: %s %s',(fapath, readpath))
+        return
+
+    if readpath.endswith('.fq'):
+        readname = fname2[:-3]
+    elif readpath.endswith('.fastq'):
+        readname = fname2[:-6]
+    elif readpath.endswith('.sra'):
+        readname = fname2[:-4]
+    else:
+        print('!!!bad args: %s %s',(fapath, readpath))
+        return
+
+    #run
+    name = '%s_%s' % (faname, readname)
+    if readpath.endswith('.sra'):
+        prefix = os.path.splitext(readpath)[0]
+        read1path = prefix + '_1.fastq'
+        read2path = prefix + '_2.fastq'
+        if not os.path.exists(read1path) or not os.path.exists(read2path):
+            print('!!!! file not exist %s or %s', (read1path,read2path))
+            return
+        cmd = '%s mem -t 12 %s %s %s >%s-pe.sam 2>%s_mem.log' % (BWA,fapath,read1path,read2path,name,name)
+    else:
+        cmd = '%s mem -t 12 %s %s >%s-se.sam 2>%s_mem.log' % (BWA,fapath,readpath,name,name)
+    print(cmd)
+    os.system(cmd)
+    cmd = 'gprof -b %s gmon.out >%s_mem_functime' % (BWA,name)
+    print(cmd)
+    os.system(cmd)
+    #sh.move('gmon.out', '%s_mem_gmon.out' % (faname))
+
+
+def dealfa(fapath):
+    fname = os.path.split(fapath)[1]
+    print('dealing ' + fname)
+    if fapath.endswith('_sec.fa'):
+        faname = fname[:-7]
+    elif fapath.endswith('.fasta'):
+        faname = fname[:-6]
+    elif fapath.endswith('.fa'):
+        faname = fname[:-3]
+    else:
+        print('!!!!bad args: %s',(fapath))
+        return
+
+    #run
+    if sys.argv[1].count('index') > 0:
+        cmd = '%s index %s 2>%s_index.log' % (BWA,fapath,faname)
+        print(cmd)
+        os.system(cmd)
+        cmd = 'gprof -b %s gmon.out >%s_index_functime' % (BWA,faname)
+        print(cmd)
+        os.system(cmd)
+    print(sys.argv[1])
+    if sys.argv[1].count('mem') > 0:
+        if len(sys.argv) < 4:
+            printhelp()
+            sys.exit(1)
+        argread = os.path.abspath(sys.argv[3])
+
+        print(argread)
+        if os.path.isfile(argread):
+            dealread(fapath, argread)
+        elif os.path.isdir(argread):
+            for name in os.listdir(argread):
+                readpath = os.path.join(argread, name)
+                print(readpath)
+                if os.path.isfile(readpath):
+                    if sys.argv[1].count('mem1') > 0:
+                        if name.endswith('.fastq') or name.endswith('.fq'):
+                            dealread(fapath, readpath)
+                    elif sys.argv[1].count('mem2') > 0:
+                        if name.lower().endswith('.sra'):
+                            dealread(fapath, readpath)
+    
+
+if len(sys.argv) < 3:
+    printhelp()
+    exit(1)
+
+argfa = os.path.abspath(sys.argv[2])
+if os.path.isfile(argfa):
+    dealfa(argfa)
+elif os.path.isdir(argfa):
+    for name in os.listdir(argfa):
+        fapath = os.path.join(argfa, name)
+        if os.path.isfile(fapath):
+            if name.endswith('.fasta') or name.endswith('.fa'):
+                dealfa(fapath)
+}}}
+==== gatk流程脚本 ====
+包含sam处理以及gatk处理. 下面是适用于paired-end的脚本, 与single-end的差别只是`samtools view`操作的时候去掉`-T $fa`参数
+{{{class="brush: bash"
+#!/bin/bash 
+ #PBS -l nodes=1:ppn=24
+ #PBS -l walltime=120:00:00
+ #PBS -N WES_analysis 
+#mkdir /QC
+##测序数据质量评估
+#/FastQC/fastqc -f fastq --noextract -o /QC /public/samba/sample/sample*_1.fastq.gz /public/samba/sample/sample*_2.fastq.gz
+#
+#mkdir /Trim
+##测序数据质量控制，过滤掉低质量非配对或较短的reads，得到有效数据（clean data）
+#java -jar /trimmomatic-0.33/trimmomatic-0.33.jar PE -threads 24 -phred33 -trimlog /Trim/sample.log /public/samba/sample/sample*_1.fastq.gz /public/samba/sample/sample*_2.fastq.gz /Trim/sample_R1.paired.fq /Trim/sample_R1.unpaired.fq /Trim/sample_R2.paired.fq /Trim/sample_R2.unpaired.fq ILLUMINACLIP:/trimmomatic-0.33/adapters/TruSeq3-PE.fa:2:30:10 LEADING:5 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36 HEADCROP:5
+#
+#mkdir /bam
+##将有效数据比对到参考基因组（一般情况下，参考基因组需要提前建好索引，一次操作，以后就不用创建了）上
+#/bwa-0.7.12/bwa mem -t 24 hg19.fa /Trim/sample_R1.paired.fq /Trim/sample_R2.paired.fq > /bam/sample.sam
+
+function usage()
+{
+echo "Usage:"
+echo "   " $0 "xxx.sam [step-begin] [step-end]" "2>xxx-gatk.log"
+}
+
+#如果没有参数或第一个参数扩展名不是sam就报错
+if [ 0 -eq $# ] || [ "${1##*.}" != "sam" ]; then
+echo "ERROR: wrong command!"
+usage
+exit 1
+fi
+
+beg=$2
+end=$3
+if [ -z $beg ]; then
+    beg=-99999
+fi
+if [ -z $end ]; then
+    end=99999
+fi
+echo "doing" $1 "begin:" $beg "end:" $end >&2
+
+
+set -v
+
+gatk=~/gatk-3.5/GenomeAnalysisTK.jar
+samtools=~/samtools-1.3.1/samtools
+picard=~/picard-tools-1.141/picard.jar
+gatkdatadir=~/bwadata/gatkref
+fa=hg19/ucsc.hg19.fasta
+
+datapre=${1%.sam*}             #获取sam文件前缀如ucsc.hg19_ERR1375575-pe
+variantdir=~/bwadata/${datapre}_variant
+
+if [ 100 -ge $beg ] && [ 100 -le $end ]; then
+#提取双端reads都比对到参考基因组上的比对结果 (单端比对不需要 -T $fa这个参数
+time $samtools view -T $fa -F 12 -bS -h $datapre".sam" > $datapre".bam"
+fi
+
+if [ 103 -ge $beg ] && [ 103 -le $end ]; then
+#对比对到参考基因组上的reads进行排序
+time java -Djava.io.tmpdir=tmp/ -Xmx24G -jar $picard SortSam I=$datapre".bam" O=$datapre".sorted.bam" SO=coordinate TMP_DIR=/tmp/ VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true
+fi
+
+if [ 106 -ge $beg ] && [ 106 -le $end ]; then
+#去掉重复reads
+time java -Djava.io.tmpdir=tmp/ -Xmx24G -jar $picard MarkDuplicates I=$datapre".sorted.bam" O=$datapre".dedupped.bam" METRICS_FILE=$datapre".metrics" CREATE_INDEX=true VALIDATION_STRINGENCY=LENIENT REMOVE_DUPLICATES=true TMP_DIR=/tmp
+fi
+
+if [ 109 -ge $beg ] && [ 109 -le $end ]; then
+#对reads增加头信息，主要针对多样本或批次分析（目前，GATK流程必须要执行该步骤，即使是单样本）
+time java -Djava.io.tmpdir=tmp/ -Xmx24G -jar $picard AddOrReplaceReadGroups I=$datapre".dedupped.bam" O=$datapre".RG.bam" RGID=sample RGLB=CN500 RGPL=Illumina RGPU=BioTecan RGSM=sample CREATE_INDEX=true   VALIDATION_STRINGENCY=LENIENT TMP_DIR=/tmp
+fi
+
+if [ 111 -ge $beg ] && [ 111 -le $end ]; then
+#对去掉重复reads后的reads进行重新排序
+time java -Djava.io.tmpdir=tmp/ -Xmx24G -jar $picard ReorderSam I=$datapre".RG.bam" O=$datapre".Reordered.bam" R=$fa CREATE_INDEX=true   VALIDATION_STRINGENCY=LENIENT TMP_DIR=/tmp
+fi
+
+if [ 114 -ge $beg ] && [ 114 -le $end ]; then
+#根据已有的indel信息（千人基因组数据），对可能存在插入或缺失的区域进行重新比对
+#找到可能插入或缺失的区域
+time java -Xmx24G -jar $gatk -T RealignerTargetCreator -nt 12 -R $fa -I $datapre".Reordered.bam" -known $gatkdatadir/1000G_phase1.indels.hg19.vcf -known $gatkdatadir/Mills_and_1000G_gold_standard.indels.hg19.vcf -o $datapre".realign.intervals"
+fi
+if [ 115 -ge $beg ] && [ 115 -le $end ]; then
+#对该区域的reads进行重新比对
+time java -Xmx24G -jar $gatk -T IndelRealigner -R $fa -I $datapre".RG.bam" -targetIntervals $datapre".realign.intervals" -known $gatkdatadir/1000G_phase1.indels.hg19.vcf -known $gatkdatadir/Mills_and_1000G_gold_standard.indels.hg19.vcf -o $datapre".realign.bam"
+fi
+
+if [ 117 -ge $beg ] && [ 117 -le $end ]; then
+#根据已有的变异位点信息（千人基因组数据），对碱基质量进行校正
+#找到可能需要校正的位点区域
+time java  -jar $gatk -T BaseRecalibrator -nct 8 -rf BadCigar -R $fa -I $datapre".realign.bam" -knownSites $gatkdatadir/dbsnp_138.hg19.vcf -knownSites $gatkdatadir/Mills_and_1000G_gold_standard.indels.hg19.vcf  -knownSites $gatkdatadir/1000G_phase1.indels.hg19.vcf -o $datapre".recal.grp"
+#获取校正后的比对到参考基因组的reads信息
+time java  -jar $gatk -T PrintReads -nct 8 -R  $fa -I $datapre".realign.bam" -BQSR $datapre".recal.grp" -o $datapre".recal.bam"
+fi
+
+if [ 120 -ge $beg ] && [ 120 -le $end ]; then
+mkdir $variantdir
+#变异检测
+#参考dbsnp数据库，使用gatk自带的变异检测算法HaplotypeCaller，检测reads中的变异信息
+time java -Xmx24G -jar $gatk -T HaplotypeCaller -R $fa -I $datapre".recal.bam" -D $gatkdatadir/dbsnp_138.hg19.vcf --genotyping_mode DISCOVERY -o ${variantdir}/sample.raw.vcf
+fi
+if [ 124 -ge $beg ] && [ 124 -le $end ]; then
+#获取变异信息中的单点突变
+time java -Xmx24G -jar $gatk -T SelectVariants -R  $fa --variant ${variantdir}/sample.raw.vcf -o ${variantdir}/sample.snp.vcf -selectType SNP 
+fi
+if [ 127 -ge $beg ] && [ 127 -le $end ]; then
+#获取变异信息中的插入或缺失
+time java -Xmx24G -jar $gatk -T SelectVariants -R  $fa --variant ${variantdir}/sample.raw.vcf -o ${variantdir}/sample.indel.vcf -selectType INDEL 
+fi
+if [ 130 -ge $beg ] && [ 130 -le $end ]; then
+#选用相关参数对snp进行过滤
+time java -Xmx24G -jar $gatk -T VariantFiltration -R  $fa -V ${variantdir}/sample.snp.vcf -o ${variantdir}/sample.snp_filter.vcf --filterExpression "QD< 2.0"   --filterExpression "MQ < 40.0"   --filterExpression "MQRankSum < -12.5"   --filterExpression "ReadPosRankSum < -8.0"   --filterName QDFilter   --filterName MQFilter   --filterName MQRSFilter   --filterName ReadPosFilter 
+fi
+if [ 134 -ge $beg ] && [ 134 -le $end ]; then
+#选用相关参数对indel进行过滤
+time java -Xmx24G -jar $gatk -T VariantFiltration -R  $fa -V ${variantdir}/sample.indel.vcf -o ${variantdir}/sample.indel_filter.vcf --filterExpression "QD < 2.0"   --filterExpression "ReadPosRankSum < -20.0"   --filterName QDFilter   --filterName ReadPosFilter
+fi
+if [ 140 -ge $beg ] && [ 140 -le $end ]; then
+#将过滤后的snp和indel进行合并
+time java -Xmx24G -jar $gatk -T CombineVariants -R  $fa --variant ${variantdir}/sample.snp_filter.vcf --variant ${variantdir}/sample.indel_filter.vcf --assumeIdenticalSamples --genotypemergeoption UNSORTED -o ${variantdir}/sample.raw_filter.vcf
+fi
+
+set +v
+}}}
+==== vcf文件比较 ====
+适用于对很相似的vcf进行比较, 如同样不同方式或参数生成的vcf
+{{{class="brush: py"
+#!/usr/bin/env python3
+
+import sys, os
+import shutil as sh
+import re
+
+
+class OrderedDict(dict):
+  '''
+  >>> d = dict()
+  >>> d['a']=1
+  >>> d['b']=2
+  >>> d['c']=3
+  >>> d.items()
+  [('a', 1), ('c', 3), ('b', 2)]
+  >>> d = OrderedDict()
+  >>> d['a'] = 1
+  >>> d['b'] = 2
+  >>> d['c'] = 3
+  >>> list(d.items())
+  [('a', 1), ('b', 2), ('c', 3)]
+  '''
+  def __init__(self, *args, **kw):
+      super(OrderedDict, self).__init__(*args, **kw)
+      self.ordered_keys = []
+ 
+  def __setitem__(self, key, value):
+      if not key in self:
+          self.ordered_keys.append(key)
+      super(OrderedDict, self).__setitem__(key, value)
+ 
+  def items(self):
+      for key in self.ordered_keys:
+          yield key, self[key]
+
+
+print(sys.argv)
+if len(sys.argv)<3:
+    print('%s file1.vcf file2.vcf' % (sys.argv[0]))
+    sys.exit(1)
+
+iline=0
+#AC=1;AF=0.500;AN=2;BaseQRankSum=-0.736;ClippingRankSum=0.736;DP=3;ExcessHet=3.0103;FS=4.771;MLEAC=1;MLEAF=0.500;MQ=60.00;MQRankSum=-0.736;QD=12.26;ReadPosRankSum=0.736;SOR=2.225	GT:AD:DP:GQ:PL	0/1:1,2:3:36:65,0,36
+sep = r'[ \t;=]'
+attrlist = ['ClippingRankSum','MQRankSum','ReadPosRankSum','BaseQRankSum','QD','AC','AF','AN','DP1','ExcessHet','FS','MLEAC','MLEAF','MQ','SOR','score','GT','AD','DP','GQ','PL',]
+maxmap = OrderedDict()
+for a in attrlist:
+    maxmap[a] = (0,0,0)
+addlist = []
+
+with open(sys.argv[1]) as f1:
+    with open(sys.argv[2]) as f2:
+        while True:
+            iline = iline + 1
+            line1 = f1.readline()
+            line2 = f2.readline()
+            if not line1:
+                break
+            line1=line1[:-1]
+            line2=line2[:-1]
+            if line1 != line2:
+                sl1 = re.split(sep,line1)
+                sl2 = re.split(sep,line2)
+
+                # make sure has same index
+                if line1[0] != '#':
+                    cmp1 = sl1[0] + ' '*(40-len(sl1[0])-len(sl1[1])) + sl1[1]
+                    cmp2 = sl2[0] + ' '*(40-len(sl2[0])-len(sl2[1])) + sl2[1]
+                    while cmp1 != cmp2:
+                        while cmp1 < cmp2:
+                            # f1 insert line
+                            addlist.append('%s add line %d: %s' % (sys.argv[1], iline, line1))
+                            iline = iline + 1
+                            line1 = f1.readline()
+                            if not line1:
+                                break
+                            line1=line1[:-1]
+                            sl1 = re.split(sep,line1)
+                            cmp1 = sl1[0] + ' '*(40-len(sl1[0])-len(sl1[1])) + sl1[1]
+                        while cmp1 > cmp2:
+                            # f2 insert line
+                            addlist.append('%s add line %d: %s' % (sys.argv[2], iline, line2))
+                            line2 = f2.readline()
+                            if not line2:
+                                break
+                            line2=line2[:-1]
+                            sl2 = re.split(sep,line2)
+                            cmp2 = sl2[0] + ' '*(40-len(sl2[0])-len(sl2[1])) + sl2[1]
+
+                # print line cannot split to same count
+                if len(sl1) != len(sl2):
+                    print(iline)
+                    print(line1)
+                    print(line2)
+                    continue
+
+                for i in range(len(sl1)):
+                    if sl1[i] != sl2[i]:
+                        if i>0:
+                            attr = sl1[i-1]
+                            if attr == 'DP':
+                                attr = 'DP1'
+                            if attr in attrlist:
+                                diff = float(sl1[i]) - float(sl2[i])
+                                if abs(maxmap[attr][1]) < abs(diff):
+                                    maxmap[attr] = (maxmap.get(attr)[0]+1,diff,iline)
+                                else:
+                                    maxmap[attr] = (maxmap.get(attr)[0]+1,maxmap.get(attr)[1],maxmap.get(attr)[2])
+                            elif i == 5:
+                                attr='score'
+                                diff = float(sl1[i]) - float(sl2[i])
+                                if abs(maxmap[attr][1]) < abs(diff):
+                                    maxmap[attr] = (maxmap.get(attr)[0]+1,diff,iline)
+                                else:
+                                    maxmap[attr] = (maxmap.get(attr)[0]+1,maxmap.get(attr)[1],maxmap.get(attr)[2])
+                            elif attr == 'GT:AD:DP:GQ:PL':
+                                #print(iline,i,sl1[i-1],sl1[i],sl2[i])
+                                al = attr.split(':')
+                                vl1 = sl1[i].split(':')
+                                vl2 = sl2[i].split(':')
+                                for j in range(len(vl1)):
+                                    if vl1[j] != vl2[j]:
+                                        vl1l = re.split(r'[,/]',vl1[j])
+                                        vl2l = re.split(r'[,/]',vl2[j])
+                                        diff = 0
+                                        for k in range(len(vl1l)):
+                                            diff  = diff + abs(int(vl1l[k]) - int(vl2l[k]))
+                                        if abs(maxmap[al[j]][1]) < abs(diff):
+                                            maxmap[al[j]] = (maxmap.get(al[j])[0]+1,diff,iline)
+                                        else:
+                                            maxmap[al[j]] = (maxmap.get(al[j])[0]+1,maxmap.get(al[j])[1],maxmap.get(al[j])[2])
+                            else:
+                                print(iline,i,sl1[i-1],sl1[i],sl2[i])
+                        else:
+                            print(iline,i,sl1[i],sl2[i])
+
+print('----------------------')
+print('line adds:')
+for s in addlist:
+    print(s)
+print('----------------------')
+print('max diffs(count, max_diff, max_diff_lineno):')
+for k,v in maxmap.items():
+    print(k,v)
+}}}
+

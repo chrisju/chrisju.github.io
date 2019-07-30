@@ -1,0 +1,168 @@
+== pyqt ==
+*2011-03-29 17:51:49*
+_编程_
+`python`
+----
+%toc
+=== 用py2exe打包pyQt4 ===
+参考 http://www.linjunhalida.com/article/pyqt%E7%BC%96%E5%86%99%E7%9A%84%E7%A8%8B%E5%BA%8F%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83 <br>
+main.py:
+{{{class="brush: py"
+#!/usr/bin/python
+# coding=utf8
+
+import sys
+from PyQt4.QtGui import QWidget, QLabel, QLineEdit, QHBoxLayout , QApplication
+from PyQt4.QtCore import *   #不加py2exe时会报缺QtCore模块的错误
+
+app = QApplication(sys.argv)
+
+w = QWidget()
+label = QLabel("Name:")
+w.resize(250, 150)
+w.move(300, 300)
+editor = QLineEdit()
+layout = QHBoxLayout(w)
+layout.addWidget(label)
+layout.addWidget(editor)
+w.show()
+
+sys.exit(app.exec_())
+}}}
+setup.py:
+{{{class="brush: py"
+# coding=utf8
+# setup.py
+
+from distutils.core import setup
+import py2exe,glob
+
+script = [{
+    "script" : "src/main.py",
+    "icon_resources": [(1, "res/app.ico")]
+    }]
+
+py2exe_options = {
+        "compressed":1, #大大减小体积,upx无法替代
+        "optimize":2,
+        "bundle_files":2, #所有dll,pyd都打包到exe
+        "dll_excludes":["MSVCP90.dll"],
+        "includes":["sip"]
+        }
+
+files=[
+("res", glob.glob("res/*.*")),
+(".",glob.glob("dlls/*.*")),
+]
+
+setup(
+        windows=script,
+        data_files=files,
+        options={'py2exe':py2exe_options},
+        zipfile=None, #不生成libraray.zip
+        )
+}}}
+必须附加的捆绑DLL: [http://zzbalabala.com/wiki/res/pyqt/dlls/ dlls] ( Microsoft.VC90.CRT.manifest msvcp90.dll msvcr90.dll)
+==== 在win下配置所需环境环境并生成exe  ====
+# 安装python
+# 安装py2exe
+# 安装pyqt4
+# 设置python的环境变量
+# 在setup.py所在目录运行下面的bat脚本 <br>
+  `make.bat`
+  {{{class="brush: py"
+python setup.py py2exe
+rmdir  /S /Q build
+dist\main.exe
+  }}}
+  
+== 技巧 ==
+=== tree实现多栏列表 ===
+* 创建
+  {{{class="brush: py"
+def buildList(self):
+
+    m = MyTreeWidget(self)
+    m.setColumnCount(2)
+    sl = QStringList()
+    sl.append('id')
+    sl.append(u'值')
+    m.setHeaderLabels(sl)
+
+    global qFrame
+    attrs = qFrame.client.showarea.curPic[0].attrs
+    for attr in attrs:
+        sid = str(attr[0]) + ' ' + qFrame.proj.attrVerbose(attr[0])
+
+        sl = QStringList()
+        sl.append(sid)
+        sl.append(str(attr[1]))
+
+        item=QTreeWidgetItem(sl)
+        item.setFlags(item.flags()|Qt.ItemIsEditable)
+        m.addTopLevelItem(item)
+
+    return m
+  }}}
+* 读取
+  {{{class="brush: py"
+item = self.list.topLevelItem(0)
+while item:
+    s1 = unicode(item.text(0))
+    s2 = unicode(item.text(1))
+    if s1 and s2:
+        try:
+            id = int(s1.split()[0]) #取id
+            v = int(s2)
+            attrs.append((id,v))
+        except ValueError:
+            QMessageBox.critical(self,'X',u'请输入整数')
+            return
+
+    item = self.list.itemBelow(item)
+  }}}
+==== 右键删除菜单 ====
+{{{class="brush: py"
+class MyTreeWidget(QTreeWidget):
+
+    def __init__(self,parent=None):
+        super(MyTreeWidget, self).__init__(parent)
+
+        self.itemPressed.connect(self.click)
+
+    def click(self,item,index):
+
+        if qApp.mouseButtons() == Qt.RightButton:
+            m=QMenu()
+            ac=QAction(u'删除',item.treeWidget())
+            ac.triggered.connect(self.delete)
+            m.addAction(ac)
+            m.exec_(QCursor.pos())
+
+    def delete(self):
+
+        self.takeTopLevelItem(self.indexOfTopLevelItem(self.currentItem()))
+}}}
+==== 双击某一栏不出现可编辑  ====
+{{{class="brush: py"
+class PathTreeWidget(MyTreeWidget):
+
+    def __init__(self,parent=None):
+        super(PathTreeWidget, self).__init__(parent)
+
+        self.itemDoubleClicked.connect(self.dclick)
+
+    def dclick(self,item,index):
+
+        if index == 1:
+            default = config.cfg['lastimgdir']
+            fname = unicode(QtGui.QFileDialog.getOpenFileName(self, u'选择图片...',default))
+            if fname:
+                config.cfg['lastimgdir'] = os.path.dirname(fname)[:]
+                item.setText(1,fname)
+        else:
+            #防止index=1时出现麻烦的可编辑,添加item时不要添加editable的flag
+            item.setFlags(item.flags()|Qt.ItemIsEditable)
+            self.editItem(item,index)
+            item.setFlags(item.flags() & ~Qt.ItemIsEditable )
+}}}

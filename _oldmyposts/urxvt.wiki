@@ -1,0 +1,30 @@
+== urxvt ==
+*2013-10-25 14:37:16*
+_linux_
+`terminal`
+----
+%toc
+==== urxvt剪贴板 ====
+urxvt不支持X剪贴板 从X剪贴板复制内容可以使用fcitx的ctrl+;快捷键
+==== urxvt配色 ====
+在.Xdefaults中添加 *需图*
+{{{class="brush: bash"
+URxvt.background:#2e3436
+URxvt.foreground:#d3d7cf
+URxvt.color0:#2e3436
+URxvt.color1:#cc0000
+URxvt.color2:#4e9a06
+URxvt.color3:#c4a000
+URxvt.color4:#3465a4
+URxvt.color5:#75507b
+URxvt.color6:#06989a
+URxvt.color7:#d3d7cf
+URxvt.color8:#555753
+URxvt.color9:#ef2929
+URxvt.color10:#8ae234
+URxvt.color11:#fce94f
+URxvt.color12:#729fcf
+URxvt.color13:#ad7fa8
+URxvt.color14:#34e2e2
+URxvt.color15:#eeeeec
+}}}

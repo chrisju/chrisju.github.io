@@ -1,0 +1,179 @@
+== vim ==
+*2011-01-29 17:55:01*
+_linux_
+`vim`
+----
+%toc
+* 我的`~/.vimrc` https://github.com/chrisju/zzconf/blob/master/conf/.vimrc
+* 我的`~/.vim` https://github.com/chrisju/zzconf/tree/master/conf/.vim
+=== 基础操作 ===
+* `:e` 刷新当前窗口
+* `:windo e!` 强制刷新所有窗口的文件
+* `:w !sudo tee %` 用root权限保存文件
+* `/searchword\c` 搜索忽略大小写
+* `CTRL-Y`/`CTRL-E` 上/下卷动一行
+* `vim +N dpy.c`  打开文件并跳转到第N行
+* 编辑远程文件 `vim scp://username@host//path/to/somefile`
+* `gf` 打开文件
+* `:r !date -R` 插入shell命令执行结果到当前光标
+* 录制宏
+{{{class="brush: bash"
+普通模式下qa开始录制,其中a为寄存器名
+q结束录制
+@a使用
+6@a使用6次
+}}}
+* 16进制编辑
+{{{class="brush: bash"
+:%!xxd      进入16进制编辑模式
+:%!xxd -r   返回普通模式
+}}}
+* 删除含abc的行
+{{{class="brush: bash"
+:%g/abc/d
+}}}
+* 数字加减
+{{{class="brush: bash"
+C^A 加1
+C^X 减1
+}}}
+=== vim显示中文乱码 ===
+{{{class="brush: bash"
+使用gvim代替vim
+并在.vimrc添加
+set fileencodings=utf8,cp936,gb18030,big5 
+}}}
+=== 多文件替换 ===
+{{{class="brush: bash"
+:args * 当前文件夹下所有文件
+:argdo %s/hate/love/gc | update
+#其它添加文件方式
+:args *.txt 当前文件夹下txt文件
+:args */*.txt 扫描下级目录
+:args **/*.txt 递归搜索当前目录
+}}}
+=== 切换字母大小写 === 
+{{{class="brush: bash"
+~     -     将光标下的字母改变大小写
+3~    -     将下3行的字母改变其大小写
+g~~   -     改变当前行字母的大小写
+U     -     将可视模式下的字母全改成大写字母
+gUU   -     将当前行的字母改成大写
+u     -     将可视模式下的字母全改成小写
+guu   -     将当前行的字母全改成小写
+gUaw  -     将光标下的单词改成大写。
+guaw  -     将光标下的单词改成小写。
+}}}
+=== python-mode插件 ===
+  主页: https://github.com/klen/python-mode <br>
+  需要先安装vim pathogen https://github.com/tpope/vim-pathogen <br>
+  {{{class="brush: bash"
+  $ mkdir -p ~/.vim/autoload ~/.vim/bundle
+  $ wget -O ~/.vim/autoload/pathogen.vim https://raw.github.com/tpope/vim-pathogen/HEAD/autoload/pathogen.vim
+  }}}
+  安装python-mode
+  {{{class="brush: bash"
+  cd ~/.vim/bundle
+  git clone git://github.com/klen/python-mode.git
+  }}}
+  更改.vimrc, 在对各类文件分别处理之前加上以下内容:
+  {{{class="brush: bash"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Pathogen load
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+filetype off
+
+call pathogen#infect()
+call pathogen#helptags()
+
+filetype plugin indent on
+syntax on
+
+" Check code every save
+let g:pymode_lint_write = 0
+" use other local set
+let g:pymode_options_other= 0
+  }}}
+  默认按键:
+  {{{class="brush: bash"
+K       	Show python docs
+<C-Space>	Rope autocomplete
+<Leader>r	Run python
+<Leader>b	Set, unset breakpoint
+  }}}
+  使用视频: http://www.youtube.com/watch?v=67OZNp9Z0CQ 
+=== vimgrep ===
+* `:vimgrep abc *` 当前文件夹下搜索abc
+* `:vimgrep "->abc" *.c` 当前文件夹下.c文件中搜索`->abc`
+* `:vimgrep abc **` 递归搜索abc在当前文件夹所有下级文件夹
+* `:copen` 打开结果窗口
+=== autocmd使用的文件类型 ===
+# `filetype plugin on`开启侦测文件类型插件
+* 类型在`/usr/share/vim/vim74/ftplugin`下判断
+=== vim 插件 ===
+==== 批量重命名插件 ====
+* [http://www.vim.org/scripts/script.php?script_id=1721 renamer.vim]
+* 安装: 放入~/.vim/plugin/下 并添加执行权限
+* 使用: `:Ren`进入编辑文件夹模式 编辑完(不能保存)再次使用`:Ren`应用更改
+==== 代码注释插件 ====
+* [http://www.vim.org/scripts/script.php?script_id=23 EnhCommentify.vim]
+* cp到~/.vim/plugin/即安装完毕 默认快捷键`\x`
+==== 竖行递增递减插件 ====
+* [http://vim.sourceforge.net/scripts/script.php?script_id=670 VisIncr插件]
+* 竖行递增: ^v选中后 `:I`
+* 竖行递减: ^v选中后 `:I -1`
+* 竖行递增右对齐: `:II`
+* 每行行递增9,右对齐,空位用0填充: `:II 9 0`
+==== 多选插件 ====
+`vim-multiple-cursors` v选中一段后按Ctrl+n可以同时选中下一个相同的一段, 然后操作(如I,c)会同步到所有选中项. 可用于批量重命名
+==== 查找关键字插件 ====
+`ctrlsf.vim` 很人性化的给出关键字的上下文, 支持回车跳转. 需先`sudo apt-get install ack-grep`
+==== undo插件 ====
+`gundo` 保存undo的分支, 不用再怕丢失undo历史了
+==== 缩进可视化插件 ====
+`Indent Guides` 可以显示直观的缩进标志. (如果用tab缩进且没有展开成空格的话, 开这个插件会挺丑且没意义 推荐设置vim自动展开tab)
+=== vim 正则 ===
+==== 删除 ====
+* `g/pattern/d` 删除匹配行
+* `g!/pattern/d` 删除不匹配行
+==== 替换 ====
+* 基本替换: `:s/abc/def/g`
+* 示例: `:%s/\[\(\d\)\]/[9\1]/g` 将`[数字]`变为`[9数字]`
+* 示例: `:%s/Java_.*_comiz_\(.*\)(/JNI_FUNC(\1)(/gc`
+* 懒惰匹配: vim中的` \{-}`相当于`*?`
+* 去掉xml标记: `:%s/<.\{-}>//g`
+* 换行符替换成空格: `:%s/\n/ /g`
+* 空格替换成换行符: `:%s/ /\r/g`
+==== 符号定义 ====
+| vim    | perl | 意义 |
+|--------+------+------|
+| *      | *    |      |
+| \+     | +    |      |
+| \?或\= | ?    |      |
+| \{n,m} |      |      |
+|        |      |      |
+|        |      |      |
+|        |      |      |
+|        |      |      |
+|        |      |      |
+|        |      |      |
+|        |      |      |
+==== 批量重命名乱码rar文件  ====
+# `:Ren`进入renamer.vim插件
+# `'<,'>s/.\{-}\.rar/1/g` 先将乱码rar都转成1.rar
+# `C-v` 选中所有1用:I(visincr)转成1,2,3等
+# `'<,'>s/\ \{-}\n/.rar\r/g` 将1,2转成1.rar,2.rar等 visincr出来的结果有空格
+=== vim IDE ===
+* 用这个[https://github.com/yangyangwithgnu/use_vim_as_ide VIMIDE]可以轻松搭建vim ide
+* 若不自己编译支持python插件等功能vim, 可能会导致插件工作不正常
+=== vim编译 ===
+* 安装编译依赖 `sudo apt-get build-dep vim-gtk`
+* 编译安装
+  {{{class="brush: bash"
+git clone https://github.com/vim/vim.git
+cd vim/
+./configure --with-features=huge --enable-pythoninterp --enable-rubyinterp --enable-luainterp --enable-perlinterp --with-python-config-dir=/usr/lib/python2.7/config/ --enable-gui=gtk2 --enable-cscope --prefix=/usr
+make
+sudo make install
+    }}}
+* 注: 重新 `./configure` 前应 `make distclean`

@@ -1,0 +1,28 @@
+== 编译安装android源码中的例子遇到的问题解决 ==
+*2013-7-4 17:49:21*
+_android_
+`android开发`
+----
+=== 安装错误: INSTALL_FAILED_OLDER_SDK ===
+
+原因:默认是编译到最新版本的 如果rom版本低就会报这个错
+
+解决方法:
+
+在build/core/version_defaults.mk中给DEFAULT_APP_TARGET_SDK 赋值
+
+如: DEFAULT_APP_TARGET_SDK := 15
+
+=== 安装错误: INSTALL_FAILED_DEXOPT ===
+
+原因: 默认会对apk优化了 分离了dex并优化为odex文件
+
+解决方法:
+
+在build/core/package.mk中找到
+
+ifndef LOCAL_DEX_PREOPT
+
+LOCAL_DEX_PREOPT := true
+
+改为false即可

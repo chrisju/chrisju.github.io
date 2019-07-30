@@ -1,0 +1,16 @@
+== 更改文件名编码 ==
+*2013-10-18 13:37:27*
+_linux_
+`encoding`
+`rename`
+----
+* windows和linux传输文件会导致文件名乱码
+* 可以使用convmv修复文件名
+* 安装: `sudo apt-get install convmv`
+* 格式: `convmv -f 源编码 -t 新编码 [选项] 文件名`
+* 常用参数:
+  * -r 递归处理子文件夹
+  * --notest 真正进行操作，请注意在默认情况下是不对文件进行真实操作的，而只是试验。
+  * --unescape  可以做一下转义，比如把%20变成空格，如果你不知道这是在做什么，就不要尝试了。
+* 测试示例: `convmv -f gbk -t utf8 xxxxxx.xxx`
+* 实用示例: `convmv -f gbk -t utf8 -r xiami/ --notest`

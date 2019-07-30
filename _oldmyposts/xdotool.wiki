@@ -1,0 +1,32 @@
+== xdotool按键模拟软件 ==
+*2013-4-14 14:58:48*
+_linux_
+`xdotool`
+----
+示例:
+{{{class="brush: bash"
+#!/bin/bash
+
+wid=`xdotool search –title “AndroVM Player”`
+xdotool windowactivate $wid
+sleep 0.2
+while true;
+do
+xdotool mousemove 420 520
+xdotool click 1
+sleep 2;
+done;
+#xdotool key “Home”
+#xdotool key “ctrl+j”
+#xdotool key “BackSpace”
+#xdotool key “ctrl+v”
+#xdotool key “Return”
+##比如一个简单的模拟鼠标操作
+#while true;
+#do
+#xdotool mousemove 1417 600; #移动鼠标
+#xdotool click 1; #点击左键
+#xdotool key F5; #按F5
+#sleep 6;
+#done
+}}}

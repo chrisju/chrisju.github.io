@@ -1,0 +1,27 @@
+== c#调用c结构体一例 ==
+*2013-4-9 15:01:15*
+_编程_
+`c#`
+----
+参考: http://www.developerfusion.com/article/84519/mastering-structs-in-c/
+{{{class="brush: csharp"
+//调用
+private static void test ()
+{
+MyScreen sc = new MyScreen ();
+sc.Height = 32;
+sc.DeviceName = “sb233″;
+test (ref sc, 1234);
+}
+
+//结构体定义
+[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+public unsafe struct MyScreen
+{
+[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
+public string DeviceName;
+public int Height;
+};
+[DllImport("./so.so" , EntryPoint = "test", CallingConvention = CallingConvention.Cdecl)]
+public unsafe static extern void test (ref MyScreen p, int size);
+}}}

@@ -1,0 +1,55 @@
+== golang ==
+*2016-04-12 13:48:26*
+_编程_
+`go`
+`golang`
+----
+
+=== go命令使用 ===
+* `go run a.go b.go` run要带上本库中依赖的文件
+
+=== 安装第三方库 ===
+* 简单示例: `$ go get github.com/Sirupsen/logrus`
+* 安装示例: `$ go get -t -u -v github.com/sjwhitworth/golearn`
+* 安装依赖示例: `$ cd golearn;go get -t -u -v ./...`
+* 示例: `$ go install golang.org/x/net/html`
+
+=== 语法 ===
+* 开头小写的属性名和函数名不能跨包访问
+* import为别名
+{{{class="brush: python"
+import(
+    iconv "github.com/djimenez/iconv-go"
+)
+}}}
+* import不带前缀
+{{{class="brush: python"
+import(
+    . "github.com/djimenez/iconv-go"
+)
+}}}
+==== 继承 ====
+* golang中继承使用包含匿名结构体实现,子类构造时需注意包含父类
+{{{class="brush: python"
+type B struct {
+	a int
+	c string
+}
+type C struct {
+	*B
+}
+func (b *B) f() {
+	b.c = fmt.Sprintf("%d == %d", b.a, b.a)
+	fmt.Println(b.c)
+}
+func (b *C) g() {
+	b.f()
+	b.c = fmt.Sprintf("%d != %d", b.a, b.a)
+	fmt.Println(b.c)
+}
+a := &C{&B{3, "ahahaha"}}
+a.g()
+a.f()
+}}}
+
+

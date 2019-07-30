@@ -1,0 +1,183 @@
+== git ==
+*2010-11-26 21:46:34*
+_编程_
+`git`
+----
+%toc
+=== git命令 ===
+* `git log --since=5.days`    前5天的记录
+* `git log -p filename`       查看此文件的修改记录内容
+* `git commit --amend` #修改上次提交 和上次提交使用一个ID
+* `git reset --hard [commitid]` #回退到某版本
+* `git revert [commitid]` #撤销某次提交 也会作为一次提交
+* `git clean -fd` 删除所有untracked的文件和文件夹
+* `git diff --stat [commitid]` 显示所有改动的文件
+==== 下载旧版本文件 ====
+#  方法一:
+  {{{class="brush: bash"
+git cat-file <commitid|branch>:filename
+  }}}
+#  方法二:
+  {{{class="brush: bash"
+git co [commitid] [file]
+使用...
+git co HEAD [file]  //恢复新版本
+  }}}
+==== git tag ====
+{{{class="brush: bash"
+git tag -a 0.1 -m "第一个测试版本" //添加tag
+git tag -n  //列出所有tag
+}}}
+==== 分支 ====
+* 创建分支
+{{{class="brush: bash"
+$ git checkout -b dev
+$ git push origin dev
+}}}
+* 下载分支
+{{{class="brush: bash"
+$ git pull origin dev
+}}}
+* 删除dev分支
+{{{class="brush: bash"
+$ git push origin :heads/dev 
+}}}
+==== remote操作 ====
+* `git fetch origin master:master` 将origin库中的master分支下载为本地master分支
+* `git fetch --all` 更新远程分支到本地
+* `git remote -v` 查看remote库信息
+* `git push origin fpga` 将本地fpga分支push到origin上为fpga分支
+==== patch ====
+===== git专有patch同步更改 =====
+* `git format-patch bdfb9ef` 对`bdfb9ef`之后的每个提交生成一个git专用补丁(有序文件名.patch)
+* `git am *.patch` 使用补丁同步更改(成功记得rm *.patch)
+==== 多远端操作====
+* *在幕後，一個pull是簡單地一個 fetch 然後 merge 。通常，我們 pull 因為我們想在獲取後合併最近提交*
+* pull 是更新本地库.而fetch不会更新本地库,仅仅是下载
+* 将默认的库取出:
+{{{class="brush: bash"
+git fetch
+}}}
+* 将origin的master取出到一个新分支里:
+{{{class="brush: bash"
+git fetch origin master:newbranch
+}}}
+* 仓库间比较:
+{{{class="brush: bash"
+git diff origin/experimental^ other/some_branch~5
+}}}
+=== git svn ===
+==== alias ====
+在~/.gitconfig中加入
+{{{class="brush: bash"
+[alias]
+    svnclone = svn clone --localtime
+    svnup = svn rebase --localtime
+    svncommit = svn dcommit --localtime
+}}}
+==== 现有git工程导入svn ====
+{{{class="brush: bash"
+$ svn mkdir --parents -m "commit msg" http://url/to/project/dir #在远端创建svn目录
+$ git svnclone http://url/to/project/dir #clone到本地
+$ cd dir
+$ git fetch /path/to/oldgitproject/.git :old #获取原git工程的master分支到old分支 非master分支的话在.git路径后加空格分支名
+$ git co old
+$ git rebase master #如果分支复杂报错就用patch吧
+$ git co master
+$ git merge dev
+$ git svncommit 提交到svn(有时报不明错误重试几下就好了
+}}}
+=== git 找回丢失的stash 如手贱stash clear ===
+  {{{class="brush: bash"
+  在.git目录下运行如下命令
+for ref in `find .git/objects | sed -e 's#.git/objects/##' | grep / | tr -d /`; do if [ `git cat-file -t $ref` = "commit" ]; then git show --summary $ref; fi; done | less
+  搜索stash对应的commit, 可找到需要的stash的commitid
+  }}}
+* `git diff ver1 ver2 | (cd path && patch -p1)` 打patch
+=== 使用vimdiff作为比较工具 ===
+{{{class="brush: bash"
+First, make sure your git version is higher than 1.6.3
+Then:
+git config --global diff.tool vimdiff
+git config --global difftool.vimdiff.cmd "vimdiff" 
+git config --global difftool.prompt false 
+That's OK. Next time, use "git difftool ..." replace "git diff ..."
+}}}
+=== 在不同目录层次使用git diff的补丁 ===
+* 在使用svn时会遇到
+* 远程版本库目录结构如/A/B/C/D
+* 一个git工程从/A处clone 另一个从/A/B/C处clone
+* 前一个工程git diff产生的patch不能直接给后一个工程用(手动改目录也不行)
+* 正确方法:在后一个工程处`patch -p3 < patchfile` 或 `git apply -p 3 patchfile`
+* git diff产生的patch默认需要`-p1` 这里要更深2层
+=== 修改历史提交 ===
+若要修改3次前的提交的日志(message)
+# `git rebase -i HEAD~3`
+# 把要修改日志的提交前的`pick`改成`r` (在这边改日志是没用的)
+# 保存后会自动跳转到`r`对应的那个提交 可以修改日志了
+=== 搭建git服务器 ===
+参考http://blog.prosight.me/index.php/2009/11/485
+# 创建一个git用户 
+{{{class="brush: bash"
+sudo adduser git
+}}}
+# 安装并启动ssh服务端: 
+{{{class="brush: bash"
+sudo apt-get install openssh-server
+}}}
+# 创建git库目录
+{{{class="brush: bash"
+# mkdir /opt/git
+# chown git:git /opt/git
+}}}
+# 切换到git用户
+{{{class="brush: bash"
+sudo su git
+}}}
+# 在git库创建一个工程 <br>
+ PS: 如果另有一个资源库,无论什么时候都直接拷贝project.git过去就行了 <br>
+ *對我手頭的項目，我喜歡貢獻者去準備倉庫，這樣我可以從其中拉。一些Git伺服讓你 點一個按鈕，擁有自己的分叉項目。*<br>
+ *在我獲取一個樹之後，我運行Git命令去瀏覽並檢查這些變更，理想情況下這些變更組織 良好，描述良好。我合併這些變更，也或許做些編輯。直到滿意，我才把變更推入主資 源庫。*<br>
+ *儘管我不經常收到貢獻，我相信這個方法擴展性良好。* <br>
+ 參見 [http://torvalds-family.blogspot.com/2009/06/happiness-is-warm-scm.html 這篇 來自Linus Torvalds的博客]
+{{{class="brush: bash"
+$ cd /opt/git
+$ mkdir project.git
+$ cd project.git
+$ git --bare init
+}}}
+# 添加每个用户ssh pub key
+{{{class="brush: bash"
+$ cat /tmp/id_rsa.pub >> ~/.ssh/authorized_keys
+PS: rsa key用ssh-keygen生成
+}}}
+=== git服务器 ===
+* 初始提交本地git库到服务器
+{{{class="brush: bash"
+$ git remote add origin git@192.168.1.15:/opt/git/project.git/
+$ git push origin master
+$ git pull origin master #从origin更新到master
+若要默认使用origin和master
+在.git/config加上:
+[branch "master"]
+    remote = origin
+    merge = master
+即可简单使用git pull 和git push
+}}}
+* 他人使用此工程
+{{{class="brush: bash"
+$ git clone git@192.168.1.15:/opt/git/project.git/ #下载库
+$ git pull  #从服务器更新
+$ git push  #推送修改到服务器
+}}}
+=== 使用本地中心库 ===
+{{{class="brush: bash"
+服务器端:
+$ mkdir luandroid.git
+$ cd luandroid.git
+$ git --bare init
+客户端:
+$ cd luandroid
+$ git remote add local /home/zz/store/proj/_repo_/luandroid.git/
+$ git push local master
+}}}

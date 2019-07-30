@@ -1,0 +1,40 @@
+== TextView ==
+*2013-11-04 13:59:43*
+_android_
+`android开发`
+----
+%toc
+=== textview行间距 ===
+* 设置行间距: `setLineSpacing(float add, float mult)`
+    * 参数解释
+    * add: 间距大小 单位:像素
+    * mult: 间距大小 单位:字体高度
+    * 2个参数独立得出间距大小 以大的为准
+    * 如add为22,字体高度为18,mult为1.2 后者的实际间距为18*1.2=21.6 最后的间距是22
+* `StaticLayout(CharSequence source, TextPaint paint, int width, Layout.Alignment align, float spacingmult, float spacingadd, boolean includepad)` 这里的spacingmult,spacingadd也是一样的
+=== 计算SpannableString宽高 ===
+* 使用`StaticLayout`计算
+* 最好在`onSizeChanged`中计算 因为可能需要知道View大小
+{{{class="brush: java"
+// ss: SpannableString string
+// align: 如Layout.Alignment.ALIGN_NORMAL
+// spacingmult, spacingadd: 行间距相关变量
+TextPaint paint = new TextPaint();
+StaticLayout tempLayout = new StaticLayout(ss, paint,
+        this.getWidth(), // 必须使用实际宽度 否则有拆行就会高度错误
+        align, spacingmult, spacingadd, false);
+sh = tempLayout.getHeight();
+}}}
+* 如果是单行模式(setSingleLine()),width设为一个大数
+{{{class="brush: java"
+TextPaint paint = new TextPaint();
+StaticLayout tempLayout = new StaticLayout(ss, paint, 1000000,
+        align, spacingmult, spacingadd, false);
+int lineCount = tempLayout.getLineCount();
+float textWidth = 0;
+for (int i = 0; i < lineCount; i++) {
+    textWidth += tempLayout.getLineWidth(i);
+}
+}}}
+=== 滚动 ===
+textview滚动需要给textview设置一个滚动句柄`setMovementMethod(ScrollingMovementMethod.getInstance());`,否则滚起来可能会受其他view的影响闪烁

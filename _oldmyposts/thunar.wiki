@@ -1,0 +1,18 @@
+== thunar ==
+*2013-10-09 18:27:11*
+_linux_
+`thunar`
+----
+%toc
+=== 添加右键菜单 ===
+菜单-编辑-配置自定义动作 参考默认的文件夹上打开终端菜单
+==== 右键打开终端 ====
+* 在文件上右键打开终端,出现条件除了目录都勾上<br>
+  `exo-open --working-directory %d --launch TerminalEmulator`
+* 在文件上右键打开终端,出现条件只勾目录<br>
+  `exo-open --working-directory %f --launch TerminalEmulator`
+==== 解压到文件夹下 ====
+出现条件勾"其他文件"<br>
+`xarchiver -x %f.dir %f`
+=== 图片文件预览 ===
+`pacman -S tumbler`

@@ -1,0 +1,61 @@
+== 用sigil制作epub电子书 ==
+*2013-11-12 11:57:45*
+`ebook`
+----
+%toc
+以制作[[diveintopython3cn]]为例
+# 下载素材
+  * 从 http://woodpecker.org.cn/diveintopython3/table-of-contents.html 下载2层网页到本地:
+  * `mkdir dv3;cd dv3;wget -t 5 -Q 100m -r -E -l 2 -k -p -np http://woodpecker.org.cn/diveintopython3/table-of-contents.html`
+# 按顺序重命名文件
+  * 由于sigil(7.4)没有提供便捷的调整页面顺序的功能 所以需要把html文件名改为按顺序(如果本来就是顺序命名就不用改了), 如001xxx,002xxx这样
+  {{{class="brush: python"
+#!/usr/bin/python
+# coding=utf-8
+
+import os,sys,re
+
+startid=100
+constl=[(0,'about.html'),(1,'index.html'),(2,'table-of-contents.html'),(-1,'colophon.html')]
+htmldir='./diveintopython3/'
+main='diveintopython3/index.html'
+p=r'<!-- toc -->(.+?)<!-- /toc -->'
+p2=r'href="(.+?)"'
+
+def renameinhtml(d,old,new):
+    for root,dirs,files in os.walk(d):
+        for file in files:
+            if file.endswith('html'):
+                path = os.path.join(root,file)
+                with open(path) as f:
+                    text = f.read()
+                s = re.sub(old,new,text)
+                with open(path,'w') as f:
+                    f.write(s)
+
+with open(main) as f:
+    text=f.read()
+
+s=re.search(p,text,re.DOTALL).group()
+l=re.findall(p2,s)
+for ht in constl:
+    l.insert(ht[0],ht[1])
+print(l)
+
+for f in os.listdir(htmldir):
+    if os.path.isfile(os.path.join(htmldir,f)) and f in l:
+        newf = '%03d' % (l.index(f) + startid) + f
+        print(f,newf)
+        os.rename(os.path.join(htmldir,f), os.path.join(htmldir,newf))
+        renameinhtml(htmldir,f,newf)
+  }}}
+# 用sigil生成epub
+  # 添加文件
+    在工程的Text文件夹右键添加现有文件 选中所有需要的html 删除不要的html 本例中我去掉了`about.html`和`table-of-contents.html`和工程自带的`Section0001.xhtml`
+  # 设置封面等
+    右键html文件-添加语义 可以设置封面/目录/后记之类(不设置也行
+  # 生成目录
+    菜单-工具-目录-生成目录(或工具栏目录图标) 会自动生成目录可以调整 最后保存
+  # 设置文件信息
+    按F8 设置书名,作者等 (有个epub阅读器据说没有作者还会报错..
+  # 保存 即会生成epub

@@ -1,0 +1,26 @@
+== 解决archlinux文件关联问题 ==
+*2013-7-17 17:23:19*
+_linux_
+`archlinux`
+`xdg`
+`mime`
+----
+chromium打开文件夹变成了audacious打开了吐血
+
+google了一下记下处理方法:
+
+查询当前打开文件夹类型所用的程序:
+
+`xdg-mime query default inode/directory`
+
+我这里显示audacious
+
+修改的话:
+
+`sudo vim /usr/share/applications/audacious.desktop`
+
+删掉对应项即可
+
+修改后更新下即可生效:
+
+`sudo update-desktop-database /usr/share/applications`

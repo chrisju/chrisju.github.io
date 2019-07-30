@@ -1,0 +1,32 @@
+== github提供push到另一个阉割版仓库 ==
+*2013-11-21 15:46:47*
+_编程_
+`git`
+`github`
+----
+=== 需求 ===
+一个git项目需要提交到2个远程库,其中一个是阉割版
+=== 方案 ===
+* 设完全版的远程库名为ALL,阉割版的远程库名为LOSER
+* 新增一个文件`updateopen.sh`:
+  {{{class="brush: bash"
+#!/bin/bash
+
+function check {
+if [[ $? -ne 0 ]]; then
+    exit
+fi
+}
+
+# open is the branch for LOSER
+git diff open master | git apply
+check
+git apply patch_open
+check
+rm patch_open
+  }}}
+* `chmod +x updateopen.sh`
+* 在项目中从master建立一个git分支, 假设为open
+* 更改open分支的内容,去掉需要去掉的东西 用diff打出patch: `git diff master > patch_open`
+* 到master下将patch_open加入版本控制并提交
+* 以后每次需要更新阉割版时就checkout到open分支,`./updateopen.sh`,用`git add`添加需要添加的文件,然后提交并push到LOSER库`git push open LOSER:master`

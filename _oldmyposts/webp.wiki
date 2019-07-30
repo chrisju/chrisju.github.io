@@ -1,0 +1,69 @@
+== webp相关以及转换 ==
+*2013-7-8 17:26:14*
+`webp`
+----
+* *默认只有chromium能查看webp格式的文件,firefox,gimp等均不能识别webp*
+* webp和webm在效果和文件大小间性价比非常高
+
+=== 安装webp支持 ===
+可直接安装或自己编译
+
+apt安装:
+{{{class="brush:bash"
+sudo apt-get install webp libwebp-dev
+}}}
+自己编译:
+{{{class="brush:bash"
+git clone http://git.chromium.org/webm/libwebp.git
+./configure –enable-libwebpmux –enable-libwebpdecoder
+make
+sudo make install
+}}}
+
+==== 用python进行批量图片转换 ====
+{{{class="brush:bash"
+sudo apt-get install python-dev python-pip
+sudo pip install pillow
+}}}
+{{{class="brush: python"
+#!/usr/bin/python
+#  --*-- coding:utf-8  --*--
+
+from PIL import Image
+import os
+import sys
+
+if len(sys.argv) != 4:
+    print "Usage python %s source_type target_type dir" % sys.argv[0]
+    sys.exit()
+
+arg="."+sys.argv[1].lower()
+arg1="."+sys.argv[2].lower()
+
+#********************* 当前目录下指定格式的图像文件名 ***********************
+def getImageFiles():
+    allfiles = os.listdir(sys.argv[3])
+
+    files = []
+
+    for f in allfiles:
+        if f[-4:].lower()==arg:
+            files.append(f)
+
+    return files
+
+#********************* 转换 **************************************************
+def CovImage():
+
+    filename=getImageFiles()
+    for i in filename:
+        x=i[:-4]
+        Image.open(i).save(x+arg1)
+
+if __name__ == "__main__":
+
+    CovImage()
+}}}
+ 
+参考链接:
+http://iraycd.blogspot.com/2013/04/webp-with-python-pillowpil.html
