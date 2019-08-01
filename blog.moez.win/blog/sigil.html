@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>sigil</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">用sigil制作epub电子书</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-11-12</a></li>
+<li><a href="Tags.html#ebook">ebook <span>2</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">用sigil制作epub电子书</a>
+</ul>
+</ul>
+</div>
+以制作<a href="diveintopython3cn.html">diveintopython3cn</a>为例
+</p>
+<ol>
+<li>
+下载素材
+
+<ul>
+<li>
+从 <a href="http://woodpecker.org.cn/diveintopython3/table-of-contents.html" target="_blank">http://woodpecker.org.cn/diveintopython3/table-of-contents.html</a> 下载2层网页到本地:
+
+<li>
+<code>mkdir dv3;cd dv3;wget -t 5 -Q 100m -r -E -l 2 -k -p -np http://woodpecker.org.cn/diveintopython3/table-of-contents.html</code>
+
+</ul>
+<li>
+按顺序重命名文件
+
+<ul>
+<li>
+由于sigil(7.4)没有提供便捷的调整页面顺序的功能 所以需要把html文件名改为按顺序(如果本来就是顺序命名就不用改了), 如001xxx,002xxx这样
+<pre class="brush: python">
+#!/usr/bin/python
+# coding=utf-8
+
+import os,sys,re
+
+startid=100
+constl=[(0,'about.html'),(1,'index.html'),(2,'table-of-contents.html'),(-1,'colophon.html')]
+htmldir='./diveintopython3/'
+main='diveintopython3/index.html'
+p=r'&lt;!-- toc --&gt;(.+?)&lt;!-- /toc --&gt;'
+p2=r'href="(.+?)"'
+
+def renameinhtml(d,old,new):
+  for root,dirs,files in os.walk(d):
+      for file in files:
+          if file.endswith('html'):
+              path = os.path.join(root,file)
+              with open(path) as f:
+                  text = f.read()
+              s = re.sub(old,new,text)
+              with open(path,'w') as f:
+                  f.write(s)
+
+with open(main) as f:
+  text=f.read()
+
+s=re.search(p,text,re.DOTALL).group()
+l=re.findall(p2,s)
+for ht in constl:
+  l.insert(ht[0],ht[1])
+print(l)
+
+for f in os.listdir(htmldir):
+  if os.path.isfile(os.path.join(htmldir,f)) and f in l:
+      newf = '%03d' % (l.index(f) + startid) + f
+      print(f,newf)
+      os.rename(os.path.join(htmldir,f), os.path.join(htmldir,newf))
+      renameinhtml(htmldir,f,newf)
+</pre>
+
+</ul>
+<li>
+用sigil生成epub
+
+<ol>
+<li>
+添加文件
+    在工程的Text文件夹右键添加现有文件 选中所有需要的html 删除不要的html 本例中我去掉了<code>about.html</code>和<code>table-of-contents.html</code>和工程自带的<code>Section0001.xhtml</code>
+
+<li>
+设置封面等
+    右键html文件-添加语义 可以设置封面/目录/后记之类(不设置也行
+
+<li>
+生成目录
+    菜单-工具-目录-生成目录(或工具栏目录图标) 会自动生成目录可以调整 最后保存
+
+<li>
+设置文件信息
+    按F8 设置书名,作者等 (有个epub阅读器据说没有作者还会报错..
+
+<li>
+保存 即会生成epub
+
+</ol>
+</ol>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="diveintopython3cn.html" title="上一篇: Dive Into Python3 中文版 epub电子书">&larr; Dive Into Python3 中文版 epub电子书</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="shadowsocks.html" title="下一篇: shadowsocks">shadowsocks &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

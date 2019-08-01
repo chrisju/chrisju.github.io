@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>lamp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">LAMP</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2011-09-29</a></li>
+<li><a href="Categories.html#linux">linux <span>31</span></a></li>
+<li><a href="Tags.html#lamp">lamp <span>1</span></a></li>
+<li><a href="Tags.html#apache">apache <span>1</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">LAMP</a>
+</ul>
+</ul>
+</div>
+</p>
+<ul>
+<li>
+目录浏览 (访问文件夹) <br />
+  在目录内建立<code>.htaccess</code>文件,内容为<code>Options FollowSymLinks Indexes</code>
+
+</ul>
+  
+<ul>
+<li>
+开启调试
+<pre class="brush: bash">
+在/etc/apache2/httpd.conf中加入:
+php_flag  display_errors        on
+php_value error_reporting       2039
+</pre>
+
+</ul>
+  
+<ul>
+<li>
+配置https
+<pre class="brush: bash">
+HTTPS为HTTP下加了SSL安全层。将apache2添加支持SSL即可。
+
+  1) 创建目录, 放置认证文件
+          $ sudo mkdir /etc/apache2/ssl
+
+  2) 生成认证文件apache.pem
+          $ sudo openssl req -new -x509 -days 365 -nodes -out /etc/apache2/ssl/apache.pem -keyout /etc/apache2/ssl/apache.pem
+
+  3) Enable Apache mod_ssl
+          $ sudo a2enmod ssl
+
+  4) 配置使监听443端口SSL连接
+          $ sudo vi /etc/apache2/sites-available/default
+
+      将原有内容，监听80端口的配置复制一份在下面，改端口为443，并添加所示两行。
+      &lt;VirtualHost *:80&gt;
+      ...
+      ...
+      &lt;/VirtualHost&gt;
+      修改后如下:
+      &lt;VirtualHost *:80&gt;
+      ...
+      ...
+      &lt;/VirtualHost&gt;
+      &lt;VirtualHost *:443&gt;
+      ...
+      ...
+      SSLEngine on
+      SSLCertificateFile /etc/apache2/ssl/apache.pem
+      &lt;/VirtuaHost&gt;
+  5) 重启 apache2 即可。
+</pre>
+
+</ul>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="python_code.html" title="上一篇: python代码">&larr; python代码</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="git_train.html" title="下一篇: git 培训">git 培训 &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

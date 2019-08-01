@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>android_environment</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">archlinux配置android开发环境</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-08-29</a></li>
+<li><a href="Categories.html#android">android <span>9</span></a></li>
+<li><a href="Tags.html#android开发">android开发 <span>7</span></a></li>
+<li><a href="Tags.html#archlinux">archlinux <span>3</span></a></li>
+<li><a href="Tags.html#eclipse">eclipse <span>1</span></a></li>
+<li><a href="Tags.html#android studio">android studio <span>2</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">archlinux配置android开发环境</a>
+<ul>
+<li><a href="#toc_0.1.1">配置java</a>
+<li><a href="#toc_0.1.2">安装配置android sudio (内含android sdk)</a>
+<li><a href="#toc_0.1.3">配置sdk和ndk 主要是方便使用命令</a>
+<li><a href="#toc_0.1.4">安装配置eclipse和ADT</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<ul>
+<li>
+在archlinux x64 下配置android开发环境
+
+<li>
+包括eclipse, android sudio
+
+<li>
+包括ndk
+
+</ul>
+<h3 id="toc_0.1.1">配置java</h3>
+
+<p>
+下载jdk6_64 for linux, 最新的为 jdk-6u45-linux-x64.bin
+</p>
+
+<p>
+下载地址: <a href="http://uni-smr.ac.ru/archive/dev/java/SDKs/sun/j2se/6/" target="_blank">http://uni-smr.ac.ru/archive/dev/java/SDKs/sun/j2se/6/</a>
+</p>
+
+<p>
+解压到/opt/java6/
+</p>
+
+<p>
+并配置~/.bashrc:
+</p>
+
+<p>
+export JAVA_HOME=/opt/java6/jdk1.6.0_45
+</p>
+
+<p>
+export PATH=$PATH:$JAVA_HOME/bin
+</p>
+
+<p>
+PS: 若系统原本安装了java可能需要放在$PATH前面或者通过工具管理
+</p>
+
+<h3 id="toc_0.1.2">安装配置android sudio (内含android sdk)</h3>
+
+<p>
+下载地址:
+</p>
+
+<p>
+<a href="https://developer.android.com/sdk/installing/studio.html" target="_blank">https://developer.android.com/sdk/installing/studio.html</a>
+</p>
+
+<p>
+解压后即可使用
+</p>
+
+<p>
+第一次建立工程会下载坑爹的gradle 比较大而且可能被墙
+</p>
+
+<p>
+最好翻墙后耐心等待
+</p>
+
+ 
+
+<h3 id="toc_0.1.3">配置sdk和ndk 主要是方便使用命令</h3>
+
+<p>
+ndk下载:
+</p>
+
+<p>
+<a href="https://developer.android.com/tools/sdk/ndk/index.html" target="_blank">https://developer.android.com/tools/sdk/ndk/index.html</a>
+</p>
+
+<p>
+配置~/.bashrc:
+</p>
+
+<p>
+export ANDROID_NDK=/mnt/DATA/dev/android-ndk-r9
+</p>
+
+<p>
+export PATH=$PATH:$ANDROID_NDK
+</p>
+
+<p>
+export ANDROID_SDK=/mnt/DATA/dev/android-studio/sdk
+</p>
+
+<p>
+export PATH=$PATH:$ANDROID_SDK/platform-tools:$ANDROID_SDK/tool
+</p>
+
+ 
+
+<h3 id="toc_0.1.4">安装配置eclipse和ADT</h3>
+
+<p>
+安装: pacman -S eclipse
+</p>
+
+<p>
+打开eclipse
+</p>
+
+<p>
+打开菜单Help-install new software…
+</p>
+
+<p>
+点Add…
+</p>
+
+<p>
+在打开的对话框中
+</p>
+
+<p>
+name填Android(其实随便)
+</p>
+
+<p>
+location填: <a href="https://dl-ssl.google.com/android/eclipse/" target="_blank">https://dl-ssl.google.com/android/eclipse/</a>
+</p>
+
+<p>
+点击OK后会搜索android相关工具
+</p>
+
+<p>
+结果全部打勾安装
+</p>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="static_blog.html" title="上一篇: 静态博客相关">&larr; 静态博客相关</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="cold.html" title="下一篇: 感冒">感冒 &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

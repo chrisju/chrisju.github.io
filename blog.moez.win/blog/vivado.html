@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>vivado</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">Vivado</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2016-07-11</a></li>
+<li><a href="Categories.html#编程">编程 <span>23</span></a></li>
+<li><a href="Tags.html#vivado">vivado <span>1</span></a></li>
+<li><a href="Tags.html#fpga">fpga <span>2</span></a></li>
+<li><a href="Tags.html#verilog">verilog <span>2</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">Vivado</a>
+<ul>
+<li><a href="#toc_0.1.1">安装</a>
+<li><a href="#toc_0.1.2">一种开发流程</a>
+<li><a href="#toc_0.1.3">仿真</a>
+<li><a href="#toc_0.1.4">tcl命令行模式</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<h3 id="toc_0.1.1">安装</h3>
+<ol>
+<li>
+解压<code>Xilinx_Vivado_SDK_Lin_2015.2_0626_1.tar.gz</code>
+
+<li>
+双击<code>xsetup</code>
+
+<li>
+安装中选择Edition时选<code>Vivado Design Edition</code>
+
+<li>
+下一步添加勾选<code>Design Toos</code>中的<code>Software Devlopement Kit</code>
+
+<li>
+其它都用默认选项(路径除外,可以自选)
+
+<li>
+安装完出现license界面, 在"Load License"选择"Copy License", 选择<code>Xilinx_pcie.lic</code>
+
+<li>
+安装完成
+
+</ol>
+<h3 id="toc_0.1.2">一种开发流程</h3>
+<ol>
+<li>
+创建工程. Project Type 选<code>RTL-Project</code>, Default Part选<code>Parts</code>下的<code>xc7z030fbg484-3</code>
+
+<li>
+在工程目录下编写模块verilog文件(*.v)
+
+<li>
+在工程目录下编写仿真测试文件(*_tb.v)
+
+<li>
+添加到design source. 左侧<code>Project Manager</code> - <code>Add Sources</code> - <code>add or create design sources</code>, 点<code>+</code>按钮添加写好的模块verilog文件.(可以直接从这里创建文件,但是创建的文件找起来麻烦,所以个人喜欢手动创建了加进去)
+
+<li>
+添加到simulation source. 同样不过选<code>add or create simulation sources</code>
+
+<li>
+如果有多个模块文件或仿真文件, 需要在主界面的<code>Project Manager</code> - <code>Sources</code> - <code>hierarchy</code>中右键主要的那个选择<code>set as top</code>
+
+<li>
+查下下方<code>Messages</code>栏, <code>statuses</code>和<code>infos</code>无所谓, <code>warning</code>看下是不是对应行代码有问题, 看不出来也无视, 只是warning而已, 红色感叹号的<code>critical warning</code>或<code>error</code>相关的是代码有错误, 修改代码保存直到不出现错误
+
+<li>
+仿真. 点击左侧<code>Run Simulation</code>开始仿真. 如弹出出错提示框, 可以看下方<code>Tcl Console</code>中的ERROR信息
+
+</ol>
+<h3 id="toc_0.1.3">仿真</h3>
+<ul>
+<li>
+跟踪模块内部变量. 在左侧Scope栏中, 点击想查看的module, 在右边obejects里会出现module的变量, 拖到仿真界面name栏下, 点Resart按钮(或菜单-Run-Restar), 再点Run for ...按钮重新运行, 即可.
+
+<li>
+仿真时鼠标在源码中被跟踪的变量上也会显示当前变量的值
+
+<li>
+以其它进制(如16进制)查看变量值. 在变量值上右键(可多选)选择对应Radix值即可
+
+</ul>
+<h3 id="toc_0.1.4">tcl命令行模式</h3>
+<ul>
+<li>
+<code>vivado -mode tcl</code> 进入tcl命令行模式
+
+<li>
+<code>open_project hello.xpr</code> 加载工程
+
+<li>
+<code>launch_simulation -simset sim_2</code> 对sim_2仿真 会自动加载对应仿真脚本
+
+<li>
+<code>close_sim</code> 关闭仿真
+
+<li>
+<code>close_project</code> 关闭工程
+
+<li>
+<code>run 250 ns</code> 往后运行250ns
+
+<li>
+<code>help -category simulation</code> 查看仿真相关命令
+
+<li>
+<code>get_value rst</code> 仿真时查看当前rst变量的值
+
+<li>
+<code>get_value -radix hex r</code> 16进制查看
+
+<li>
+<code>set ok [get_value rst]</code> 将仿真的rst变量的当前值赋给tcl的ok变量
+
+<li>
+<code>report_values</code> 查看所有变量
+
+<li>
+<code>current_time</code> 查看当前时间
+
+<li>
+<code>restart</code> 恢复到0时间
+
+<li>
+<code>#</code> 注释
+
+<li>
+<code>source xxx.tcl</code> 运行tcl脚本
+
+<li>
+<a href="https://forums.xilinx.com/t5/Vivado%E4%B8%93%E5%8C%BA/Vivado%E4%BD%BF%E7%94%A8%E8%AF%AF%E5%8C%BA%E4%B8%8E%E8%BF%9B%E9%98%B6-Tcl%E5%9C%A8Vivado%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/td-p/525003" target="_blank">Tcl在Vivado中的应用(内含基本tcl语法)</a>
+
+<li>
+自动化测试脚本一例.<code>vivado -mode tcl</code>进入tcl命令模式后直接<code>source test.tcl</code>就能出结果
+<pre class="brush: py">
+# test.tcl
+open_project project_1.xpr
+launch_simulation -simset sim_1
+set ok [get_value ok]
+while {$ok != 1} {run 1000ns; set ok [get_value ok]}
+set r [get_value -radix hex r]
+puts $r
+if {$r == "0000000e0000006900000000000000690000000e0000000e"} {puts "Success!"} else {puts "Failed!"}
+</pre>
+
+</ul>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="vsftpd.html" title="上一篇: vsftpd">&larr; vsftpd</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="verilog.html" title="下一篇: Verilog">Verilog &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

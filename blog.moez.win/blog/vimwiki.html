@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>vimwiki</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">vimwiki</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-08-19</a></li>
+<li><a href="Categories.html#linux">linux <span>31</span></a></li>
+<li><a href="Tags.html#vim">vim <span>2</span></a></li>
+<li><a href="Tags.html#vimwiki">vimwiki <span>3</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">vimwiki</a>
+<ul>
+<li><a href="#toc_0.1.1">常用语法</a>
+<ul>
+<li><a href="#toc_0.1.1.1">字体</a>
+<ul>
+<li><a href="#toc_0.1.1.1.0.1">示例</a>
+</ul>
+</ul>
+<li><a href="#toc_0.1.1.2">链接</a>
+<li><a href="#toc_0.1.1.3">列表</a>
+<ul>
+<li><a href="#toc_0.1.1.3.0.1">示例1</a>
+<li><a href="#toc_0.1.1.3.0.2">示例2</a>
+</ul>
+</ul>
+<li><a href="#toc_0.1.1.4">编辑时的按键</a>
+</ul>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<ul>
+<li>
+<code>:h vimwiki</code> 查看vimwiki帮助
+
+<li>
+<code>:VimwikiAll2HTML</code> 编译文件夹下所有wiki文件 
+
+<li>
+<code>:VimwikiTable 3 12</code> 创建3列12行(含标题行)的表
+
+</ul>
+<h3 id="toc_0.1.1">常用语法</h3>
+<ul>
+<li>
+<code>%nohtml</code> 加入这个标记不会生成html
+
+<li>
+<code>----</code> 4个'-'会产生分割线
+
+<li>
+<code>%%</code> 开头的为注释,不会生成html代码
+
+</ul>
+<h4 id="toc_0.1.1.1">字体</h4>
+<pre>
+  *bold text*
+  _italic text_
+  ~~strikeout text~~
+  `code (no syntax) text`
+  super^script^
+  sub,,script,,
+</pre>
+<h6 id="toc_0.1.1.1.0.1">示例</h6>
+<p>
+  <strong>bold text</strong>
+  <em>italic text</em>
+  <del>strikeout text</del>
+  <code>code (no syntax) text</code>
+  super<sup><small>script</small></sup>
+  sub<sub><small>script</small></sub>
+</p>
+<h4 id="toc_0.1.1.2">链接</h4>
+<ul>
+<li>
+<code>[[static_blog]]</code> 内部链接 预览:<a href="static_blog.html">static_blog</a>
+
+<li>
+<code>[http://reverland.bitbucket.org/wiki.html 一个vimwiki用户]</code> 外部链接 预览:<a href="http://reverland.bitbucket.org/wiki.html" target="_blank">一个vimwiki用户</a>
+
+<li>
+图片基本等同于普通链接
+
+</ul>
+<h4 id="toc_0.1.1.3">列表</h4>
+<p>
+<code>*</code>和<code>#</code>可产生列表
+</p>
+<pre>
+1:
+* 师父领进门
+* 修行靠个人
+* 我一看形势：转行搞IT了
+2:
+# 师父领进门
+# 修行靠个人
+# 我一看形势：转行搞IT了
+</pre>
+<h6 id="toc_0.1.1.3.0.1">示例1</h6>
+<ul>
+<li>
+师父领进门
+
+<li>
+修行靠个人
+
+<li>
+我一看形势：转行搞IT了
+
+</ul>
+<h6 id="toc_0.1.1.3.0.2">示例2</h6>
+<ol>
+<li>
+师父领进门
+
+<li>
+修行靠个人
+
+<li>
+我一看形势：转行搞IT了
+
+</ol>
+<h4 id="toc_0.1.1.4">编辑时的按键</h4>
+<ol>
+<li>
+在词条上敲回车键，可以编辑这个词条
+
+<li>
+使用 Tab 键，可以跳到下一个维基词条或链接，使用 Shift-Tab 跳到上一个
+
+<li>
+在标题上点击 - 和 =，可以提升和降低标题层级
+
+</ol>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="ffmpeg.html" title="上一篇: 音视频处理">&larr; 音视频处理</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="static_blog.html" title="下一篇: 静态博客相关">静态博客相关 &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

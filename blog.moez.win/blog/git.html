@@ -1,0 +1,386 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>git</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">git</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2010-11-26</a></li>
+<li><a href="Categories.html#编程">编程 <span>23</span></a></li>
+<li><a href="Tags.html#git">git <span>5</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">git</a>
+<ul>
+<li><a href="#toc_0.1.1">git命令</a>
+<ul>
+<li><a href="#toc_0.1.1.1">下载旧版本文件</a>
+<li><a href="#toc_0.1.1.2">git tag</a>
+<li><a href="#toc_0.1.1.3">分支</a>
+<li><a href="#toc_0.1.1.4">remote操作</a>
+<li><a href="#toc_0.1.1.5">patch</a>
+<ul>
+<li><a href="#toc_0.1.1.5.1">git专有patch同步更改</a>
+</ul>
+<li><a href="#toc_0.1.1.6">多远端操作</a>
+</ul>
+<li><a href="#toc_0.1.2">git svn</a>
+<ul>
+<li><a href="#toc_0.1.2.1">alias</a>
+<li><a href="#toc_0.1.2.2">现有git工程导入svn</a>
+</ul>
+<li><a href="#toc_0.1.3">git 找回丢失的stash 如手贱stash clear</a>
+<li><a href="#toc_0.1.4">使用vimdiff作为比较工具</a>
+<li><a href="#toc_0.1.5">在不同目录层次使用git diff的补丁</a>
+<li><a href="#toc_0.1.6">修改历史提交</a>
+<li><a href="#toc_0.1.7">搭建git服务器</a>
+<li><a href="#toc_0.1.8">git服务器</a>
+<li><a href="#toc_0.1.9">使用本地中心库</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<h3 id="toc_0.1.1">git命令</h3>
+<ul>
+<li>
+<code>git log --since=5.days</code>    前5天的记录
+
+<li>
+<code>git log -p filename</code>       查看此文件的修改记录内容
+
+<li>
+<code>git commit --amend</code> #修改上次提交 和上次提交使用一个ID
+
+<li>
+<code>git reset --hard [commitid]</code> #回退到某版本
+
+<li>
+<code>git revert [commitid]</code> #撤销某次提交 也会作为一次提交
+
+<li>
+<code>git clean -fd</code> 删除所有untracked的文件和文件夹
+
+<li>
+<code>git diff --stat [commitid]</code> 显示所有改动的文件
+
+</ul>
+<h4 id="toc_0.1.1.1">下载旧版本文件</h4>
+<pre class="brush: bash">
+git co [commitid] [file]
+使用...
+git co HEAD [file]  //恢复新版本
+</pre>
+<h4 id="toc_0.1.1.2">git tag</h4>
+<pre class="brush: bash">
+git tag -a 0.1 -m "第一个测试版本" //添加tag
+git tag -n  //列出所有tag
+</pre>
+<h4 id="toc_0.1.1.3">分支</h4>
+<ul>
+<li>
+创建分支
+<pre class="brush: bash">
+$ git checkout -b dev
+$ git push origin dev
+</pre>
+
+<li>
+下载分支
+<pre class="brush: bash">
+$ git pull origin dev
+</pre>
+
+<li>
+删除dev分支
+<pre class="brush: bash">
+$ git push origin :heads/dev 
+</pre>
+
+</ul>
+<h4 id="toc_0.1.1.4">remote操作</h4>
+<ul>
+<li>
+<code>git fetch origin master:master</code> 将origin库中的master分支下载为本地master分支
+
+<li>
+<code>git fetch --all</code> 更新远程分支到本地
+
+<li>
+<code>git remote -v</code> 查看remote库信息
+
+<li>
+<code>git push origin fpga</code> 将本地fpga分支push到origin上为fpga分支
+
+</ul>
+<h4 id="toc_0.1.1.5">patch</h4>
+<h5 id="toc_0.1.1.5.1">git专有patch同步更改</h5>
+<ul>
+<li>
+<code>git format-patch bdfb9ef</code> 对<code>bdfb9ef</code>之后的每个提交生成一个git专用补丁(有序文件名.patch)
+
+<li>
+<code>git am *.patch</code> 使用补丁同步更改(成功记得rm *.patch)
+
+</ul>
+<h4 id="toc_0.1.1.6">多远端操作</h4>
+<ul>
+<li>
+<strong>在幕後，一個pull是簡單地一個 fetch 然後 merge 。通常，我們 pull 因為我們想在獲取後合併最近提交</strong>
+
+<li>
+pull 是更新本地库.而fetch不会更新本地库,仅仅是下载
+
+<li>
+将默认的库取出:
+<pre class="brush: bash">
+git fetch
+</pre>
+
+<li>
+将origin的master取出到一个新分支里:
+<pre class="brush: bash">
+git fetch origin master:newbranch
+</pre>
+
+<li>
+仓库间比较:
+<pre class="brush: bash">
+git diff origin/experimental^ other/some_branch~5
+</pre>
+
+</ul>
+<h3 id="toc_0.1.2">git svn</h3>
+<h4 id="toc_0.1.2.1">alias</h4>
+<p>
+在~/.gitconfig中加入
+</p>
+<pre class="brush: bash">
+[alias]
+    svnclone = svn clone --localtime
+    svnup = svn rebase --localtime
+    svncommit = svn dcommit --localtime
+</pre>
+<h4 id="toc_0.1.2.2">现有git工程导入svn</h4>
+<pre class="brush: bash">
+$ svn mkdir --parents -m "commit msg" http://url/to/project/dir #在远端创建svn目录
+$ git svnclone http://url/to/project/dir #clone到本地
+$ cd dir
+$ git fetch /path/to/oldgitproject/.git :old #获取原git工程的master分支到old分支 非master分支的话在.git路径后加空格分支名
+$ git co old
+$ git rebase master #如果分支复杂报错就用patch吧
+$ git co master
+$ git merge dev
+$ git svncommit 提交到svn(有时报不明错误重试几下就好了
+</pre>
+<h3 id="toc_0.1.3">git 找回丢失的stash 如手贱stash clear</h3>
+<pre class="brush: bash">
+在.git目录下运行如下命令
+for ref in `find .git/objects | sed -e 's#.git/objects/##' | grep / | tr -d /`; do if [ `git cat-file -t $ref` = "commit" ]; then git show --summary $ref; fi; done | less
+搜索stash对应的commit, 可找到需要的stash的commitid
+</pre>
+<ul>
+<li>
+<code>git diff ver1 ver2 | (cd path &amp;&amp; patch -p1)</code> 打patch
+
+</ul>
+<h3 id="toc_0.1.4">使用vimdiff作为比较工具</h3>
+<pre class="brush: bash">
+First, make sure your git version is higher than 1.6.3
+Then:
+git config --global diff.tool vimdiff
+git config --global difftool.vimdiff.cmd "vimdiff" 
+git config --global difftool.prompt false 
+That's OK. Next time, use "git difftool ..." replace "git diff ..."
+</pre>
+<h3 id="toc_0.1.5">在不同目录层次使用git diff的补丁</h3>
+<ul>
+<li>
+在使用svn时会遇到
+
+<li>
+远程版本库目录结构如/A/B/C/D
+
+<li>
+一个git工程从/A处clone 另一个从/A/B/C处clone
+
+<li>
+前一个工程git diff产生的patch不能直接给后一个工程用(手动改目录也不行)
+
+<li>
+正确方法:在后一个工程处<code>patch -p3 &lt; patchfile</code> 或 <code>git apply -p 3 patchfile</code>
+
+<li>
+git diff产生的patch默认需要<code>-p1</code> 这里要更深2层
+
+</ul>
+<h3 id="toc_0.1.6">修改历史提交</h3>
+<p>
+若要修改3次前的提交的日志(message)
+</p>
+<ol>
+<li>
+<code>git rebase -i HEAD~3</code>
+
+<li>
+把要修改日志的提交前的<code>pick</code>改成<code>r</code> (在这边改日志是没用的)
+
+<li>
+保存后会自动跳转到<code>r</code>对应的那个提交 可以修改日志了
+
+</ol>
+<h3 id="toc_0.1.7">搭建git服务器</h3>
+<p>
+参考<a href="http://blog.prosight.me/index.php/2009/11/485" target="_blank">http://blog.prosight.me/index.php/2009/11/485</a>
+</p>
+<ol>
+<li>
+创建一个git用户 
+<pre class="brush: bash">
+sudo adduser git
+</pre>
+
+<li>
+安装并启动ssh服务端: 
+<pre class="brush: bash">
+sudo apt-get install openssh-server
+</pre>
+
+<li>
+创建git库目录
+<pre class="brush: bash">
+# mkdir /opt/git
+# chown git:git /opt/git
+</pre>
+
+<li>
+切换到git用户
+<pre class="brush: bash">
+sudo su git
+</pre>
+
+<li>
+在git库创建一个工程 <br>
+ PS: 如果另有一个资源库,无论什么时候都直接拷贝project.git过去就行了 <br>
+ <strong>對我手頭的項目，我喜歡貢獻者去準備倉庫，這樣我可以從其中拉。一些Git伺服讓你 點一個按鈕，擁有自己的分叉項目。</strong><br>
+ <strong>在我獲取一個樹之後，我運行Git命令去瀏覽並檢查這些變更，理想情況下這些變更組織 良好，描述良好。我合併這些變更，也或許做些編輯。直到滿意，我才把變更推入主資 源庫。</strong><br>
+ <strong>儘管我不經常收到貢獻，我相信這個方法擴展性良好。</strong> <br>
+ 參見 <a href="http://torvalds-family.blogspot.com/2009/06/happiness-is-warm-scm.html" target="_blank">這篇 來自Linus Torvalds的博客</a>
+<pre class="brush: bash">
+$ cd /opt/git
+$ mkdir project.git
+$ cd project.git
+$ git --bare init
+</pre>
+
+<li>
+添加每个用户ssh pub key
+<pre class="brush: bash">
+$ cat /tmp/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys
+PS: rsa key用ssh-keygen生成
+</pre>
+
+</ol>
+<h3 id="toc_0.1.8">git服务器</h3>
+<ul>
+<li>
+初始提交本地git库到服务器
+<pre class="brush: bash">
+$ git remote add origin git@192.168.1.15:/opt/git/project.git/
+$ git push origin master
+$ git pull origin master #从origin更新到master
+若要默认使用origin和master
+在.git/config加上:
+[branch "master"]
+    remote = origin
+    merge = master
+即可简单使用git pull 和git push
+</pre>
+
+<li>
+他人使用此工程
+<pre class="brush: bash">
+$ git clone git@192.168.1.15:/opt/git/project.git/ #下载库
+$ git pull  #从服务器更新
+$ git push  #推送修改到服务器
+</pre>
+
+</ul>
+<h3 id="toc_0.1.9">使用本地中心库</h3>
+<pre class="brush: bash">
+服务器端:
+$ mkdir luandroid.git
+$ cd luandroid.git
+$ git --bare init
+客户端:
+$ cd luandroid
+$ git remote add local /home/zz/store/proj/_repo_/luandroid.git/
+$ git push local master
+</pre>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="doxgen.html" title="上一篇: doxgen代码注释">&larr; doxgen代码注释</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="vim.html" title="下一篇: vim">vim &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

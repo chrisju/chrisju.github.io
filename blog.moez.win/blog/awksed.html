@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>awksed</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">awk和sed</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2016-04-25</a></li>
+<li><a href="Categories.html#cat">cat <span>2</span></a></li>
+<li><a href="Tags.html#tag">tag <span>2</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">awk和sed</a>
+<ul>
+<li><a href="#toc_0.1.1">awk</a>
+<li><a href="#toc_0.1.2">sed</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<h3 id="toc_0.1.1">awk</h3>
+<ul>
+<li>
+<code>awk '{print $1 "\t"  $7}' ~/t/1</code> 输出文件1的第一列和第七列 以\t分隔
+
+<li>
+<code>awk -v RS='&gt;' 'NR&gt;1{i++}i&gt;=10&amp;&amp;i&lt;=20{print "&gt;"$0}' a.fasta|sed '/^$/d'&gt;b.fasta</code> 从a.fasta中提取第10至第20个序列存到b.fasta中
+
+<li>
+<code>awk '/^&gt;/{f=++d".fasta"} {print &gt; f}' input.fasta</code> 将input.fasta中第每一条序列保存到一个文件中
+
+<li>
+<code>awk '{for(i=11;i&lt;=NF;i++){printf "%s ", $i};printf "\n"}'</code> 打印11列开始的所有列
+
+<li>
+在alias中使用awk, 将<code>'</code>换成<code>'\''</code>
+
+</ul>
+<h3 id="toc_0.1.2">sed</h3>
+<p>
+<a href="http://sed.sourceforge.net/sed1line_zh-CN.html" target="_blank">SED单行脚本快速参考</a>
+</p>
+<ul>
+<li>
+<code>sed -n '8,12p'</code> 显示部分文本——指定行号范围（从第8至第12行，含8和12行）
+
+<li>
+<code>sed 's/^/aaa/g' filename.txt &gt; outputfile.txt</code> 在文件中的每一行之前加上一个字符串，比如：aaa
+
+<li>
+<code>ls chr1_read3_0*.sam|sed 's/^chr1_\(read3_0[0-9]\)-se.sam/\1/'</code> 类似用sed对grep结果进行捕获
+
+<li>
+<code>sed -i</code> 直接修改文件内容
+
+<li>
+sed 参数中的<code>'</code> 不是必须的 出错的时候如用xargs时可以去掉
+
+</ul>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="golang.html" title="上一篇: golang">&larr; golang</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="cgdb.html" title="下一篇: CGDB">CGDB &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

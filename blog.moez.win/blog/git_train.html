@@ -1,0 +1,286 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>git_train</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">git 培训</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2011-12-29</a></li>
+<li><a href="Categories.html#编程">编程 <span>23</span></a></li>
+<li><a href="Tags.html#git">git <span>5</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">git 培训</a>
+<ul>
+<li><a href="#toc_0.1.1">代码管理中的分支管理</a>
+<ul>
+<li><a href="#toc_0.1.1.0.1">永久分支</a>
+<li><a href="#toc_0.1.1.0.2">临时分支</a>
+</ul>
+</ul>
+<li><a href="#toc_0.1.2">我们使用git的好处和坏处</a>
+<ul>
+<li><a href="#toc_0.1.2.1">git其它好处</a>
+<li><a href="#toc_0.1.2.2">缺点</a>
+</ul>
+<li><a href="#toc_0.1.3">使用git</a>
+<li><a href="#toc_0.1.4">推荐的教程</a>
+<li><a href="#toc_0.1.5">参考</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+
+<h3 id="toc_0.1.1">代码管理中的分支管理</h3>
+<p>
+<a href="../res/branch.png"><img src="../res/branch.png" /></a>
+</p>
+<h5 id="toc_0.1.1.0.1">永久分支</h5>
+<ul>
+<li>
+<strong>master</strong>  团队成员从主分支(master)获得的都是处于可发布状态的代码
+
+<li>
+<strong>develop</strong> 能够获得最新开发进展的代码
+
+</ul>
+<h5 id="toc_0.1.1.0.2">临时分支</h5>
+<p>
+临时分支(辅助分支)是根据需要从master或develop产生的, 完成后就归到master或develop去并删除掉. 数量不限
+</p>
+<ul>
+<li>
+<strong>feature</strong> 常用于开发一个独立的新功能. 每个新功能独立生成一个feature分支
+
+<li>
+<strong>release</strong> 通常负责"短期的发布前准备工作","小bug的修复工作","版本号等元信息的准备工作", 严禁并入新功能. 与此同时, develop分支又可以承接下一个新功能的开发工作了
+
+<li>
+<strong>hotfix</strong>  源于master的非预期关键BUG
+
+</ul>
+
+<h3 id="toc_0.1.2">我们使用git的好处和坏处</h3>
+<ol>
+<li>
+SVN分支合并会遇到各种问题,包括额外的冲突和繁琐的操作 <a href="http://www.kuqin.com/managetool/20110612/91868.html" target="_blank">详情</a>. 而git由于使用不同架构可以轻易的管理分支. git可以让你拥有多个本地分支, 他们可能是完全独立的. 而且建立,合并,切换和删除这些开发的支线只需要几秒钟的时间
+
+</ol>
+<h4 id="toc_0.1.2.1">git其它好处</h4>
+<ul>
+<li>
+由于是分布式版本库 在连不上服务器情况下也能在本地仓库维护版本
+
+<li>
+由于有本地仓库,可以作小步提交,不用顾虑他人,当然注释要写明是此次提交的临时性的不能下载的提交
+
+<li>
+没有烦人的.svn文件夹
+
+</ul>
+<h4 id="toc_0.1.2.2">缺点</h4>
+
+<h3 id="toc_0.1.3">使用git</h3>
+<ol>
+<li>
+<strong>安装</strong>
+<pre class="brush: bash">
+sudo apt-get install git
+</pre>
+
+<li>
+<strong>配置</strong> <br>
+ 编辑 ~/.gitconfig
+<pre class="brush: bash">
+[user]
+	name = aa
+	email = aa@gmail.com
+[alias]
+    co = checkout
+    ci = commit -a
+    st = status
+    svnup = svn rebase --localtime
+    svncommit = svn dcommit --localtime
+    logweek = log --since=5.days
+[core]
+	excludesfile = ~/.gitignore
+</pre>
+ user填入你的名字和邮箱,alias里可以自定义缩写 <br>
+ 编辑 ~/.gitignore 设置要忽略的文件和文件夹
+<pre class="brush: bash">
+# 此为注释 将被 Git 忽略
+#*.a       # 忽略所有 .a 结尾的文件
+#!lib.a    # 但 lib.a 除外
+#/abc     # 仅仅忽略项目根目录下的 TODO 文件，不包括 subdir/abc
+#build/    # 忽略 build/ 目录下的所有文件
+#doc/*.txt # 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt
+*.[oa]    # 忽略.o和.a文件
+*~
+*.swp
+.libs/
+*.so
+*.lo
+*.la
+*.pyc
+
+tags
+tmp/
+bin/
+obj/
+*.pro.user
+*.apk
+gen/
+libs/
+default.properties
+.svn/
+.DS_Store
+</pre>
+
+<li>
+<strong>从服务器克隆一个工程到本地</strong>
+<pre class="brush: bash">
+git clone git@192.168.1.15:/opt/git/project.git
+</pre>
+
+<li>
+添加文件
+<pre class="brush: bash">
+git add path/to/file    #添加一个文件或文件夹
+git add .               #添加当前文件夹下所有文件,含子文件夹,忽略设置为忽略的
+git add -f path/to/file #强行添加设置为忽略的文件
+</pre>
+
+<li>
+提交所有更改到本地库
+<pre class="brush: bash">
+git ci -m"日志信息"
+</pre>
+
+<li>
+一些基本操作,详细的看 <code>git help</code> 以及 <code>git help {command}</code> {command}可以是log diff等等
+<pre class="brush: bash">
+git log     #提交记录,记录里commit后面的hash值是此次提交的标记,假设为12ab11...
+git show 12ab file1  #比较12ab的file1的内容修改
+git co 12ab     #切换到此次提交,要co回到最新就co本分支名字就行了 类似svn co
+git st              #查看当前状态 类似svn st
+git diff file1      #查看file1已作更改 类似svn diff
+git diff 112a ac32  #比较112a和ac32的差别
+git rm file1        #删除file1以及取消对其的控制 类似svndelete
+git reset --hard    #取消当前所做更改;类似svn revert
+</pre>
+
+<li>
+与版本服务器交互
+<pre class="brush: bash">
+git push    #上传当前分支到默认的服务器的默认分支 (clone的时候会自动设置
+git pull    #从默认的服务器的默认分支下载并合并
+git push orign dev      #上传到服务器的dev分支
+git pull origin fix:fix #下载服务器的fix分支为本地的fix分支 (会自动创建
+git branch -r       #查看服务器的分支状况
+</pre>
+
+<li>
+分支操作
+<pre class="brush: bash">
+git co -b newf  #从当前分支创建叫newf的新分支
+git co dev      #切换到dev分支
+git merge newf  #合并newf分支的更改到当前分支
+git branch -d newf  #删除newf分支
+git branch          #查看本地分支状况
+git diff dev..newf  #比较dev分支和newf分支的差别
+</pre>
+
+<li>
+一个示例
+<pre class="brush: bash">
+git clone git@192.168.1.15:/opt/git/project.git #首次下载
+git co dev          #可能会默认为dev分支,就不需要这个操作了
+git co -b newf      #建立一个新功能分支
+... 作修改操作,添加文件修改文件什么的,穿插n次 git ci -m"xx"
+git ci -m"xxxxxx"   #提交到本地库, 这个新功能差不多没有问题告一段落就合并到dev中
+git co dev          #切换回dev分支
+git merge newf      #合并newf分支的修改到dev中
+git branch -d newf  #删除newf分支
+git pull origin dev #从服务器更新dev分支
+git push origin dev #提交到dev
+</pre>
+
+</ol>
+<h3 id="toc_0.1.4">推荐的教程</h3>
+<p>
+Git Magic: <a href="http://www-cs-students.stanford.edu/~blynn/gitmagic/intl/zh_tw/" target="_blank">http://www-cs-students.stanford.edu/~blynn/gitmagic/intl/zh_tw/</a>
+不过这个教程内容比较多
+也可以自己搜简要些的教程
+</p>
+<h3 id="toc_0.1.5">参考</h3>
+<p>
+<a href="http://roclinux.cn/?p=2129" target="_blank">http://roclinux.cn/?p=2129</a>
+</p>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="lamp.html" title="上一篇: LAMP">&larr; LAMP</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="valgrind.html" title="下一篇: valgrind">valgrind &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

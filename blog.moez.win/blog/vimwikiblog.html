@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>vimwikiblog</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">用vimwiki写博客</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-11-07</a></li>
+<li><a href="Categories.html#linux">linux <span>31</span></a></li>
+<li><a href="Tags.html#vimwiki">vimwiki <span>3</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">用vimwiki写博客</a>
+<ul>
+<li><a href="#toc_0.1.1">简介</a>
+<li><a href="#toc_0.1.2">vimwikiblog约定</a>
+<li><a href="#toc_0.1.3">使用方法</a>
+<li><a href="#toc_0.1.4">详解</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<h3 id="toc_0.1.1">简介</h3>
+<ul>
+<li>
+项目地址: <a href="https://github.com/chrisju/vimwikiblog" target="_blank">https://github.com/chrisju/vimwikiblog</a>
+
+<li>
+vimwikiblog是一个python3工具,用来将vimwiki转换成静态博客.工具对vimwiki生成的html进行修饰,生成导航页面,以及上传有改动的文件至博客主机.在修改保存.wiki文件后直接运行一个命令就能同步更改到博客上
+
+<li>
+内置了博客模版,只要很简单的配置就能把你写的vimwikis转变成一个博客,如果对原始风格不满意可以自定义模版
+
+<li>
+Blog示例: <a href="http://blog.moez.win" target="_blank">http://blog.moez.win</a>
+
+</ul>
+<h3 id="toc_0.1.2">vimwikiblog约定</h3>
+<ul>
+<li>
+约定用来给文章设置时间,分类和tag
+
+<li>
+在~/.vimrc中加入插入约定的快捷键 <strong>注意快捷键冲突</strong>
+<pre class="brush: bash">
+:map &lt;F2&gt; &lt;ESC&gt;gg:read !echo -e "*`date '+\%Y-\%m-\%d \%H:\%M:\%S'`*\n_cat_\n\`tag\`\n----\n\%toc"&lt;CR&gt;
+</pre>
+
+<li>
+用vim打开wiki文件并按F2在文件中插入约定
+
+<li>
+编辑约定
+
+<ul>
+<li>
+时间(*之间的)必须有1个
+
+<li>
+分类(_之间的)为0或1个
+
+<li>
+tag(`之间的)任意个(一个一行)
+
+<li>
+<code>----</code>必须保留
+
+<li>
+<code>%toc</code>那一行表示生成目录 不需要可以删掉
+
+</ul>
+</ul>
+<h3 id="toc_0.1.3">使用方法</h3>
+<ol>
+<li>
+本文假设你是vimwiki用户 若不是可以去这里入门: <a href="http://wiki.ktmud.com/tips/vim/vimwiki-guide.html" target="_blank">http://wiki.ktmud.com/tips/vim/vimwiki-guide.html</a>
+
+<li>
+<code>git clone https://github.com/chrisju/vimwikiblog.git</code>
+
+<li>
+<code>cd vimwikiblog</code>
+
+<li>
+编辑 <code>~/.vimrc</code>,参考<code>config/vimrc</code>, 必须添加template_path,template_default,template_ext,css_name等字段
+
+<li>
+编辑<code>config/config.json</code> basic下的wiki,html分别对应wiki所在文件夹和vimwiki的html输出文件夹,upload中可以设置ftp帐号
+
+<li>
+编辑 <code>vimwikiblog/config/vimwiki.tpl</code> 和 <code>vimwikiblog/config/generate.tpl</code>.以合适内容替换所有的<code>xxx</code>字符串
+
+<li>
+按 <strong>vimwikiblog约定(重要!!)</strong> 编写wiki和对现有wiki文件进行改造.示例可以看vimwikiblog/wiki/文件夹下的.wiki文件
+
+<li>
+若第一次使用,用vim打开wiki文件,使用:VimwikiAll2HTML将文件夹下所有wiki文件转为html
+
+<li>
+进入vimwikiblog文件夹, 运行<code>python3 tools/vimwiki2blog.py -c config/config.json</code>, 会在blog下生成博客文件并上传到ftp(若配置有ftp)
+
+<li>
+将<code>blog/style0.css</code>复制到远程主机的博客文件夹中
+
+<li>
+将 <code>site</code> 文件夹复制到博客主机中 与博客文件夹同级(在同一个父目录下)
+
+</ol>
+<h3 id="toc_0.1.4">详解</h3>
+<ul>
+<li>
+静态博客相关知识,包括评论,代码高亮等: <a href="http://blog.moez.win/blog/static_blog.html" target="_blank">静态博客相关</a>
+
+<li>
+blog_tmp下是改动过的文件但未上传成功的文件, 可以使用<code>python3 tools/vimwiki2blog.py -c config/config.json -u</code>上传(添加-u表示仅上传)
+
+<li>
+加上 <code>--upall</code> 参数可以上传所有html到ftp而不仅仅是改动过的文件,在不同步时可以使用
+
+<li>
+在<code>site/js/disqus.js</code>设置<code>disqus_shortname</code>为你的disqus shortname以使用评论系统
+
+<li>
+在<code>site/js/ga.js</code>设置google-analytics
+
+<li>
+修改样式可以修改<code>config/genpage.tpl</code>,<code>config/vimwiki.tpl</code>,<code>blog/style0.css</code>和site下的文件.其中genpage.tpl是导航页模版文件,vimwiki.tpl是vimwiki的模版文件
+
+<li>
+默认的配置文件是<code>~/.config/vimwikiblog/config.json</code> 复制过去就不需要用-c指定配置文件了
+
+<li>
+要上传需要配置blog_tmp(默认配置即可),可以保存修改的文件,同步时可以只上传这些文件
+
+<li>
+可以上传到多个服务器,enable设为true即打开上传开关,目前只支持ftp
+
+<li>
+可以在~/.bashrc加上 <code>alias xxupblog='cd /mnt/DATA/proj/vimwikiblog/;python3 tools/vimwiki2blog.py -c config/config.json'</code>,这样在修改保存.wiki文件后直接<code>upblog</code>就能同步到博客上啦
+
+<li>
+更多的就自己改代码吧 记住别把自己的ftp密码公开出来 o(<strong><sup><small>▽</small></sup></strong>)o
+
+</ul>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="fcitx.html" title="上一篇: fctix">&larr; fctix</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="android_autoi18.html" title="下一篇: android用脚本提取固定字符串转为使用string.xml">android用脚本提取固定字符串转为使用string.xml &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>python</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">python</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-10-22</a></li>
+<li><a href="Categories.html#编程">编程 <span>23</span></a></li>
+<li><a href="Tags.html#python">python <span>7</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">python</a>
+<ul>
+<li><a href="#toc_0.1.1">常用语句</a>
+<li><a href="#toc_0.1.2">调试</a>
+<li><a href="#toc_0.1.3">获取generator(yield)的大小</a>
+<li><a href="#toc_0.1.4">兼容py2和py3</a>
+<li><a href="#toc_0.1.5">python2下的mkdir -p</a>
+<li><a href="#toc_0.1.6">python2下的带encoding的open</a>
+<li><a href="#toc_0.1.7">二维数组</a>
+<li><a href="#toc_0.1.8">xml字符转义</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<h3 id="toc_0.1.1">常用语句</h3>
+<ul>
+<li>
+<code>shutil.rmtree(adir, ignore_errors=True)</code> 删除文件夹
+
+<li>
+<code>re.split(r'[ \t\n]',s)</code> 多分割符分割字符串
+
+<li>
+<code>repr</code> <code>exec</code> 转为python语法的字符串 运行python语法的字符串
+
+<li>
+<code>s.encode('hex')</code> python2中获取字符串16进制表示
+
+<li>
+<code>binascii.hexlify(s.encode())</code> <code>binascii.b2a_hex(s.encode())</code> python3中获取字符串16进制表示
+
+</ul>
+<h3 id="toc_0.1.2">调试</h3>
+<ol>
+<li>
+<code>python -m pdb your.py</code> 进入调试模式
+
+<li>
+设置一个断点 仅在进入断点时进入调试模式
+<pre class="brush: python">
+import pdb
+pdb.set_trace() #这句放在要断点的地方
+</pre>
+
+<li>
+更多调试方法: <a href="https://www.zhihu.com/question/21572891" target="_blank">https://www.zhihu.com/question/21572891</a> 
+
+</ol>
+<h3 id="toc_0.1.3">获取generator(yield)的大小</h3>
+<p>
+<code>len(tuple(generator))</code>
+</p>
+<h3 id="toc_0.1.4">兼容py2和py3</h3>
+<ol>
+<li>
+先用sys.version判断版本
+<pre class="brush: python">
+if sys.version &gt; '3':
+    PY3 = True
+else:
+    PY3 = False
+</pre>
+
+<li>
+根据版本调用不同的模块
+<pre class="brush: python">
+if PY3:
+    import subprocess as commands
+else:
+    import commands
+</pre>
+
+</ol>
+<h3 id="toc_0.1.5">python2下的mkdir -p</h3>
+<pre class="brush: python">
+#递归创建目录函数 python2真烦
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError as exc:  # Python &gt;2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise
+</pre>
+<h3 id="toc_0.1.6">python2下的带encoding的open</h3>
+<pre class="brush: python">
+#带encoding的open 为了匹配python2
+if sys.version_info[0] &gt; 2:
+    # py3k
+    pass
+else:
+    # py2
+    import codecs
+    import warnings
+    def open(file, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None, closefd=True, opener=None):
+        if newline is not None:
+            warnings.warn('newline is not supported in py2')
+        if not closefd:
+            warnings.warn('closefd is not supported in py2')
+        if opener is not None:
+            warnings.warn('opener is not supported in py2')
+        return codecs.open(filename=file, mode=mode, encoding=encoding,
+                    errors=errors, buffering=buffering)
+
+用法：
+open(xmlpath, "rt", encoding='utf-8', errors = 'strict')
+</pre>
+<h3 id="toc_0.1.7">二维数组</h3>
+<ul>
+<li>
+<code>hef=[[0 for x in range(qlen)] for x in range(tlen)]</code> 初始化二维数组
+
+</ul>
+<h3 id="toc_0.1.8">xml字符转义</h3>
+<pre class="brush: python">
+def toxml(s):
+    """ 将非法xml字符替换为实体引用 """
+
+    s = s.replace('&lt;','&amp;lt;')
+    s = s.replace('&gt;','&amp;gt;')
+    s = s.replace('&amp;','&amp;amp;')
+    s = s.replace('\'','&amp;apos;')
+    s = s.replace('"','&amp;quot;')
+    s = s.replace(' ','(&amp;#x20;)')
+    return s
+</pre>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="python_lua.html" title="上一篇: python调用lua">&larr; python调用lua</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="github.html" title="下一篇: github">github &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

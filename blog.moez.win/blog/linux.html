@@ -1,0 +1,375 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>linux</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">linux</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-09-25</a></li>
+<li><a href="Categories.html#linux">linux <span>31</span></a></li>
+<li><a href="Tags.html#linux">linux <span>2</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">linux</a>
+<ul>
+<li><a href="#toc_0.1.1">命令</a>
+<ul>
+<li><a href="#toc_0.1.1.1">comm</a>
+<li><a href="#toc_0.1.1.2">split</a>
+<li><a href="#toc_0.1.1.3">xargs</a>
+<li><a href="#toc_0.1.1.4">grep</a>
+</ul>
+<li><a href="#toc_0.1.2">命令行删除乱码文件</a>
+<li><a href="#toc_0.1.3">查询系统安装时间</a>
+<li><a href="#toc_0.1.4">查看硬件信息</a>
+<ul>
+<li><a href="#toc_0.1.4.1">查看原始信息</a>
+</ul>
+<li><a href="#toc_0.1.5">alias中使用'符号</a>
+<li><a href="#toc_0.1.6">制作系统安装U盘(usb install)</a>
+<li><a href="#toc_0.1.7">apt</a>
+<li><a href="#toc_0.1.8">更新grub</a>
+<li><a href="#toc_0.1.9">工具</a>
+<li><a href="#toc_0.1.10">iptables</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<h3 id="toc_0.1.1">命令</h3>
+<ul>
+<li>
+查看系统发行版本 <code>cat /etc/issue</code>
+
+<li>
+记录命令耗时: <code>time</code>后接原命令, 如 <code>time find .</code>
+
+<li>
+进制转换 16-&gt;10 printf %d 0x4e00
+
+<li>
+进制转换 10-&gt;16 printf %x 19782
+
+<li>
+查看进程内存使用情况 <code>cat /proc/[pid]/statm</code>
+
+<li>
+查看端口占用情况 <code>netstat -ntlp|grep 46989</code>
+
+<li>
+在多个文件中替换文本
+<pre class="brush: bash">
+sed -i "s/MyUtil\.Fav/Fav/g" `grep -rl "MyUtil.Fav" ./`
+</pre>
+
+<li>
+查看so函数名列表 <code>nm -D libluandroid.so</code>
+
+<li>
+pkg-config --modversion gtk+-2.0 查看包版本信息
+
+<li>
+显示内存中的字符串
+  <code>sudo dd if=/dev/mem | cat | strings</code>
+
+<li>
+Rip audio from a video file.
+  <code>mplayer -ao pcm -vo null -vc dummy -dumpaudio -dumpfile &lt;output-file&gt; &lt;input-file&gt;</code>
+
+<li>
+杀死占用文件或文件系统的进程们
+  <code>fuser -k [filename|filesystem]</code>
+
+<li>
+把文件名中的空格替换为_
+  <code>rename 'y/ /_/' *</code>
+
+<li>
+拷贝目录下所有png图片到目标文件夹
+  <code>find .|grep \.png$|xargs -I '{}' cp  '{}' pic/</code>
+
+<li>
+查找相同文件,基于文件大小和md5
+  <code>find -not -empty -type f -printf "%s\n" | sort -rn | uniq -d | xargs -I{} -n1 find -type f -size {}c -print0 | xargs -0 md5sum | sort | uniq -w32 --all-repeated=separate</code>
+
+<li>
+录制屏幕
+  <code>ffmpeg -f x11grab -s 1440x900 -r 25 -i :0.0 -sameq /tmp/out.mpg</code>
+
+<li>
+查看登录失败记录
+  <code>grep "Failed password for root" /var/log/auth.log | awk '{print $11}' | sort | uniq -c | sort -nr | more</code>
+
+<li>
+调整权限文件和文件夹设置
+  <code>chmod -R o-r,o-w,o-x dir/</code>
+
+</ul>
+<h4 id="toc_0.1.1.1">comm</h4>
+<p>
+对2个已排序文件逐行比较, 默认输出三列, 第一列为文件1独有, 第二列为文件2独有, 第三列为共有. 用参数-1/-2/-3分别可去除1/2/3列的输出
+</p>
+<ul>
+<li>
+<code>comm -12 1 2</code> 输出文件1和2的共有行 (仅输出第三列)
+
+</ul>
+<h4 id="toc_0.1.1.2">split</h4>
+<p>
+分割文件
+</p>
+<ul>
+<li>
+<code>split -l 10240 -d -a 3 --additional-suffix=.txt xxx xxx_</code> 将xxx分为xxx_000.txt xxx_001.txt等 每行10240行
+
+<li>
+<code>-l</code> 每段行数
+
+<li>
+<code>-b</code> 每段字节数
+
+<li>
+<code>-d</code> 用数字编号
+
+<li>
+<code>-a</code> 后缀位数 默认2位
+
+<li>
+<code>--additional-suffix=&lt;suffix&gt;</code> 后缀 较老的split不支持这个选项
+
+</ul>
+<h4 id="toc_0.1.1.3">xargs</h4>
+<p>
+每行作为一组参数传递给别的命令
+</p>
+<ul>
+<li>
+<code>ls read3_0*|xargs -n1 -t -I {} mv {} {}.fq</code>
+
+<li>
+<code>-n num </code> 每次传入参数个数 默认所有(即一行) 没传完就继续传(一行传多次)
+
+<li>
+<code>-I {}</code> 将参数赋给占位符<code>{}</code>
+
+<li>
+<code>-t</code> 执行前会打印每条命令
+
+<li>
+<code>-p</code> 执行每条命令前询问i, 输入<code>y</code>或<code>Y</code>才会执行
+
+<li>
+<code>-a file</code> 以文件作为输入而非<code>stdin</code>
+
+<li>
+<code>-d delim</code> 指定分隔字符
+
+<li>
+<code>-0</code> <code>--null</code> 以<code>\0</code>代替空格,引号,斜杠分割参数, 空格等会包含在参数中
+
+</ul>
+<h4 id="toc_0.1.1.4">grep</h4>
+<ul>
+<li>
+<code>-</code>和<code>.</code> 用单引号加转义符 如<code>grep -rn '\-bb\.ee'</code>
+
+</ul>
+<h3 id="toc_0.1.2">命令行删除乱码文件</h3>
+<ol>
+<li>
+用 <code>ls -li</code> 显示文件节点号
+
+<li>
+<code>find ./ -inum 1445610 -print -exec rm {} \; #1445610是上一步获取的文件节点号</code>
+
+</ol>
+<h3 id="toc_0.1.3">查询系统安装时间</h3>
+<p>
+<code>$ sudo passwd -S root</code> 看root用户的创建时间
+</p>
+<h3 id="toc_0.1.4">查看硬件信息</h3>
+<ul>
+<li>
+<strong>查看系统硬件简易信息</strong> <code>inxi</code> 如源上没有可以<code>wget https://inxi.googlecode.com/svn/trunk/inxi</code>
+
+<li>
+<strong>查看系统硬件详细信息</strong> <code>inxi -F</code>
+
+</ul>
+<h4 id="toc_0.1.4.1">查看原始信息</h4>
+<ul>
+<li>
+主板 <code>dmidecode|less</code> 找到<code>Base Board</code>块
+
+<li>
+CPU <code>cat /proc/cpuinfo|grep 'model name'</code>
+
+<li>
+CPU位长 <code>cat /proc/cpuinfo|grep flags</code>
+<pre class="brush: bash">
+如果找到lm, 则说明你的CPU是64位的. lm是long mode的意思.
+Long Mode - 64位CPU
+Real Mode - 16位CPU
+Protected Mode - 32位CPU
+</pre>
+
+<li>
+内存 <code>cat /proc/meminfo |grep MemTotal</code>
+
+<li>
+硬盘 <code>cat /proc/scsi/scsi</code>
+
+<li>
+显卡 <code>lspci |grep VGA</code>
+
+</ul>
+<h3 id="toc_0.1.5">alias中使用'符号</h3>
+<p>
+将<code>'</code>替换成<code>'\''</code>
+</p>
+<h3 id="toc_0.1.6">制作系统安装U盘(usb install)</h3>
+<ul>
+<li>
+archlinux: <code># dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx &amp;&amp; sync</code>
+
+<li>
+debian: <code># cat debian.iso &gt; /dev/sdb; sync</code>
+
+</ul>
+<h3 id="toc_0.1.7">apt</h3>
+<ul>
+<li>
+查找命令所在包: <code>dpkg -S [cmd]</code> 可配合 <code>dpkg -l|grep [cmd]</code>
+
+<li>
+pkg-config --modversion gtk+-2.0 查看包版本信息
+
+<li>
+查看linux内置程序源码
+<pre class="brush: bash">
+进入准备存放源码的文件夹
+sudo apt-get install dpkg-dev
+apt-get source coreutils
+就会在当前文件夹看到源码文件夹
+</pre>
+
+<li>
+查看最近安装的软件包
+<pre class="brush: bash">
+cat  /var/log/apt/history.log |grep "\sinstall\s" |tail
+</pre>
+
+</ul>
+<h3 id="toc_0.1.8">更新grub</h3>
+<ol>
+<li>
+<code>sudo cp /boot/grub/grub.cfg /boot/grub/grub.cfg.bak</code>
+
+<li>
+<code>sudo grub-mkconfig -o /boot/grub/grub.cfg</code>
+
+</ol>
+<h3 id="toc_0.1.9">工具</h3>
+<ul>
+<li>
+文件比较GUI工具: <code>kdiff3-qt</code> (有KDE环境可以直接使用<code>kdiff3</code>)
+
+</ul>
+<h3 id="toc_0.1.10">iptables</h3>
+<pre class="brush:bash">
+#添加屏蔽IP
+#禁止此IP访问服务器
+iptables -I INPUT -s 1.2.3.4 -j DROP
+或
+iptables -A INPUT -s 1.2.3.4 -j DROP
+#禁止服务器访问此IP
+iptables -A OUTPUT -d 1.2.3.4 -j DROP
+如果要封某个网段：
+iptables -I INPUT -s 1.2.3.0/24 -j DROP
+
+#清空屏蔽IP
+iptables -t filter -D INPUT -s 1.2.3.4 -j DROP
+iptables -t filter -D OUTPUT -d 1.2.3.4 -j DROP
+
+#一键清空所有规则
+iptables -F
+
+#查看
+iptables -L INPUT
+或
+iptables -L
+或
+iptables-save（此命令将保存规则，下次开机自动执行）
+
+#处理IP碎片数量,防止攻击,允许每秒100个
+iptables -A FORWARD -f -m limit --limit 100/s --limit-burst 100 -j ACCEPT
+#设置ICMP包过滤,允许每秒1个包,限制触发条件是10个包
+iptables -A FORWARD -p icmp -m limit --limit 1/s --limit-burst 10 -j ACCEPT 
+</pre>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="gifview.html" title="上一篇: android显示gif动画">&larr; android显示gif动画</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="lua.html" title="下一篇: lua">lua &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

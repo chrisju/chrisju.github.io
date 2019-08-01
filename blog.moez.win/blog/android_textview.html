@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>android_textview</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">TextView</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-11-04</a></li>
+<li><a href="Categories.html#android">android <span>9</span></a></li>
+<li><a href="Tags.html#android开发">android开发 <span>7</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">TextView</a>
+<ul>
+<li><a href="#toc_0.1.1">textview行间距</a>
+<li><a href="#toc_0.1.2">计算SpannableString宽高</a>
+<li><a href="#toc_0.1.3">滚动</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<h3 id="toc_0.1.1">textview行间距</h3>
+<ul>
+<li>
+设置行间距: <code>setLineSpacing(float add, float mult)</code>
+
+<ul>
+<li>
+参数解释
+
+<li>
+add: 间距大小 单位:像素
+
+<li>
+mult: 间距大小 单位:字体高度
+
+<li>
+2个参数独立得出间距大小 以大的为准
+
+<li>
+如add为22,字体高度为18,mult为1.2 后者的实际间距为18*1.2=21.6 最后的间距是22
+
+</ul>
+<li>
+<code>StaticLayout(CharSequence source, TextPaint paint, int width, Layout.Alignment align, float spacingmult, float spacingadd, boolean includepad)</code> 这里的spacingmult,spacingadd也是一样的
+
+</ul>
+<h3 id="toc_0.1.2">计算SpannableString宽高</h3>
+<ul>
+<li>
+使用<code>StaticLayout</code>计算
+
+<li>
+最好在<code>onSizeChanged</code>中计算 因为可能需要知道View大小
+<pre class="brush: java">
+// ss: SpannableString string
+// align: 如Layout.Alignment.ALIGN_NORMAL
+// spacingmult, spacingadd: 行间距相关变量
+TextPaint paint = new TextPaint();
+StaticLayout tempLayout = new StaticLayout(ss, paint,
+        this.getWidth(), // 必须使用实际宽度 否则有拆行就会高度错误
+        align, spacingmult, spacingadd, false);
+sh = tempLayout.getHeight();
+</pre>
+
+<li>
+如果是单行模式(setSingleLine()),width设为一个大数
+<pre class="brush: java">
+TextPaint paint = new TextPaint();
+StaticLayout tempLayout = new StaticLayout(ss, paint, 1000000,
+        align, spacingmult, spacingadd, false);
+int lineCount = tempLayout.getLineCount();
+float textWidth = 0;
+for (int i = 0; i &lt; lineCount; i++) {
+    textWidth += tempLayout.getLineWidth(i);
+}
+</pre>
+
+</ul>
+<h3 id="toc_0.1.3">滚动</h3>
+<p>
+textview滚动需要给textview设置一个滚动句柄<code>setMovementMethod(ScrollingMovementMethod.getInstance());</code>,否则滚起来可能会受其他view的影响闪烁
+</p>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="screen.html" title="上一篇: 类screen软件">&larr; 类screen软件</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="fcitx.html" title="下一篇: fctix">fctix &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

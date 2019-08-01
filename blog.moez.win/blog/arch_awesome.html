@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>arch_awesome</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">archlinux安装及配置</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-03-16</a></li>
+<li><a href="Categories.html#linux">linux <span>31</span></a></li>
+<li><a href="Tags.html#archlinux">archlinux <span>3</span></a></li>
+<li><a href="Tags.html#awesome">awesome <span>1</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">archlinux安装及配置</a>
+<ul>
+<li><a href="#toc_0.1.1">安装</a>
+<li><a href="#toc_0.1.2">配置</a>
+<ul>
+<li><a href="#toc_0.1.2.1">网络 wicd</a>
+<li><a href="#toc_0.1.2.2">电源管理</a>
+<li><a href="#toc_0.1.2.3">输入法 ibus</a>
+<li><a href="#toc_0.1.2.4">各种乱码</a>
+</ul>
+<li><a href="#toc_0.1.3">技巧</a>
+<ul>
+<li><a href="#toc_0.1.3.1">更改slim主题</a>
+<li><a href="#toc_0.1.3.2">查看窗口CLASS等信息</a>
+<li><a href="#toc_0.1.3.3">截屏</a>
+<li><a href="#toc_0.1.3.4">安装 Virtualbox</a>
+<li><a href="#toc_0.1.3.5">flash</a>
+<li><a href="#toc_0.1.3.6">获取最快源</a>
+</ul>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<h3 id="toc_0.1.1">安装</h3>
+
+<h3 id="toc_0.1.2">配置</h3>
+
+<h4 id="toc_0.1.2.1">网络 wicd</h4>
+<p>
+参考<a href="https://wiki.archlinux.org/index.php/Wicd_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)" target="_blank">arch的wiki</a>
+</p>
+<ol>
+<li>
+<code>pacman -S wicd</code>
+
+<li>
+<code>pacman -S dhclient wpa_supplicant hicolor-icon-theme</code>
+
+<li>
+
+<pre class="brush: bash">
+编辑/etc/rc.conf, 在network前加! 并添加wicd 
+在~/.xinitrc 添加启动wicd客户端 
+wicd-client &amp;
+重启X 如 # rc.d restart slim
+</pre>
+
+</ol>
+<h4 id="toc_0.1.2.2">电源管理</h4>
+<pre class="brush: bash">
+sudo pacman -S gnome-power-manager
+sudo pacman -S gnome-control-center
+在~/.xinitrc 添加启动
+gnome-power-manager &amp;
+</pre>
+<p>
+安装挂起
+</p>
+<pre class="brush: bash">
+sudo pacman -S pm-utils
+在/etc/sudoers加入:
+%wheel ALL = (ALL) NOPASSWD: /usr/sbin/pm-suspend
+</pre>
+<p>
+普通用户使用关机重启支持
+</p>
+<pre class="brush: bash">
+在/etc/sudoers加入:
+%wheel ALL = (ALL) NOPASSWD: /sbin/reboot
+%wheel ALL = (ALL) NOPASSWD: /sbin/halt
+</pre>
+<p>
+加入awesome菜单
+</p>
+<pre class="brush: bash">
+mysysmenu = {
+   { "suspend", terminal .. " -e sudo pm-suspend" },
+   { "reboot", terminal .. " -e sudo reboot" },
+   { "halt", terminal .. " -e sudo halt" },
+}
+</pre>
+<h4 id="toc_0.1.2.3">输入法 ibus</h4>
+<p>
+参考<a href="https://wiki.archlinux.org/index.php/Ibus" target="_blank">arch的wiki</a>
+</p>
+<ol>
+<li>
+<code>pacman -S ibus ibus-pinyin ibus-anthy</code>
+
+<li>
+
+<pre class="brush: bash">
+在~/.xinitrc 添加启动wicd客户端
+export LANG=zh_CN.UTF-8
+export LC_ALL="zh_CN.UTF-8"
+ibus-daemon -d -x -r -n awesome
+</pre>
+
+<li>
+urxvt下使用ibus:
+<pre class="brush: bash">
+在 .Xdefaults 添加
+  URxvt.inputMethod: ibus
+  URxvt.preeditType: OnTheSpot,None 
+</pre>
+
+</ol>
+<h4 id="toc_0.1.2.4">各种乱码</h4>
+<p>
+参考<a href="https://wiki.archlinux.org/index.php/Arch_Linux_%E4%B8%AD%E6%96%87%E5%8C%96_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)" target="_blank">arch的wiki</a>
+</p>
+<h3 id="toc_0.1.3">技巧</h3>
+<ul>
+<li>
+查看最近安装的软件: <code>cat /var/log/pacman.log|grep installed |tail</code>
+
+</ul>
+<h4 id="toc_0.1.3.1">更改slim主题</h4>
+<ul>
+<li>
+主题下载: <a href="http://slim.berlios.de/themes01.php" target="_blank">http://slim.berlios.de/themes01.php</a>
+
+<li>
+解压后放入 /usr/share/slim/themes
+
+<li>
+修改 /etc/slim.conf : 修改 current_theme 为新主题名
+
+</ul>
+<h4 id="toc_0.1.3.2">查看窗口CLASS等信息</h4>
+<p>
+yaourt xprop,运行xprop,点击需要查看的窗口
+</p>
+<h4 id="toc_0.1.3.3">截屏</h4>
+<p>
+在rc.lua的"Key bindings"处添加
+<code>    awful.key({ }, "Print", function () awful.util.spawn("scrot -e 'mv $f ~/pic/shot/ 2&gt;/dev/null'") end),</code>
+</p>
+<h4 id="toc_0.1.3.4">安装 Virtualbox</h4>
+<p>
+安装对应的kernel headers
+如提示没有libGLU.so,安装 freeglut
+Virtualbox-管理-设定-Extensions里安装extension
+</p>
+<h4 id="toc_0.1.3.5">flash</h4>
+<ol>
+<li>
+<code>pacman -Sy flashplugin</code>
+
+<li>
+开启/etc/adobe/mms.cfg里的<code>EnableLinuxHWVideoDecode=1</code>
+
+</ol>
+<h4 id="toc_0.1.3.6">获取最快源</h4>
+<pre class="brush: bash">
+cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak2
+pacman -S reflector
+reflector -l 5 --sort rate --save /etc/pacman.d/mirrorlist
+</pre>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="gimp.html" title="上一篇: GIMP">&larr; GIMP</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="kvm.html" title="下一篇: kvm">kvm &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

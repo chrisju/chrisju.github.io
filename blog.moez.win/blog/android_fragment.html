@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>android_fragment</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">Fragment根据屏幕用不同方式显示</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-7-29</a></li>
+<li><a href="Categories.html#android">android <span>9</span></a></li>
+<li><a href="Tags.html#Fragment">Fragment <span>1</span></a></li>
+<li><a href="Tags.html#android开发">android开发 <span>7</span></a></li>
+</ul>
+
+<hr />
+</p>
+<ul>
+<li>
+Fragement在横竖屏显示为不同行为 原理是横屏的layout里显示一个layout而竖屏没有
+
+<ul>
+<li>
+竖屏:
+<pre class="brush: xml">
+&lt;FrameLayout xmlns:android=”http://schemas.android.com/apk/res/android”
+android:layout_width=”match_parent”
+android:layout_height=”match_parent”&gt;
+
+&lt;fragment
+class=”com.exple.testfragment.MainActivity$TitlesFragment”
+android:id=”@+id/titles”
+android:layout_width=”match_parent”
+android:layout_height=”match_parent”/&gt;
+&lt;/FrameLayout&gt;
+</pre>
+
+<li>
+横屏:
+<pre class="brush: xml">
+&lt;LinearLayout xmlns:android=”http://schemas.android.com/apk/res/android”
+android:baselineAligned=”false”
+android:orientation=”horizontal”
+android:layout_width=”match_parent”
+android:layout_height=”match_parent”&gt;
+
+&lt;fragment
+class=”com.exple.testfragment.MainActivity$TitlesFragment”
+android:id=”@+id/titles”
+android:layout_weight=”1″
+android:layout_width=”0px”
+android:layout_height=”match_parent”/&gt;
+
+&lt;FrameLayout
+android:id=”@+id/details”
+android:layout_weight=”5″
+android:layout_width=”0px”
+android:layout_height=”match_parent”
+android:background=”?android:attr/detailsElementBackground”/&gt;
+
+&lt;/LinearLayout&gt;
+</pre>
+
+</ul>
+<li>
+注意: 关键是那个FrameLayout(id/details) 而非fragment 这里的fragment换成listview啥的毫不影响
+
+<li>
+小屏的话需要再建立一个单独的activity 在oncreate里设置Fragment 假设InfoFragment是Fragment的子类
+<pre class="brush: java">
+getFragmentManager().beginTransaction().add(android.R.id.content, new InfoFragment()).commit();
+</pre>
+
+<li>
+就ok了 实际使用用可以加个switch或if根据选择来创建不同的Fragment
+
+</ul>
+
+<ul>
+<li>
+下一步是显示Fragment的内容 如果是大屏 则会显示FrameLayout 需要设置R.id.details的内容为Fragment(显示方法和下面的大屏显示方法一样) 否则不管
+
+</ul>
+
+<ul>
+<li>
+然后要为选择绑定操作
+
+<li>
+如果是小屏:直接startActivity
+
+<li>
+如果是大屏:
+
+<li>
+首先获取目前显示中的Fragment
+<pre class="brush: java">
+Fragment cur = getFragmentManager().findFragmentById(R.id.details);
+</pre>
+
+<li>
+然后对照选择判断是否需要更改Fragment 需要则新建 否则return结束操作
+<pre class="brush: java">
+case 0://InfoFragment
+if (cur == null || !(cur instanceof InfoFragment)) {
+newfrag = new InfoFragment();
+} else {
+return;
+}
+</pre>
+
+<li>
+用FragmentTransaction更改目前那个FrameLayout(id/details)的内容:
+<pre class="brush: java">
+FragmentTransaction ft = getFragmentManager().beginTransaction();
+ft.replace(R.id.details, newfrag);
+ft.commit();
+</pre>
+
+</ul>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="arch_mime.html" title="上一篇: 解决archlinux文件关联问题">&larr; 解决archlinux文件关联问题</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="audacious_midi.html" title="下一篇: 配置Audacious播放MIDI">配置Audacious播放MIDI &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>privoxy</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">privoxy</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-10-15</a></li>
+<li><a href="Categories.html#linux">linux <span>31</span></a></li>
+<li><a href="Tags.html#privoxy">privoxy <span>1</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">privoxy</a>
+<ul>
+<li><a href="#toc_0.1.1">用privoxy控制goagent代理</a>
+</ul>
+</ul>
+</ul>
+</div>
+privoxy是个代理管理工具, 而不仅仅是socks代理转换成http代理的工具
+<a href="http://www.lainme.com/doku.php/blog/2011/04/privoxy_%E5%B9%BF%E5%91%8A%E8%BF%87%E6%BB%A4%E5%92%8C%E8%87%AA%E5%8A%A8%E4%BB%A3%E7%90%86%E5%88%87%E6%8D%A2" target="_blank">这里</a>有
+分发规则用法
+</p>
+<h3 id="toc_0.1.1">用privoxy控制goagent代理</h3>
+<ul>
+<li>
+浏览器上的代理插件或firefox之类自带的pac支持只能控制浏览器上的代理工作规则
+
+<li>
+privoxy可以提供全局控制<br>
+
+</ul>
+<p>
+比如终端的http_proxy变量若设置为goagent代理,则代理会始终起作用. 假如对局域网连接不需要代理, 则需要设定规则 这时可以使用privoxy 在/etc/privoxy/config设置
+</p>
+<pre class="brush: bash">
+forward   /      127.0.0.1:8087
+forward         192.168.*.*/     .
+</pre>
+<p>
+然后把http_proxy设到privoxy端口 <code>sudo service privoxy restart</code>即可
+</p>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="firefox.html" title="上一篇: firefox">&larr; firefox</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="convert_filename_encoding.html" title="下一篇: 更改文件名编码">更改文件名编码 &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

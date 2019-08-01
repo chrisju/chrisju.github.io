@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>audio_accident</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">一起声音小事故</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-03-29</a></li>
+<li><a href="Categories.html#linux">linux <span>31</span></a></li>
+<li><a href="Tags.html#linux">linux <span>2</span></a></li>
+<li><a href="Tags.html#多媒体">多媒体 <span>3</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">一起声音小事故</a>
+</ul>
+</ul>
+</div>
+今天正在编译ffmpeg时 看到B站的空境更新了 就跑去看空境
+</p>
+
+<p>
+放了一会没声音 感觉不对劲 跑audacious下听歌 直接报错
+</p>
+
+<p>
+当下就慌了 以前给声音整过几次 苦不堪言
+</p>
+
+<p>
+从终端跑audacious,提示:
+</p>
+
+<p>
+<code>ALSA lib pcm_dmix.c:1022:(snd_pcm_dmix_open) unable to open slave</code>
+</p>
+
+<p>
+以及对话框提示: <code>snd_pcm_open failed: Device or resource busy</code>
+</p>
+
+<p>
+解决办法:
+</p>
+
+<p>
+<code>fuser /dev/snd/* /dev/dsp /dev/snd</code>
+</p>
+
+<p>
+查看占用资源的进程号(pid)
+</p>
+
+<p>
+然后用<code>ps aux|grep pid</code>看谁在搞鬼
+</p>
+
+<p>
+我这发现是wineqq在搞鬼…
+</p>
+
+<p>
+退出qq就好了
+</p>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="ssh.html" title="上一篇: ssh">&larr; ssh</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="csharp_struct.html" title="下一篇: c#调用c结构体一例">c#调用c结构体一例 &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

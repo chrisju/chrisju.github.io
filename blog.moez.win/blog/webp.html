@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>webp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">webp相关以及转换</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-7-8</a></li>
+<li><a href="Tags.html#webp">webp <span>1</span></a></li>
+</ul>
+
+<hr />
+</p>
+<ul>
+<li>
+<strong>默认只有chromium能查看webp格式的文件,firefox,gimp等均不能识别webp</strong>
+
+<li>
+webp和webm在效果和文件大小间性价比非常高
+
+</ul>
+
+<h3 id="toc_0.1.1">安装webp支持</h3>
+<p>
+可直接安装或自己编译
+</p>
+
+<p>
+apt安装:
+</p>
+<pre class="brush:bash">
+sudo apt-get install webp libwebp-dev
+</pre>
+<p>
+自己编译:
+</p>
+<pre class="brush:bash">
+git clone http://git.chromium.org/webm/libwebp.git
+./configure –enable-libwebpmux –enable-libwebpdecoder
+make
+sudo make install
+</pre>
+
+<h4 id="toc_0.1.1.1">用python进行批量图片转换</h4>
+<pre class="brush:bash">
+sudo apt-get install python-dev python-pip
+sudo pip install pillow
+</pre>
+<pre class="brush: python">
+#!/usr/bin/python
+#  --*-- coding:utf-8  --*--
+
+from PIL import Image
+import os
+import sys
+
+if len(sys.argv) != 4:
+    print "Usage python %s source_type target_type dir" % sys.argv[0]
+    sys.exit()
+
+arg="."+sys.argv[1].lower()
+arg1="."+sys.argv[2].lower()
+
+#********************* 当前目录下指定格式的图像文件名 ***********************
+def getImageFiles():
+    allfiles = os.listdir(sys.argv[3])
+
+    files = []
+
+    for f in allfiles:
+        if f[-4:].lower()==arg:
+            files.append(f)
+
+    return files
+
+#********************* 转换 **************************************************
+def CovImage():
+
+    filename=getImageFiles()
+    for i in filename:
+        x=i[:-4]
+        Image.open(i).save(x+arg1)
+
+if __name__ == "__main__":
+
+    CovImage()
+</pre>
+ 
+<p>
+参考链接:
+<a href="http://iraycd.blogspot.com/2013/04/webp-with-python-pillowpil.html" target="_blank">http://iraycd.blogspot.com/2013/04/webp-with-python-pillowpil.html</a>
+</p>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="dia.html" title="上一篇: dia">&larr; dia</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="arch_mime.html" title="下一篇: 解决archlinux文件关联问题">解决archlinux文件关联问题 &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

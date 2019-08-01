@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>shadowsocks</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">shadowsocks</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-11-13</a></li>
+<li><a href="Categories.html#linux">linux <span>31</span></a></li>
+<li><a href="Tags.html#shadowsocks">shadowsocks <span>1</span></a></li>
+<li><a href="Tags.html#fuckgfw">fuckgfw <span>1</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">shadowsocks</a>
+<ul>
+<li><a href="#toc_0.1.1">安装配置服务端和客户端</a>
+<li><a href="#toc_0.1.2">使用c实现</a>
+</ul>
+</ul>
+</ul>
+</div>
+项目地址: <a href="https://github.com/clowwindy/shadowsocks" target="_blank">https://github.com/clowwindy/shadowsocks</a>
+</p>
+<h3 id="toc_0.1.1">安装配置服务端和客户端</h3>
+<ol>
+<li>
+服务端和客户端都需要安装shadowsocks:
+<pre class="brush: bash">
+apt-get install python-pip
+pip install shadowsocks
+</pre>
+
+<li>
+在server的/opt/shadowsocks下建立config.json,内容如下:
+<pre class="brush: bash">
+{
+    "server":"my_server_ip",
+    "server_port":8388,
+    "local_port":1080,
+    "password":"barfoo!",
+    "timeout":600,
+    "method":"table"
+}
+</pre>
+
+<li>
+在/opt/shadowsocks下运行<code>ssserver</code>
+
+<li>
+拷贝config.json到客户端:
+<pre class="brush: bash">
+scp root@xxx.xxx.xxx.xxx:/opt/shadowsocks/config.json /opt/shadowsocks/config.json
+</pre>
+
+<li>
+在客户端的/opt/shadowsocks下运行<code>sslocal</code>
+
+<li>
+ok.至此已在127.0.0.1:1080创建socks5代理
+
+</ol>
+<p>
+<strong>服务端极耗内存 有空试下c实现</strong>
+</p>
+<h3 id="toc_0.1.2">使用c实现</h3>
+<ul>
+<li>
+<strong>可以解决python实现的内存问题</strong>
+
+<li>
+项目地址: <a href="https://github.com/madeye/shadowsocks-libev" target="_blank">https://github.com/madeye/shadowsocks-libev</a>
+
+<li>
+照着文档编译安装 很简单
+
+<li>
+<strong>配置文件通用</strong>
+
+<li>
+启动服务端<code>ss-server -c /opt/shadowsocks/config.json</code>
+
+</ul>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="sigil.html" title="上一篇: 用sigil制作epub电子书">&larr; 用sigil制作epub电子书</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="github_open.html" title="下一篇: github提供push到另一个阉割版仓库">github提供push到另一个阉割版仓库 &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

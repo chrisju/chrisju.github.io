@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>android_autoi18</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">android用脚本提取固定字符串转为使用string.xml</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-11-08</a></li>
+<li><a href="Categories.html#android">android <span>9</span></a></li>
+<li><a href="Tags.html#python">python <span>7</span></a></li>
+<li><a href="Tags.html#i18">i18 <span>1</span></a></li>
+</ul>
+
+<hr />
+</p>
+<ul>
+<li>
+本例是要把<code>appendMonitorLog("xxxxx")</code>格式的字符串提取出来写入string.xml 不同需求更改正则表达式
+
+<li>
+脚本所做工作:
+
+<ol>
+<li>
+将java文件中匹配的字符串转为使用string id
+
+<li>
+在string.xml加入对应项
+<pre class="brush: python">
+#!/usr/bin/python
+# coding=utf8
+
+import os,sys,re
+
+srcdir='src/main/java/com/sangame/xx/android/'
+xml='res/values/strings.xml'
+xmlsf='\n    &lt;string name="{0}"&gt;{1}&lt;/string&gt;\n'
+stridf='message{0}'
+rbf='MonitorService.getService().getResources().getString(R.string.{0})'
+sp=r'(?P&lt;pre&gt;appendMonitorLog\()"(.+?)"(?P&lt;end&gt;\))' #按需修改
+
+def add2xml(strid,msg):
+    xmls = xmlsf.format(strid,msg)
+    with open(xml) as f:
+        s = f.read()
+    p=r'(\n)(?P&lt;end&gt;\n&lt;/resources&gt;)'
+    s = re.sub(p,xmls+'\g&lt;end&gt;',s)
+    with open(xml,'w') as f:
+        f.write(s)
+
+startid=100
+i=startid
+msgs=[]
+def getstrid(msg):
+    if msg in msgs:
+        return stridf.format(msgs.index(msg)+startid)
+    else:
+        global i
+        msgs.append(msg)
+        strid=stridf.format(i)
+        i = i + 1
+        add2xml(strid,msg)
+        return strid
+
+
+for root,dirs,files in os.walk(srcdir):
+    for file in files:
+        p = os.path.join(root,file)
+        print(p)
+        with open(p) as f:
+            s=f.read()
+
+        m=re.findall(sp,s)
+        count = len(m)
+        print(m)
+
+        if m:
+            for j in range(len(m)):
+                strid=getstrid(m[j][1])
+                rb=rbf.format(strid)
+                if j == 0:
+                    ns,n=re.subn(sp,'\g&lt;pre&gt;'+rb+'\g&lt;end&gt;',s,count=1)
+                else:
+                    ns,n=re.subn(sp,'\g&lt;pre&gt;'+rb+'\g&lt;end&gt;',ns,count=1)
+            with open(p,'w') as f:
+                f.write(ns)
+</pre>
+
+</ol>
+</ul>
+<p>
+若是少量漏网的可以另外处理,比如
+</p>
+<pre class="brush: python">
+        m=re.findall(sp,s)
+        for s in m:
+            if '+' in s:
+                print(p)
+                print(s)
+        continue
+</pre>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="vimwikiblog.html" title="上一篇: 用vimwiki写博客">&larr; 用vimwiki写博客</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="diveintopython3cn.html" title="下一篇: Dive Into Python3 中文版 epub电子书">Dive Into Python3 中文版 epub电子书 &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

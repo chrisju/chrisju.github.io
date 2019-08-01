@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>vimwikiblog_en</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">vimwikiblog document</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-12-04</a></li>
+<li><a href="Categories.html#linux">linux <span>31</span></a></li>
+<li><a href="Tags.html#vimwiki">vimwiki <span>3</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">vimwikiblog document</a>
+<ul>
+<li><a href="#toc_0.1.1">Introduction</a>
+<li><a href="#toc_0.1.2">Vimwikiblog convention for .wiki</a>
+<li><a href="#toc_0.1.3">Usage</a>
+<li><a href="#toc_0.1.4">Advance</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<h3 id="toc_0.1.1">Introduction</h3>
+<ul>
+<li>
+Project mainpage: <a href="https://github.com/chrisju/vimwikiblog" target="_blank">https://github.com/chrisju/vimwikiblog</a>
+
+<li>
+vimwikiblog is python3 tool.It can transfer wiki files to a static blog.After edit and save .wiki file,you can update the modification to your blog by one command.
+
+<li>
+Use this tool, only a little setting, you can convert your vimwiki files to be a blog. You can modify templates to fit your preference.
+
+<li>
+Blog example: <a href="http://blog.moez.win" target="_blank">http://blog.moez.win</a>
+
+</ul>
+<h3 id="toc_0.1.2">Vimwikiblog convention for .wiki</h3>
+<ul>
+<li>
+There is a convention to set time/category/tags for the article
+
+<li>
+In <code>~/.vimrc</code>, add shortcut for quickly insert convention   <strong>Note the shortcut conflicts</strong>
+<pre class="brush: bash">
+:map &lt;F2&gt; &lt;ESC&gt;gg:read !echo -e "*`date '+\%Y-\%m-\%d \%H:\%M:\%S'`*\n_cat_\n\`tag\`\n----\n\%toc"&lt;CR&gt;
+</pre>
+
+</ul>
+
+<ul>
+<li>
+Open all .wiki files and press <code>F2</code> to insert the convention
+
+<li>
+Convention editing
+
+<ul>
+<li>
+There must one time string (between '*')
+
+<li>
+Category can be one or zero (between '_')
+
+<li>
+Can add any number of tags (between '`'), one line for one tag
+
+<li>
+Must keep <code>----</code>
+
+<li>
+<code>%toc</code> will be converted to a direcory. this can be removed
+
+</ul>
+</ul>
+<h3 id="toc_0.1.3">Usage</h3>
+<ol>
+<li>
+You must have knowledge with vimwiki
+
+<li>
+<code>git clone https://github.com/chrisju/vimwikiblog.git</code>
+
+<li>
+<code>cd vimwikiblog</code>
+
+<li>
+edit <code>~/.vimrc</code>,depend on <code>config/vimrc</code>, must add template_path,template_default,template_ext,css_name in <code>vimwiki_list</code>
+
+<li>
+edit <code>config/config.json</code> wiki,html under <code>base</code> is the wiki dir and vimwiki's output dir,you can set ftp account in <code>upload</code>
+
+<li>
+edit <code>vimwikiblog/config/vimwiki.tpl</code> and <code>vimwikiblog/config/generate.tpl</code>.Replace all <code>xxx</code> string with your own
+
+<li>
+Modify all .wiki files according to <strong>vimwikiblog convention (important!!)</strong>.thers are examples in vimwikiblog/wiki/
+
+<li>
+If first run, open wiki file with vim,type :VimwikiAll2HTML to convert all wiki files into html
+
+<li>
+<code>cd vimwikiblog</code>, and run <code>python3 tools/vimwiki2blog.py -c config/config.json</code>, will generate blog files in blog/ and upload to ftp(if configed)
+
+<li>
+copy <code>blog/style0.css</code> to remote blog directory
+
+<li>
+Upload <code>site</code> directory to blog server, make sure that it has the parent directory as same as the blog directory.
+
+</ol>
+<h3 id="toc_0.1.4">Advance</h3>
+<ul>
+<li>
+Files in blog_tmp is the files modified but not uploaded, use <code>python3 tools/vimwiki2blog.py -c config/config.json -u</code> can upload them(argument '-u' means upload only)
+
+<li>
+Add <code>--upall</code> argument can upload all html files instead of only upload changed files
+
+<li>
+In <code>site/js/disqus.js</code> set <code>disqus_shortname</code> for disqus
+
+<li>
+Set <code>site/js/ga.js</code> for google-analytics
+
+<li>
+Modify style: <code>config/genpage.tpl</code>,<code>config/vimwiki.tpl</code>,<code>blog/style0.css</code> and files under site.genpage.tpl is the template of navigation pages,vimwiki.tpl is the template of vimwiki
+
+<li>
+Default config file:<code>~/.config/vimwikiblog/config.json</code>,if not use <code>-c</code> argument
+
+<li>
+You can add <code>alias upblog='cd /mnt/DATA/proj/vimwikiblog/;python3 tools/vimwiki2blog.py -c config/config.json'</code> into <code>~/.bashrc</code>
+
+</ul>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="rootminix.html" title="上一篇: Minix Neo X5 Mini 4.2.2 root">&larr; Minix Neo X5 Mini 4.2.2 root</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="fbterm.html" title="下一篇: fbterm">fbterm &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

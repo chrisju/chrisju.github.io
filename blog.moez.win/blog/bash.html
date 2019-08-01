@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>bash</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">bash</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-07-29</a></li>
+<li><a href="Categories.html#linux">linux <span>31</span></a></li>
+<li><a href="Tags.html#bash">bash <span>1</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">bash</a>
+<ul>
+<li><a href="#toc_0.1.1">显示输入</a>
+<li><a href="#toc_0.1.2">调用编辑器编辑命令</a>
+<li><a href="#toc_0.1.3">sudo运行多个命令</a>
+<li><a href="#toc_0.1.4">搜索history时使用ctrl-s作为ctrl-r的反向搜索</a>
+<li><a href="#toc_0.1.5">忽略alias</a>
+<li><a href="#toc_0.1.6">文档字符串(HERE DOCUMENT)</a>
+<li><a href="#toc_0.1.7">字符串取前缀</a>
+<li><a href="#toc_0.1.8">参数判断</a>
+<li><a href="#toc_0.1.9">分阶段运行脚本</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<ul>
+<li>
+定义变量 a=werty
+
+<li>
+使用变量 <code>$a</code> <code>${a}</code>
+
+</ul>
+<h3 id="toc_0.1.1">显示输入</h3>
+<p>
+<code>set -v</code> 打印输入
+<code>set +v</code> 关闭打印输入
+</p>
+<h3 id="toc_0.1.2">调用编辑器编辑命令</h3>
+<p>
+<code>^X^E</code>
+</p>
+<h3 id="toc_0.1.3">sudo运行多个命令</h3>
+<p>
+<code>sudo su root -c 'echo "wp:wp" | chpasswd'</code>
+</p>
+<h3 id="toc_0.1.4">搜索history时使用ctrl-s作为ctrl-r的反向搜索</h3>
+<pre class="brush: bash">
+history搜索本来支持ctrl-s,只是因为快捷键冲突而失效
+原ctrl-s为冻结终端 禁用此特性可解决快捷键冲突
+在~/.bashrc加入
+stty -ixon
+</pre>
+<h3 id="toc_0.1.5">忽略alias</h3>
+<p>
+在命令前加'<code>\</code>' 如'<code>\ls .</code>'
+</p>
+<h3 id="toc_0.1.6">文档字符串(HERE DOCUMENT)</h3>
+<pre class="brush: bash">
+cat &lt;&lt; 'EOF' &gt; /tmp/yourfilehere
+These contents will be written to the file.
+EOF
+tee newfile &lt;&lt;IAMEOF
+line 1
+line 2
+line 3
+IAMEOF
+</pre>
+<h3 id="toc_0.1.7">字符串取前缀</h3>
+<pre class="brush: bash">
+${filename%.sam*}
+</pre>
+<h3 id="toc_0.1.8">参数判断</h3>
+<pre class="brush: bash">
+#如果没有参数或第一个参数扩展名不是sam就报错
+if [ 0 -eq $# ] || [ "${1##*.}" != "sam" ]; then
+echo "ERROR: wrong command!"
+usage
+exit 1
+fi
+</pre>
+<h3 id="toc_0.1.9">分阶段运行脚本</h3>
+<pre class="brush: bash">
+beg=$1
+end=$2
+if [ -z $beg ]; then
+    beg=-99999
+fi
+if [ -z $end ]; then
+    end=99999
+fi
+echo "begin:" $beg "end:" $end
+
+if [ 1 -ge $beg ] &amp;&amp; [ 1 -le $end ]; then
+    echo "1"
+fi
+if [ 3 -ge $beg ] &amp;&amp; [ 3 -le $end ]; then
+    echo "3"
+fi
+if [ 11 -ge $beg ] &amp;&amp; [ 11 -le $end ]; then
+    echo "11"
+fi
+</pre>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="audacious_midi.html" title="上一篇: 配置Audacious播放MIDI">&larr; 配置Audacious播放MIDI</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="ffmpeg.html" title="下一篇: 音视频处理">音视频处理 &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

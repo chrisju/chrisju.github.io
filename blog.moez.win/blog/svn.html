@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>svn</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">svn</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-09-28</a></li>
+<li><a href="Categories.html#编程">编程 <span>23</span></a></li>
+<li><a href="Tags.html#svn">svn <span>1</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">svn</a>
+<ul>
+<li><a href="#toc_0.1.1">svn 使用注意事项</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<ul>
+<li>
+svn log -l4           显示最近4条log
+
+<li>
+svn log -v -r 430     显示430版本改动的文件
+
+<li>
+svn diff -r 430:431   显示430和431的详细改动.可指定文件
+
+<li>
+svn copy SRC DST -m "message"     创建分支或tag
+
+<li>
+svn list PATH
+
+<li>
+svn mkdir --parents -m "msg" PATH|URL 创建文件夹
+
+<li>
+svn import -m "msg" [LOCAL_DIR] PATH
+
+<li>
+svn回滚库
+<pre class="brush: bash">
+在当前项目工作目录执行：
+svn merge -r HEAD:26803[要回滚到的版本号] trunk的url 
+合并后无提示再提交代码 
+</pre>
+
+</ul>
+
+
+<h3 id="toc_0.1.1">svn 使用注意事项</h3>
+<ul>
+<li>
+经常update (不要让自己的代码落后于版本库太多,容易冲突,最好落后不要超过1天,如果一天没有提交了,那就先update一下,在最新的基础上修改
+
+<li>
+如果本地没有有意义的改动,与版本库同步前先revert
+
+<li>
+尽量不要在别处改了再复制到svn控制的代码中,要直接在svn的代码里改,不然容易盖掉别人的修改
+
+<li>
+一个功能的修改,尽量放在一次提交里,分开的话下了中间的版本就无法编译运行,要尽量减少无法运行版本
+
+<li>
+提交前要update (否则无法提交
+
+<li>
+提交前一定要仔细比较待提交的每行修改,确保正确(除非这个文件别人不会编辑),尽量不要有测试性的代码
+
+<li>
+提交前一定要对最后的代码编译运行,在比较后更改代码后要重新编译运行,要尽量去除编译的warning (我们的项目有2个要编译的:CBTest和GoldMiner2
+
+<li>
+提交时一定要好好写日志记录,方便查看
+
+</ul>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="lua.html" title="上一篇: lua">&larr; lua</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="wine.html" title="下一篇: wine">wine &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>android_studio</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">Android Studio</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-06-21</a></li>
+<li><a href="Categories.html#android">android <span>9</span></a></li>
+<li><a href="Tags.html#android开发">android开发 <span>7</span></a></li>
+<li><a href="Tags.html#android studio">android studio <span>2</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">Android Studio</a>
+<ul>
+<li><a href="#toc_0.1.1">~/gitignore</a>
+<li><a href="#toc_0.1.2">模拟器</a>
+<li><a href="#toc_0.1.3">工程操作</a>
+<li><a href="#toc_0.1.4">gradlew</a>
+<ul>
+<li><a href="#toc_0.1.4.1">gradlew生成签名apk</a>
+<li><a href="#toc_0.1.4.2">代码混淆</a>
+</ul>
+<li><a href="#toc_0.1.5">问题</a>
+<ul>
+<li><a href="#toc_0.1.5.1">cannot resolve symbol 'R'</a>
+<li><a href="#toc_0.1.5.2">类似eclipse的Ctrl+Shift+O的自动导入</a>
+</ul>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<h3 id="toc_0.1.1">~/gitignore</h3>
+<p>
+~/gitignore:
+</p>
+<pre class="brush bash">
+build/
+.gradle/
+workspace.xml
+</pre>
+<h3 id="toc_0.1.2">模拟器</h3>
+<p>
+我这从Android Studio运行avd会上不了网 但是从命令行运行正常
+</p>
+
+<p>
+<code>emulator64-arm -avd 4.0</code> (需要将sdk的tools目录加入PATH环境变量)
+</p>
+<h3 id="toc_0.1.3">工程操作</h3>
+<ul>
+<li>
+创建android module
+
+</ul>
+<p>
+不能用project上右键里的new module, 要用主菜单File菜单下的new module
+新项目显示资源错误需要先Make(Ctrl+F9)一下
+</p>
+<ul>
+<li>
+删除module
+
+</ul>
+<p>
+需要自己在.idea/modules.xml中删除相应moudle, 并手动在磁盘上删除对应的module文件夹
+</p>
+<ul>
+<li>
+导入module
+
+</ul>
+<p>
+File-&gt;import module… 然后对.idea/modules,settings.gradle和新module的iml文件一阵鼓捣…
+</p>
+<h3 id="toc_0.1.4">gradlew</h3>
+<ul>
+<li>
+gradlew帮助: <code>./gradlew tasks</code>
+
+<li>
+clean gradle: <code>./gradlew clean</code>
+
+<li>
+编译工程内所有apk: <code>./gradlew assembleRelease</code>
+
+<li>
+只编译某个module的apk: 进入module的目录下运行<code>../gradlew assembleRelease</code> 生成的apk在<code>&lt;module&gt;/build/apk</code>下
+
+<li>
+编译调试apk(debug签名): <code>./gradlew build</code> 生成的apk在<code>&lt;module&gt;/build/apk</code>下
+
+</ul>
+<h4 id="toc_0.1.4.1">gradlew生成签名apk</h4>
+<ol>
+<li>
+在module文件夹下的<code>build.gradle</code>文件中添加:
+<pre class="brush: bash">
+android {
+    signingConfigs {
+        releaseConfig {
+            storeFile file("/path/to/xxx.keystore")
+            storePassword "xxyyzz"
+            keyAlias "xxx"
+            keyPassword "xxyyzz"
+        }
+    }
+}
+</pre>
+  <code>signingConfigs</code>块添加在<code>android</code>块里面
+
+<li>
+<code>../gradlew assembleRelease</code>
+
+</ol>
+<h4 id="toc_0.1.4.2">代码混淆</h4>
+<ol>
+<li>
+在module文件夹下的<code>build.gradle</code>文件中添加:
+<pre class="brush: bash">
+android {
+    buildTypes {
+        release {
+            runProguard true
+            proguardFile file('../proguard-project.txt')
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+            signingConfig signingConfigs.releaseConfig
+        }
+
+}
+</pre>
+  <code>buildTypes</code>块添加在<code>android</code>块里面
+
+<li>
+<code>../gradlew assembleRelease</code>
+
+</ol>
+<h3 id="toc_0.1.5">问题</h3>
+<h4 id="toc_0.1.5.1">cannot resolve symbol 'R'</h4>
+<p>
+<a href="http://stackoverflow.com/a/18183656/2775335" target="_blank">A simple 'gradlew clean' and 'gradlew build' did the trick.</a>
+</p>
+<h4 id="toc_0.1.5.2">类似eclipse的Ctrl+Shift+O的自动导入</h4>
+<ul>
+<li>
+File -&gt; Settings -&gt; Editor -&gt; Auto Import, "Insert imports on paste"选ALL,勾全打上
+
+<li>
+参见: <a href="http://stackoverflow.com/a/16616085/2775335" target="_blank">http://stackoverflow.com/a/16616085/2775335</a>
+
+</ul>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="view_chromium_source.html" title="上一篇: linux查看chromium/chrome插件的源码">&larr; linux查看chromium/chrome插件的源码</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="compile_android_source.html" title="下一篇: 编译安装android源码中的例子遇到的问题解决">编译安装android源码中的例子遇到的问题解决 &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

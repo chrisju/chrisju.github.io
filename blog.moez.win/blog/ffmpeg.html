@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>ffmpeg</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">音视频处理</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-08-09</a></li>
+<li><a href="Categories.html#linux">linux <span>31</span></a></li>
+<li><a href="Tags.html#多媒体">多媒体 <span>3</span></a></li>
+<li><a href="Tags.html#ffmpeg">ffmpeg <span>1</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">音视频处理</a>
+<ul>
+<li><a href="#toc_0.1.1">拼接flv类视频</a>
+<li><a href="#toc_0.1.2">转换hlv为mp4</a>
+<li><a href="#toc_0.1.3">转换psp支持的视频格式</a>
+<li><a href="#toc_0.1.4">分解gif文件和制作mpeg电影</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<h3 id="toc_0.1.1">拼接flv类视频</h3>
+<p>
+<a href="https://github.com/chrisju/FLVCopyCat" target="_blank">FLVCopyCat</a>
+</p>
+<ul>
+<li>
+支持hlv
+
+<li>
+不耗时 渣本拼接90M的hlv耗时2s
+
+</ul>
+<h3 id="toc_0.1.2">转换hlv为mp4</h3>
+<p>
+<code>ffmpeg -i out.hlv -vcodec copy -acodec copy -f mp4 out.mp4</code>
+</p>
+<ul>
+<li>
+秒转
+
+<li>
+可能会提示加"-strict -2", 照做就是
+
+</ul>
+<h3 id="toc_0.1.3">转换psp支持的视频格式</h3>
+<ul>
+<li>
+缩略图: <code>ffmpeg -i 3.hlv -f image2 -ss 10 -vframes 10 -s 160x120 -an 3.thm</code> 提示错误不用管 生成就行了
+
+<li>
+<a href="http://psp.abang.com/od/beginner/a/vediotype_n2.htm" target="_blank">PSP支持的格式</a>
+
+<li>
+主要为MP4-AVC, 扩展名.mp4 编码格式：H.264 分辨率有720*480,480*272,320*240
+
+</ul>
+<p>
+<div style="display:none">
+</p>
+<ul>
+<li>
+转换步骤: (参考<a href="http://unixboy.iteye.com/blog/157898" target="_blank">http://unixboy.iteye.com/blog/157898</a>)
+
+<li>
+自定义编译faac <a href="http://hivelocity.dl.sourceforge.net/project/faac/faac-src/faac-1.28/faac-1.28.tar.gz" target="_blank">下载</a>
+<pre class="brush: bash">
+$ ./configure --prefix=/usr/local --enable-shared --with-mp4v2
+$ vi common/mp4v2/mpeg4ip.h "注释掉126行strcasestr的声明
+$ make
+$ make check
+$ sudo make install
+</pre>
+
+<li>
+自定义编译faad2 <a href="http://superb-dca2.dl.sourceforge.net/project/faac/faad2-src/faad2-2.7/faad2-2.7.zip" target="_blank">下载</a>
+<pre class="brush: bash">
+autoreconf -vif
+./configure  --prefix=/usr/local  --with-mpeg4ip
+$ make
+$ make check
+$ sudo make install
+</pre>
+
+<li>
+自定义编译ffmpeg <a href="http://ffmpeg.org/download.html" target="_blank">下载</a>
+
+<ul>
+<li>
+注: 现在的ffmpeg已经自带AAC解码 不再需要faad依赖了
+<pre class="brush: bash">
+$ sudo pacman -S lame xvidcore libvorbis libogg libass
+$ ./configure --enable-shared --enable-libfaac --enable-libx264 --enable-pthreads --enable-libmp3lame --enable-libxvid --enable-libvorbis --enable-libass  --enable-gpl --enable-nonfree --prefix=/usr/local
+$ make
+</pre>
+
+</ul>
+<li>
+转换: <code>myffmpeg  -i out.mp4 -f psp -r 29.97 -b 1000k -ar 24000 -ab 64k -strict -2 -s 320x240 M4V00021.MP4</code>
+
+</ul>
+<p>
+</div>
+</p>
+<h3 id="toc_0.1.4">分解gif文件和制作mpeg电影</h3>
+<pre class="brush: bash">
+convert -deconstruct foo.gif bar.jpg
+convert *.jpg foo.mpeg
+</pre>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="bash.html" title="上一篇: bash">&larr; bash</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="vimwiki.html" title="下一篇: vimwiki">vimwiki &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

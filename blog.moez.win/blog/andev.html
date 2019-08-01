@@ -1,0 +1,966 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>andev</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">android 开发</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2012-11-2</a></li>
+<li><a href="Categories.html#android">android <span>9</span></a></li>
+<li><a href="Tags.html#android开发">android开发 <span>7</span></a></li>
+<li><a href="Tags.html#笔记">笔记 <span>1</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">android 开发</a>
+<ul>
+<li><a href="#toc_0.1.0.1">多语言</a>
+<li><a href="#toc_0.1.0.2">内部类导致内存泄漏</a>
+<li><a href="#toc_0.1.0.3">ImageSwitcher内存泄漏(BitmapDrawable内存泄漏)</a>
+<li><a href="#toc_0.1.0.4">Bitmap导致OOM问题</a>
+<li><a href="#toc_0.1.0.5">增大应用的heapsize</a>
+<li><a href="#toc_0.1.0.6">有些公司的设备adb devices找不到</a>
+<li><a href="#toc_0.1.0.7">有些公司的设备adb需要root权限</a>
+<li><a href="#toc_0.1.0.8">Android shell没有cp命令</a>
+<li><a href="#toc_0.1.0.9">使用库项目</a>
+<li><a href="#toc_0.1.0.10">webview跳转链接时仍使用自己打开</a>
+<li><a href="#toc_0.1.0.11">webview播放flash视频</a>
+<li><a href="#toc_0.1.0.12">xml中写入复杂或多行字符串</a>
+<li><a href="#toc_0.1.0.13">距离单位转换</a>
+</ul>
+<li><a href="#toc_0.1.1">Activity生命周期</a>
+<li><a href="#toc_0.1.2">Activity栈</a>
+<li><a href="#toc_0.1.3">模拟器</a>
+<li><a href="#toc_0.1.4">代码混淆</a>
+<li><a href="#toc_0.1.5">apk反编译</a>
+<li><a href="#toc_0.1.6">APK签名</a>
+<li><a href="#toc_0.1.7">代码</a>
+<ul>
+<li><a href="#toc_0.1.7.1">获取相对路径</a>
+<li><a href="#toc_0.1.7.2">service中使用Toast</a>
+<li><a href="#toc_0.1.7.3">显示等待框</a>
+<li><a href="#toc_0.1.7.4">显示其它activity之上的view</a>
+<li><a href="#toc_0.1.7.5">使用Paint计算字符串宽高</a>
+<li><a href="#toc_0.1.7.6">VideoView拉伸至指定大小</a>
+<li><a href="#toc_0.1.7.7">通过代码全屏</a>
+<li><a href="#toc_0.1.7.8">隐藏导航栏(Navigation Bar)</a>
+<li><a href="#toc_0.1.7.9">显示提示对话框(MessageBox)</a>
+<li><a href="#toc_0.1.7.10">从raw文件夹拷贝文件</a>
+<li><a href="#toc_0.1.7.11">获取ip地址</a>
+<li><a href="#toc_0.1.7.12">安装软件包</a>
+<li><a href="#toc_0.1.7.13">用root权限运行shell命令</a>
+<li><a href="#toc_0.1.7.14">运行shell命令</a>
+<li><a href="#toc_0.1.7.15">任何线程都可使用的toast</a>
+</ul>
+<li><a href="#toc_0.1.8">NDK</a>
+<ul>
+<li><a href="#toc_0.1.8.1">使用预编译的.a或.so</a>
+</ul>
+<li><a href="#toc_0.1.9">sqlite</a>
+<ul>
+<li><a href="#toc_0.1.9.1">shell 操作 sqlite</a>
+<li><a href="#toc_0.1.9.2">安装sqlite3工具</a>
+</ul>
+<li><a href="#toc_0.1.10">eclipse</a>
+<ul>
+<li><a href="#toc_0.1.10.1">导入工程</a>
+<li><a href="#toc_0.1.10.2">导入android框架源码</a>
+<li><a href="#toc_0.1.10.3">代码混淆</a>
+<li><a href="#toc_0.1.10.4">eclipse故障排除</a>
+<ul>
+<li><a href="#toc_0.1.10.4.1">eclipse打开失败</a>
+</ul>
+</ul>
+<li><a href="#toc_0.1.11">shell操作</a>
+<ul>
+<li><a href="#toc_0.1.11.1">模拟按键</a>
+<li><a href="#toc_0.1.11.2">am命令</a>
+<ul>
+<li><a href="#toc_0.1.11.2.1">启动Activity</a>
+<li><a href="#toc_0.1.11.2.2">强制停止程序</a>
+</ul>
+<li><a href="#toc_0.1.11.3">截屏</a>
+</ul>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<h4 id="toc_0.1.0.1">多语言</h4>
+<ul>
+<li>
+简体:<code>zh-rCN</code> 如<code>values-zh-rCN</code>
+
+<li>
+繁体:<code>zh-rTW</code> 如<code>values-zh-rTW</code>
+
+<li>
+2字节的语言代码: <a href="http://www.loc.gov/standards/iso639-2/php/code_list.php" target="_blank">ISO 639-1</a>
+
+<li>
+2字节的地区代码(可选,前面需加小写的r): <a href="http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1.html" target="_blank">ISO 3166-1-alpha-2</a>
+
+<li>
+参考: <a href="https://developer.android.com/training/basics/supporting-devices/languages.html" target="_blank">https://developer.android.com/training/basics/supporting-devices/languages.html</a>
+
+<li>
+参考: <a href="https://developer.android.com/guide/topics/resources/localization.html" target="_blank">https://developer.android.com/guide/topics/resources/localization.html</a>
+
+<li>
+参考: <a href="https://developer.android.com/guide/topics/resources/providing-resources.html#table2" target="_blank">https://developer.android.com/guide/topics/resources/providing-resources.html#table2</a>
+
+</ul>
+<h4 id="toc_0.1.0.2">内部类导致内存泄漏</h4>
+<ul>
+<li>
+比如是View里面 应使用 <strong>静态类</strong> 否则重复创建会导致内存泄漏
+
+<li>
+因为对non-static内部类来说，它会持有一个 <strong>外部类的引用</strong> (如Context).所以只要context没有释放内部类就不会释放
+
+</ul>
+<h4 id="toc_0.1.0.3">ImageSwitcher内存泄漏(BitmapDrawable内存泄漏)</h4>
+<ul>
+<li>
+Drawable在退出时需要释放 否则内存泄漏
+<pre class="brush: java">
+  // 不释放会导致内存泄漏 重复创建移除控件的时候会表现出来
+  for (Drawable drawable : pics) {
+      drawable.setCallback(null);
+      BitmapDrawable bm = (BitmapDrawable) drawable;
+      if (null != drawable &amp;&amp; !bm.getBitmap().isRecycled()) {
+          bm.getBitmap().recycle();
+      }
+  }
+</pre>
+
+</ul>
+<h4 id="toc_0.1.0.4">Bitmap导致OOM问题</h4>
+<ul>
+<li>
+OOM的原因并非内存不足,而是c内存不足 原因是曾被java用过的内存c无法使用
+
+<li>
+解决方法: 用 <strong>BitmapFactory.decodeStream</strong> 解析图片, decodeStream是在c下分配内存, 而其它方法是在java下分配内存
+<pre class="brush: java">
+  FileInputStream is = new FileInputStream(new File(s));
+  Bitmap bm = BitmapFactory.decodeStream(is);
+  this.pics.add(new BitmapDrawable(context.getResources(), bm));
+</pre>
+
+</ul>
+<h4 id="toc_0.1.0.5">增大应用的heapsize</h4>
+<p>
+在&lt;application&gt;添加 <code>android:largeHeap="true"</code>
+</p>
+<h4 id="toc_0.1.0.6">有些公司的设备adb devices找不到</h4>
+<ul>
+<li>
+需要在~/.android/adb_usb.ini(无则新建)中添加设备ID 一行一个 如:
+<pre class="brush: bash">
+#for MINIX
+0x2207
+</pre>
+  其中2207是来自于lsusb的结果
+<pre class="brush: bash">
+[zz@zz-Mint:~]$ lsusb
+Bus 001 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 002 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 003 Device 011: ID 2207:0006
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+</pre>
+
+<li>
+<strong>每次升级SDK会重置这个文件 所以最好备份下 升级SDK后恢复</strong>
+
+</ul>
+<p>
+参考: <a href="http://blog.csdn.net/liuqz2009/article/details/7942569" target="_blank">http://blog.csdn.net/liuqz2009/article/details/7942569</a>
+</p>
+<h4 id="toc_0.1.0.7">有些公司的设备adb需要root权限</h4>
+<ul>
+<li>
+为每个设备新建一个文件(序号不能有重复) <code>/etc/udev/rules.d/51-minix.rules.</code>
+
+<li>
+内容如下 其中2207来自lsusb的输出(见上一条) 即可无需root权限连接设备
+<pre class="brush: bash">
+SUBSYSTEM=="usb", ATTR{idVendor}=="2207", MODE="0666", GROUP="plugdev"
+</pre>
+
+<li>
+参考: <a href="https://developer.android.com/tools/device.html" target="_blank">https://developer.android.com/tools/device.html</a>
+
+</ul>
+<h4 id="toc_0.1.0.8">Android shell没有cp命令</h4>
+<p>
+使用dd代替 <code>dd if=source_file of=dest_file</code>
+</p>
+<h4 id="toc_0.1.0.9">使用库项目</h4>
+<ul>
+<li>
+在项目属性的Android栏中的IsLibrary打勾即可作为库项目, 在其下面可以添加库项目
+
+<li>
+库共享的有代码(含jni部分)和资源, AndroidManifest.xml,asset文件夹不会共享
+
+<li>
+资源同名的会优先使用工作项目的,库项目按列表顺序
+
+<li>
+曾经用过的资源文件名可能导致问题,可以更改资源文件名,删除gen目录应该也可以
+
+<li>
+使用库项目需添加库项目所用项的权限
+
+</ul>
+<h4 id="toc_0.1.0.10">webview跳转链接时仍使用自己打开</h4>
+<pre class="brush: java">
+private class MyWebViewClient extends WebViewClient {
+      public boolean shouldOverrideUrlLoading(WebView view, String url) {
+          // 使用当前的WebView加载页面
+          view.loadUrl(url);
+          return true;
+      }
+  }
+this.setWebViewClient(new MyWebViewClient());
+</pre>
+<h4 id="toc_0.1.0.11">webview播放flash视频</h4>
+<ol>
+<li>
+安装flash插件: <a href="http://helpx.adobe.com/flash-player/kb/archived-flash-player-versions.html" target="_blank">http://helpx.adobe.com/flash-player/kb/archived-flash-player-versions.html</a>
+
+<li>
+在AndroidManifest.xml的application标签中添加<code>android:hardwareAccelerated="true"</code>
+
+</ol>
+<h4 id="toc_0.1.0.12">xml中写入复杂或多行字符串</h4>
+<p>
+在<code>&lt;string&gt;</code>或<code>&lt;string-array&gt;</code>中加入<code>formatted="false"</code>属性 可视字符串为原始字符串 不需要特殊处理<code>%</code> 换行也会被忽略(需要换行手动加<code>\n</code>)
+</p>
+<h4 id="toc_0.1.0.13">距离单位转换</h4>
+<ul>
+<li>
+mm转为pix示例 value单位为mm
+
+<li>
+pix = value * getResources().getDisplayMetrics().xdpi * (1.0f / 25.4f);
+
+<li>
+其它单位转换参考:
+<pre class="brush: java">
+switch (unit) {
+    case COMPLEX_UNIT_PX:
+        return value;
+    case COMPLEX_UNIT_DIP:
+        return value * metrics.density;
+    case COMPLEX_UNIT_SP:
+        return value * metrics.scaledDensity;
+    case COMPLEX_UNIT_PT:
+        return value * metrics.xdpi * (1.0f/72);
+    case COMPLEX_UNIT_IN:
+        return value * metrics.xdpi;
+    case COMPLEX_UNIT_MM:
+        return value * metrics.xdpi * (1.0f/25.4f);
+}
+</pre>
+
+<li>
+参考: <a href="http://stackoverflow.com/questions/14569963/converting-pixel-values-to-mm-android" target="_blank">http://stackoverflow.com/questions/14569963/converting-pixel-values-to-mm-android</a>
+
+</ul>
+<h3 id="toc_0.1.1">Activity生命周期</h3>
+<ul>
+<li>
+<a href="../res/lifecycle.png"><img src="../res/lifecycle.png" /></a>
+
+</ul>
+<h3 id="toc_0.1.2">Activity栈</h3>
+<p>
+&lt;activity&gt;里的<code>android:launchMode</code>与activity的跳转栈相关
+</p>
+<ul>
+<li>
+standard 在栈顶新建创建
+
+<li>
+singleTop 栈顶是要建的则不建 将intent发给原activity
+
+<li>
+singleTask 栈中只要有就将intent发给原activity
+
+<li>
+singleInstance 全局(如别的进程调用的共享activity)中只有一个实例
+
+</ul>
+<p>
+intent.setFlags() 也是 activity的跳转栈相关
+</p>
+<ul>
+<li>
+FLAG_ACTIVITY_CLEAR_TOP 把原activity之上的activity记录全删掉
+
+<li>
+FLAG_ACTIVITY_NEW_TASK 如需要则新建activity栈 从非activity启动activity需要
+
+<li>
+FLAG_ACTIVITY_NO_HISTORY 目标activity不存在栈中
+
+<li>
+FLAG_ACTIVITY_SINGLE_TOP 同singleTop
+
+</ul>
+<h3 id="toc_0.1.3">模拟器</h3>
+<ul>
+<li>
+以指定的内存和rom大小启动模拟器: emulator -avd avd4 -memory 256 -partition-size 256,or emulator -partition-size 1024 @avd10
+
+</ul>
+<h3 id="toc_0.1.4">代码混淆</h3>
+<p>
+不能混淆的部分:
+</p>
+<ol>
+<li>
+会被反射的类
+
+<li>
+依赖于系统的接口,比如系统的回调方法
+
+<li>
+文件中指定类名的
+
+</ol>
+<h3 id="toc_0.1.5">apk反编译</h3>
+<ul>
+<li>
+所需工具: <a href="https://code.google.com/p/dex2jar/" target="_blank">dex2jar</a> <a href="http://varaneckas.com/jad/" target="_blank">Jad 1.5.8e for Linux (statically linked)</a>
+
+<li>
+用以下脚本反编译 <code>decodeapk.sh xxx.apk</code>
+<pre class="brush: bash">
+#!/usr/bin/env bash
+
+apk=$1
+echo $apk
+
+jad="jad158e.linux.static/jad"
+dex2jar="dex2jar-0.0.9.15/d2j-dex2jar.sh"
+
+apkdir=$apk"_tmpdir"
+srcdir=$apk"_srcdir"
+
+unzip $apk -d $apkdir
+$dex2jar $apkdir/classes.dex
+unzip classes-dex2jar.jar -d $apkdir/classes_dex2jar
+rm classes-dex2jar.jar 
+$jad -o -r -sjava -d$srcdir $apkdir/classes_dex2jar/**/*.class
+
+#有的文件夾/**/會失效 需要直接寫如
+#$jad -o -r -sjava -d$srcdir $apkdir/classes_dex2jar/*.class
+
+
+apktool="apktool1.5.2/apktool.jar"
+#get apk resources
+#java -jar $apktool d $apk
+</pre>
+
+</ul>
+<h3 id="toc_0.1.6">APK签名</h3>
+<ul>
+<li>
+生成keystore证书<br>
+  <code>keytool -genkey -v -keystore abc.keystore -alias abc.keystore -keyalg RSA -validity 20000</code> <br>
+   第一个abc.keystore为证书文件名, 第二个为证书名
+   会提示问题啥的, 需要记住密码, 使用此证书签名时需要
+
+<li>
+导出未签名apk<br>
+  在eclipse项目右键-&gt;Android Tools-&gt;Export Unsigned Application Package
+
+<li>
+签名: <code>jarsigner -verbose -keystore zzlab.keystore -signedjar comiz_signed.apk comiz.apk zzlab.keystore</code> <br>
+  优化: <code>zipalign -v 4 comiz_signed.apk comiz_signed_aligned.apk</code> <br>
+  签名及优化的批处理py:
+<pre class="brush: py">
+#!/usr/bin/python
+
+import os
+import sys
+
+def show_usage():
+
+  print 'usage:\nsign.py [-k] apk\n-k\tkeep origin apk\nexample: sign.py comiz.apk' % ()
+
+if __name__ == '__main__':
+
+  #print sys.argv
+  argc = len(sys.argv)
+  if argc != 2 and argc != 3:
+      show_usage()
+      exit()
+
+  keypath = '/mnt/DATA/dev/zzlab.keystore'
+  keyname = 'zzlab.keystore'
+  zipalign = '/mnt/DATA/dev/android-sdk-linux/tools/zipalign'
+
+  keep = False
+  if sys.argv[1] == '-k':
+      keep = True
+  originapk = sys.argv[argc-1]
+  pair = os.path.splitext(originapk)
+  signedapk = pair[0]+'_signed'+pair[1]
+  if not os.path.exists(originapk):
+      print 'Error: No such file.'
+      exit()
+  if os.path.exists(signedapk):
+      os.remove(signedapk)
+
+  cmd = 'jarsigner -verbose -keystore "%s" -signedjar "%s" "%s" %s' % (keypath, 'tmpapk', originapk, keyname)
+  print cmd
+  if os.system(cmd) != 0:
+      print 'failed'
+      exit()
+
+  cmd = '%s -v 4 "%s" "%s"' % (zipalign, 'tmpapk', signedapk)
+  print cmd
+  if os.system(cmd) != 0:
+      print 'failed'
+      exit()
+
+  os.remove('tmpapk')
+  if not keep:
+      os.remove(originapk)
+  print 'ok'
+
+</pre>
+
+<li>
+查看签名1: <code>jarsigner -verify -verbose -certs xxx.apk</code>
+
+<li>
+简明查看任意个apk <code>./showapkcert.sh a.apk b.apk</code>
+<pre class="brush: bash">
+#!/bin/bash
+mkdir temp_for_certificate
+cd temp_for_certificate
+count=0
+while [ -n "$1" ]
+do
+count=$[$count+1]
+echo "(#$count) "`basename "$1"`":"
+echo ""
+path=`jar tf "../""$1" | grep RSA` #查找apk中RSA文件
+echo $path
+jar xf "../"$1 $path #把RSA文件解压出来
+keytool -printcert -file $path #查看指纹证书
+rm -r $path #删除之前解压的文件
+echo "--------------------------------------------"
+shift
+done
+cd ..
+rm -rf temp_for_certificate
+</pre>
+
+</ul>
+<h3 id="toc_0.1.7">代码</h3>
+<h4 id="toc_0.1.7.1">获取相对路径</h4>
+<pre class="brush: java">
+  private String getRelaPath(File root, File path) {
+      return path.getAbsolutePath().substring(root.getAbsolutePath().length() + 1);
+  }
+</pre>
+<h4 id="toc_0.1.7.2">service中使用Toast</h4>
+<pre class="brush: java">
+  final String text = s;
+  new Handler(Looper.getMainLooper()).post(new Runnable() {
+      public void run() {
+          Toast.makeText(getApplicationContext(), text,
+                  Toast.LENGTH_SHORT).show();
+      }
+  });
+</pre>
+<h4 id="toc_0.1.7.3">显示等待框</h4>
+<pre class="brush: java">
+m_Dialog=ProgressDialog.show(this, "请等待...", "正在拷贝资源文件，请稍后...",true);
+new Thread(){
+  @Override
+  public void run() {
+      super.run();
+      //do something for long time
+      m_Dialog.dismiss();
+  }
+}.start();
+</pre>
+<h4 id="toc_0.1.7.4">显示其它activity之上的view</h4>
+<pre class="brush: java">
+WindowManager wm = (WindowManager) getApplicationContext()
+		.getSystemService(WINDOW_SERVICE);
+WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT; //overlay显示等级过高
+//TYPE_SYSTEM_ALERT需要配合这些flag否则为modal类型
+params.flags |= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+		| WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+params.gravity = gravity;
+params.width = WindowManager.LayoutParams.MATCH_PARENT;
+params.height = h;
+wm.addView(msgView, params);
+</pre>
+<p>
+  注: 需要用<code>wm.removeView(msgView);</code>手动释放view
+</p>
+<h4 id="toc_0.1.7.5">使用Paint计算字符串宽高</h4>
+<ul>
+<li>
+高度:
+<pre class="brush: java">
+  Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
+  fontMetrics.bottom – fontMetrics.top 即字符串的完整高度
+</pre>
+  详情可参考<a href="http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2013/0409/1143.html" target="_blank">http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2013/0409/1143.html</a>
+
+<li>
+宽度:  <code>Paint.measureText</code>函数可得真实宽度 注:不要用<code>getTextBounds</code>
+
+</ul>
+<h4 id="toc_0.1.7.6">VideoView拉伸至指定大小</h4>
+<pre class="brush: java">
+  private int width;
+  private int height;
+  @Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+// 只有直接指定大小才能伸展到设定的大小
+setMeasuredDimension(width, height);
+	}
+</pre>
+<h4 id="toc_0.1.7.7">通过代码全屏</h4>
+<p>
+在setContentView之前
+</p>
+<pre class="brush: java">
+requestWindowFeature(Window.FEATURE_NO_TITLE);
+getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+</pre>
+<h4 id="toc_0.1.7.8">隐藏导航栏(Navigation Bar)</h4>
+<ul>
+<li>
+隐藏系统栏 <strong>注:原生android系统只有手机(handset)可以 不支持tablet</strong>
+<pre class="brush: java">
+getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+</pre>
+
+<li>
+使系统栏不显眼
+<pre class="brush: java">
+getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+</pre>
+
+</ul>
+<h4 id="toc_0.1.7.9">显示提示对话框(MessageBox)</h4>
+<pre class="brush: java">
+  public static void ShowMessage(Context ctx, String msg) {
+      AlertDialog.Builder dialog = new AlertDialog.Builder(ctx);
+      dialog.setMessage(msg);
+      dialog.show();
+</pre>
+<h4 id="toc_0.1.7.10">从raw文件夹拷贝文件</h4>
+<pre class="brush: java">
+  public static void copyRaw2Sdcard(Context context, int id, File target, boolean rewrite) {
+      File f = target;
+      String targetPath = f.getAbsolutePath();
+      if (!f.exists() || rewrite) {
+          File dir = new File(targetPath.substring(0,
+                  targetPath.lastIndexOf(File.separator)));
+          if (!dir.exists() &amp;&amp; !dir.mkdirs()) {
+              Log.e("zz", "can't create directory!");
+          }
+          InputStream ins = context.getResources().openRawResource(id);
+          try {
+              byte[] buf = new byte[8 * 1024];
+              int size;
+              FileOutputStream fos = new FileOutputStream(f);
+              while ((size = ins.read(buf)) != -1)
+                  fos.write(buf, 0, size);
+              ins.close();
+              fos.close();
+          } catch (FileNotFoundException e) {
+              Log.e("zz",
+                      "can't create file:" + e.getMessage());
+          } catch (IOException e) {
+              Log.e("zz",
+                      "can't create file:" + e.getMessage());
+          }
+      }
+  }
+</pre>
+<h4 id="toc_0.1.7.11">获取ip地址</h4>
+<pre class="brush: java">
+  public static String getLocalIpAddress() {
+      String ip = "";
+      try {
+          for (Enumeration&lt;NetworkInterface&gt; en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+              NetworkInterface intf = en.nextElement();
+              for (Enumeration&lt;InetAddress&gt; enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                  InetAddress inetAddress = enumIpAddr.nextElement();
+                  if (!inetAddress.isLoopbackAddress() &amp;&amp; InetAddressUtils.isIPv4Address(inetAddress.getHostAddress()))  //这里做了一步IPv4的判定
+                  {
+                      ip = inetAddress.getHostAddress().toString();
+                      return ip;
+                  }
+              }
+          }
+      } catch (SocketException e) {}
+      return ip;
+  }
+</pre>
+
+<h4 id="toc_0.1.7.12">安装软件包</h4>
+<pre class="brush: java">
+	void installApk(Context context, File apkfile) {
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setDataAndType(Uri.fromFile(apkfile),
+				"application/vnd.android.package-archive");
+		context.startActivity(intent);
+	}
+</pre>
+<h4 id="toc_0.1.7.13">用root权限运行shell命令</h4>
+<pre class="brush: java">
+	public static boolean runAsRoot(String cmd) {
+		Process process = null;
+		DataOutputStream os = null;
+		try {
+			process = Runtime.getRuntime().exec("su"); // 切换到root帐号
+			os = new DataOutputStream(process.getOutputStream());
+			os.writeBytes(cmd + "\n");
+			os.writeBytes("exit\n");
+			os.flush();
+			process.waitFor();
+		} catch (Exception e) {
+			return false;
+		} finally {
+			try {
+				if (os != null) {
+					os.close();
+				}
+				process.destroy();
+			} catch (Exception e) {
+			}
+		}
+		return true;
+	}
+	
+    // 如需挂载/为rw
+    mount -o remount,rw rootfs /
+    用完后: mount -o remount,ro rootfs /
+	
+    // 示例:修改系统时间
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd.HHmmss", Locale.US);
+	Calendar cal = Calendar.getInstance();
+	cal.set(Calendar.HOUR_OF_DAY, 4);
+	String datetime = sdf.format(cal.getTime());
+	String command = "date -s \"" + datetime + "\"";
+	Log.e("zz", command);
+	runAsRoot(command);
+</pre>
+<h4 id="toc_0.1.7.14">运行shell命令</h4>
+<pre class="brush: java">
+	public static boolean run(String cmd) {
+		Process process = null;
+		DataOutputStream os = null;
+		try {
+			process = Runtime.getRuntime().exec(cmd);
+		} catch (Exception e) {
+			return false;
+		} finally {
+			try {
+				if (os != null) {
+					os.close();
+				}
+				process.destroy();
+			} catch (Exception e) {
+			}
+		}
+		return true;
+	}
+</pre>
+<h4 id="toc_0.1.7.15">任何线程都可使用的toast</h4>
+<pre class="brush: java">
+public class ToastMessageTask extends AsyncTask&lt;String, String, String&gt; {
+	Context context;
+	String toastMessage;
+	int lengthtype;
+
+	ToastMessageTask(Context context, String msg, int lengthtype) {
+		this.context = context;
+		this.toastMessage = msg;
+		this.lengthtype = lengthtype;
+	}
+
+	@Override
+	protected String doInBackground(String... params) {
+		return "";
+	}
+
+	// This is executed in the context of the main GUI thread
+	protected void onPostExecute(String result) {
+		Toast toast = Toast.makeText(context, toastMessage,
+				lengthtype);
+		toast.show();
+	}
+}
+</pre>
+<p>
+使用:
+</p>
+<pre class="brush: bash">
+new ToastMessageTask(ctx, "this is a toast", Toast.LENGTH_LONG).execute();
+</pre>
+<h3 id="toc_0.1.8">NDK</h3>
+<h4 id="toc_0.1.8.1">使用预编译的.a或.so</h4>
+<pre class="brush: bash">
+加上这段
+include $(CLEAR_VARS)
+LOCAL_MODULE := lua
+LOCAL_SRC_FILES := liblua.a
+include $(PREBUILT_STATIC_LIBRARY)
+LOCAL_MODULE是赋予之一个名字 使用时使用那个名字:
+LOCAL_STATIC_LIBRARIES := lua
+.so使用PREBUILT_STATIC_LIBRARY
+</pre>
+
+<h3 id="toc_0.1.9">sqlite</h3>
+<h4 id="toc_0.1.9.1">shell 操作 sqlite</h4>
+<pre class="brush: bash">
+貌似需要解锁的机器
+adb shell
+cd /data/data/xxx.xxx.xx/databases
+sqlite3 databasename
+命令需在前面加. 如".quit"
+sql语句需加; 如"select * from xx;"
+</pre>
+<h4 id="toc_0.1.9.2">安装sqlite3工具</h4>
+<p>
+<a href="http://blog.csdn.net/ygc87/article/details/7452422" target="_blank">http://blog.csdn.net/ygc87/article/details/7452422</a>
+</p>
+<h3 id="toc_0.1.10">eclipse</h3>
+<h4 id="toc_0.1.10.1">导入工程</h4>
+<pre class="brush: bash">
+新建同名工程 然后`git co .`恢复被修改内容
+</pre>
+<h4 id="toc_0.1.10.2">导入android框架源码</h4>
+<ol>
+<li>
+任选一个eclipse工程 进入其Build path设定
+
+<li>
+在<code>Libraries</code> - <code>Android4.2.2</code> - <code>android.jar</code>编辑其<code>Source attachment</code> 选择<code>External folder...</code> 选择源码文件夹(内含framworks等文件夹以及Makefile)
+
+</ol>
+<h4 id="toc_0.1.10.3">代码混淆</h4>
+<ol>
+<li>
+在project.properties文件中混淆配置文件<code>proguard.config=proguard-project.txt</code>
+
+<li>
+导出apk(build产生的debug签名的apk不会混淆)
+
+</ol>
+<h4 id="toc_0.1.10.4">eclipse故障排除</h4>
+<h5 id="toc_0.1.10.4.1">eclipse打开失败</h5>
+<p>
+log显示"org.eclipse.swt.SWTException: Failed to execute runnable (java.lang.NullPointerException"<br>
+</p>
+<ul>
+<li>
+解决方法:<code>eclipse -clean -clearPersistedState</code>
+
+<li>
+参考: <a href="http://stackoverflow.com/a/16901800/2775335" target="_blank">http://stackoverflow.com/a/16901800/2775335</a>
+
+</ul>
+<h3 id="toc_0.1.11">shell操作</h3>
+<h4 id="toc_0.1.11.1">模拟按键</h4>
+<p>
+<code>input keyevent &lt;event_code&gt;</code>
+例 模拟POWER按键: <code>input keyevent 26</code>
+</p>
+<pre class="brush:java">
+0 --&gt;  "KEYCODE_UNKNOWN" 
+1 --&gt;  "KEYCODE_MENU" 
+2 --&gt;  "KEYCODE_SOFT_RIGHT" 
+3 --&gt;  "KEYCODE_HOME" 
+4 --&gt;  "KEYCODE_BACK" 
+5 --&gt;  "KEYCODE_CALL" 
+6 --&gt;  "KEYCODE_ENDCALL" 
+7 --&gt;  "KEYCODE_0" 
+8 --&gt;  "KEYCODE_1" 
+9 --&gt;  "KEYCODE_2" 
+10 --&gt;  "KEYCODE_3" 
+11 --&gt;  "KEYCODE_4" 
+12 --&gt;  "KEYCODE_5" 
+13 --&gt;  "KEYCODE_6" 
+14 --&gt;  "KEYCODE_7" 
+15 --&gt;  "KEYCODE_8" 
+16 --&gt;  "KEYCODE_9" 
+17 --&gt;  "KEYCODE_STAR" 
+18 --&gt;  "KEYCODE_POUND" 
+19 --&gt;  "KEYCODE_DPAD_UP" 
+20 --&gt;  "KEYCODE_DPAD_DOWN" 
+21 --&gt;  "KEYCODE_DPAD_LEFT" 
+22 --&gt;  "KEYCODE_DPAD_RIGHT" 
+23 --&gt;  "KEYCODE_DPAD_CENTER" 
+24 --&gt;  "KEYCODE_VOLUME_UP" 
+25 --&gt;  "KEYCODE_VOLUME_DOWN" 
+26 --&gt;  "KEYCODE_POWER" 
+27 --&gt;  "KEYCODE_CAMERA" 
+28 --&gt;  "KEYCODE_CLEAR" 
+29 --&gt;  "KEYCODE_A" 
+30 --&gt;  "KEYCODE_B" 
+31 --&gt;  "KEYCODE_C" 
+32 --&gt;  "KEYCODE_D" 
+33 --&gt;  "KEYCODE_E" 
+34 --&gt;  "KEYCODE_F" 
+35 --&gt;  "KEYCODE_G" 
+36 --&gt;  "KEYCODE_H" 
+37 --&gt;  "KEYCODE_I" 
+38 --&gt;  "KEYCODE_J" 
+39 --&gt;  "KEYCODE_K" 
+40 --&gt;  "KEYCODE_L" 
+41 --&gt;  "KEYCODE_M" 
+42 --&gt;  "KEYCODE_N" 
+43 --&gt;  "KEYCODE_O" 
+44 --&gt;  "KEYCODE_P" 
+45 --&gt;  "KEYCODE_Q" 
+46 --&gt;  "KEYCODE_R" 
+47 --&gt;  "KEYCODE_S" 
+48 --&gt;  "KEYCODE_T" 
+49 --&gt;  "KEYCODE_U" 
+50 --&gt;  "KEYCODE_V" 
+51 --&gt;  "KEYCODE_W" 
+52 --&gt;  "KEYCODE_X" 
+53 --&gt;  "KEYCODE_Y" 
+54 --&gt;  "KEYCODE_Z" 
+55 --&gt;  "KEYCODE_COMMA" 
+56 --&gt;  "KEYCODE_PERIOD" 
+57 --&gt;  "KEYCODE_ALT_LEFT" 
+58 --&gt;  "KEYCODE_ALT_RIGHT" 
+59 --&gt;  "KEYCODE_SHIFT_LEFT" 
+60 --&gt;  "KEYCODE_SHIFT_RIGHT" 
+61 --&gt;  "KEYCODE_TAB" 
+62 --&gt;  "KEYCODE_SPACE" 
+63 --&gt;  "KEYCODE_SYM" 
+64 --&gt;  "KEYCODE_EXPLORER" 
+65 --&gt;  "KEYCODE_ENVELOPE" 
+66 --&gt;  "KEYCODE_ENTER" 
+67 --&gt;  "KEYCODE_DEL" 
+68 --&gt;  "KEYCODE_GRAVE" 
+69 --&gt;  "KEYCODE_MINUS" 
+70 --&gt;  "KEYCODE_EQUALS" 
+71 --&gt;  "KEYCODE_LEFT_BRACKET" 
+72 --&gt;  "KEYCODE_RIGHT_BRACKET" 
+73 --&gt;  "KEYCODE_BACKSLASH" 
+74 --&gt;  "KEYCODE_SEMICOLON" 
+75 --&gt;  "KEYCODE_APOSTROPHE" 
+76 --&gt;  "KEYCODE_SLASH" 
+77 --&gt;  "KEYCODE_AT" 
+78 --&gt;  "KEYCODE_NUM" 
+79 --&gt;  "KEYCODE_HEADSETHOOK" 
+80 --&gt;  "KEYCODE_FOCUS" 
+81 --&gt;  "KEYCODE_PLUS" 
+82 --&gt;  "KEYCODE_MENU" 
+83 --&gt;  "KEYCODE_NOTIFICATION" 
+84 --&gt;  "KEYCODE_SEARCH" 
+85 --&gt;  "TAG_LAST_KEYCODE"
+</pre>
+<h4 id="toc_0.1.11.2">am命令</h4>
+<h5 id="toc_0.1.11.2.1">启动Activity</h5>
+<ul>
+<li>
+格式: <code>$ am start -n ｛包(package)名｝/｛包名｝.{活动(activity)名称} </code>
+
+<li>
+例: <code>am start -n com.example.hello/com.example.hello.MainActivity</code>
+
+<li>
+或: <code>am start -n com.example.hello/.MainActivity</code>
+
+</ul>
+<h5 id="toc_0.1.11.2.2">强制停止程序</h5>
+<ul>
+<li>
+格式: <code>$ am force-stop {包名}</code>
+
+<li>
+例: <code>am force-stop com.example.hello</code>
+
+</ul>
+<h4 id="toc_0.1.11.3">截屏</h4>
+<p>
+<code>screencap -p /sdcard/screen.png</code>
+</p>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="git_backup.html" title="上一篇: 定时备份.git文件夹">&larr; 定时备份.git文件夹</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="makefile.html" title="下一篇: makefile">makefile &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

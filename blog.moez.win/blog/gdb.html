@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>gdb</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">gdb</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2016-04-26</a></li>
+<li><a href="Categories.html#cat">cat <span>2</span></a></li>
+<li><a href="Tags.html#tag">tag <span>2</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">gdb</a>
+<ul>
+<li><a href="#toc_0.1.1">命令</a>
+<li><a href="#toc_0.1.2">高级</a>
+<ul>
+<li><a href="#toc_0.1.2.1">display</a>
+<li><a href="#toc_0.1.2.2">断点</a>
+<li><a href="#toc_0.1.2.3">watch</a>
+<li><a href="#toc_0.1.2.4">catch</a>
+</ul>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<h3 id="toc_0.1.1">命令</h3>
+<ul>
+<li>
+<code>file &lt;exec&gt;</code> 载入二进制程序
+
+<li>
+<code>r</code> 可以带上参数 如果不是第一次运行 会自动使用上次的参数 要清空参数可以用<code>set args</code>
+
+<li>
+<code>c</code> 继续运行直到触发断点 可加参数表示跳过多少个断点
+
+<li>
+<code>b &lt;filename:lineno&gt;</code> 添加断点 如<code>b xx.c:33</code>
+
+<li>
+<code>d &lt;breakindex&gt;</code> 删除断点 不带断点编号则删除全部
+
+<li>
+<code>p &lt;arg&gt;</code> 打印变量或表达式值
+
+<li>
+<code>bt</code> 打印调用堆栈
+
+<li>
+<code>watch</code> 简写为<code>wa</code> 监视一个变量 变量被修改时停止 也是一种断点
+
+<li>
+<code>i b</code> 查看断点信息
+
+<li>
+<code>i args</code> 查看参数
+
+<li>
+<code>i locals</code> 查看局部变量
+
+</ul>
+<h3 id="toc_0.1.2">高级</h3>
+<ul>
+<li>
+<code>p *&lt;arg&gt;</code> 打印指针所指内容 比如给一个结构体指针 可以打印出结构体内容
+
+<li>
+<code>p *(OCC_PARAM *)param</code> 强制转换指针并打印指针内容
+
+<li>
+<code>p *(int [4] *)tk</code> 强制转换为数组指针并打印内容
+
+<li>
+<code>whatis &lt;VAR&gt;</code> 查看变量VAR的类型
+
+<li>
+<code>finish</code> 退出当前函数
+
+<li>
+<code>until</code> 到指定代码处停止(退出当前函数时也会停止) 可用行号、函数名、内存地址等 同<code>b</code>
+
+<li>
+<code>commands &lt;breakindex&gt;</code>  进入断点后的自动操作 如
+<pre class="brush: bash">
+(gdb) commands 1
+Type commands for when breakpoint 1 is hit, one per line.
+End with a line saying just "end".
+&gt;silent 
+&gt;printf "n = %d \n", n
+&gt;continue
+&gt;end
+</pre>
+
+<li>
+<code>define func</code> 宏(类似函数) 如
+<pre class="brush: bash">
+define print_and_go
+print $arg0
+continue
+end
+</pre>
+
+<li>
+<code>return</code> 结束当前函数运行 返回表达式值
+
+<li>
+<code>jump</code> 跳过代码 <code>jump 555</code>跳到555行 <code>jump +10</code>跳过10行
+
+<li>
+<code>call func(a,b)</code> 强制调用函数 基本同<code>print func(a,b)</code>
+
+<li>
+<code>x</code> 查看内存值
+
+<li>
+<code>set</code> 设置内存值
+
+</ul>
+<h4 id="toc_0.1.2.1">display</h4>
+<ul>
+<li>
+<code>display</code> 监视一个变量 每次停止自动打印出此变量
+
+<li>
+<code>undisplay [INDEX]</code> 取消监视一个变量 语法同<code>d</code>
+
+<li>
+<code>i display</code> 查看监视信息
+
+</ul>
+<h4 id="toc_0.1.2.2">断点</h4>
+<ul>
+<li>
+<code>b xx.c:10 if x==3</code> 条件断点
+
+<li>
+<code>clear</code>  清除当前行的断点
+
+<li>
+<code>disable [breakindex]</code> 禁用断点 语法同<code>d</code>
+
+<li>
+<code>enable [breakindex]</code>  启用断点 语法同<code>d</code>
+
+</ul>
+<h4 id="toc_0.1.2.3">watch</h4>
+<ul>
+<li>
+<code>rwatch</code> 监视一个变量 变量被读取时停止
+
+<li>
+<code>awatch</code> 监视一个变量 变量被读取或修改时停止
+
+<li>
+<code>watch *(int *)0x12345678</code> 监视指针0x12345678处存放的值
+
+<li>
+<code>watch x+y</code> 监视表达式的值
+
+<li>
+<code>watch i &gt; 999</code>
+
+</ul>
+<h4 id="toc_0.1.2.4">catch</h4>
+<p>
+<code>catch [EVENT]</code> EVENT可以是以下值
+</p>
+<ul>
+<li>
+throw：当程序抛出一个异常时；
+
+<li>
+catch：当程序捕获到一个异常时；
+
+<li>
+exec：当程序调用exec时；
+
+<li>
+fork：当程序调用fork时；
+
+<li>
+vfork：当程序调用vfork时；
+
+<li>
+syscall：当程序调用系统调用（system calls）时。
+
+</ul>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="gprof.html" title="上一篇: gprof">&larr; gprof</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="gcc.html" title="下一篇: gcc">gcc &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>kvm</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">kvm</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-03-18</a></li>
+<li><a href="Categories.html#linux">linux <span>31</span></a></li>
+<li><a href="Tags.html#kvm">kvm <span>1</span></a></li>
+<li><a href="Tags.html#虚拟机">虚拟机 <span>1</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">kvm</a>
+<ul>
+<li><a href="#toc_0.1.1">检查硬件支持</a>
+<li><a href="#toc_0.1.2">基本使用</a>
+<li><a href="#toc_0.1.3">挂载qcow2文件</a>
+<li><a href="#toc_0.1.4">开机加载kvm模块</a>
+<li><a href="#toc_0.1.5">clone虚拟机</a>
+<li><a href="#toc_0.1.6">声音</a>
+<li><a href="#toc_0.1.7">qcow2镜像扩容</a>
+<li><a href="#toc_0.1.8">libvirt</a>
+<li><a href="#toc_0.1.9">参考</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<h3 id="toc_0.1.1">检查硬件支持</h3>
+<p>
+<code>$ grep -E "(vmx|svm)" --color=always /proc/cpuinfo</code> 如果运行后没有显示，那么你的处理器不支持硬件虚拟化，你不能使用KVM。
+</p>
+<h3 id="toc_0.1.2">基本使用</h3>
+<pre class="brush: bash">
+sudo apt-get install qemu-kvm qemu-utils libvirt-bin ubuntu-vm-builder bridge-utils
+
+"创建磁盘镜像 (磁盘文件实际大小不是创建参数的大小 而是实际使用到的大小
+qemu-img create -f qcow2 ubuntu32.qcow2 38G
+
+"安装
+"-m 内存 单位M
+"-cdrom 将参数作为光驱内容
+"-boot d 表示从光驱启动
+"-vga std 可以免驱动支持较高分辨率
+kvm -hda ubuntu32.qcow2 -m 1024 -cdrom /mnt/DATA/down/ubuntu-12.10-desktop-i386.iso -boot d -vga std
+
+"使用(可单向访问主机或外网 可使用scp传共享文件)
+kvm -hda ubuntu32.qcow2 -m 1024 -vga std -net nic -net user
+</pre>
+<h3 id="toc_0.1.3">挂载qcow2文件</h3>
+<pre class="brush: bash">
+# modprobe nbd max_part=63
+# qemu-nbd -c /dev/nbd0 image.qcow2
+# mount /dev/nbd0p1 /mnt/image
+</pre>
+<p>
+用完后
+</p>
+<pre class="brush: bash">
+# umount /mnt/image
+# qemu-nbd -d /dev/nbd0
+</pre>
+<h3 id="toc_0.1.4">开机加载kvm模块</h3>
+<p>
+sudo vi /etc/moudles 加入
+</p>
+<pre class="brush: bash">
+modprobe kvm
+modprobe kvm_intel
+</pre>
+<h3 id="toc_0.1.5">clone虚拟机</h3>
+<p>
+<code>sudo virt-clone -o win7_32 --auto-clone</code>
+</p>
+<h3 id="toc_0.1.6">声音</h3>
+<p>
+启动命令需要配置<code>QEMU_AUDIO_DRV</code>环境变量并启用声卡 示例:
+<code>QEMU_AUDIO_DRV=alsa kvm -hda win7_32.qcow2 -m 1024 -vga std -net nic -net user -usb -usbdevice tablet -soundhw all</code>
+</p>
+<h3 id="toc_0.1.7">qcow2镜像扩容</h3>
+<p>
+扩大5G: <code>qemu-img resize win7_32.qcow2 +5G</code>
+</p>
+<ul>
+<li>
+注意<code>+</code>和<code>5G</code>中间不能有空格
+
+<li>
+要把win7分区调大还需要去磁盘管理中做扩展卷的操作,扩展后重启下就OK了
+
+</ul>
+<h3 id="toc_0.1.8">libvirt</h3>
+<ul>
+<li>
+可能需要安装spice <code>sudo apt-get install qemu-kvm-spice python-spice-client-gtk</code>
+
+<li>
+导入到libvirt虚拟机管理器中 (man virt-install
+
+</ul>
+<p>
+<code>sudo virt-install -n u32 -r 2048 --os-variant=ubuntuquantal --disk path=/mnt/DATA/soft/kvms/ubuntu_1210_ia32/ubuntu32.qcow2,device=disk,format=qcow2 --vnc --noautoconsole --import</code>
+</p>
+<ul>
+<li>
+<strong>这样导入后用libvirt运行虚拟机很慢 不知道什么原因</strong> <code>[老猫] KVM必须开virtio和writeback cache [老猫] 要不然当然会慢</code>
+
+</ul>
+<h3 id="toc_0.1.9">参考</h3>
+<p>
+<a href="https://wiki.archlinux.org/index.php/KVM#How_to_use_KVM" target="_blank">https://wiki.archlinux.org/index.php/KVM#How_to_use_KVM</a>
+<a href="http://wiki.ubuntu.org.cn/Kvm%E6%95%99%E7%A8%8B" target="_blank">http://wiki.ubuntu.org.cn/Kvm%E6%95%99%E7%A8%8B</a>
+<a href="http://www.linux-kvm.org/page/Networking" target="_blank">http://www.linux-kvm.org/page/Networking</a>
+</p>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="arch_awesome.html" title="上一篇: archlinux安装及配置">&larr; archlinux安装及配置</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="ssh.html" title="下一篇: ssh">ssh &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

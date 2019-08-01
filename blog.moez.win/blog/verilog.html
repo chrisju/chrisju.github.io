@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>verilog</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">Verilog</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2016-07-11</a></li>
+<li><a href="Categories.html#编程">编程 <span>23</span></a></li>
+<li><a href="Tags.html#fpga">fpga <span>2</span></a></li>
+<li><a href="Tags.html#verilog">verilog <span>2</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">Verilog</a>
+<ul>
+<li><a href="#toc_0.1.1">教程</a>
+<li><a href="#toc_0.1.2">语法</a>
+<ul>
+<li><a href="#toc_0.1.2.1">wire和reg</a>
+<li><a href="#toc_0.1.2.2">其它语法</a>
+</ul>
+<li><a href="#toc_0.1.3">技巧</a>
+<li><a href="#toc_0.1.4">源码</a>
+<ul>
+<li><a href="#toc_0.1.4.1">负数比较</a>
+<li><a href="#toc_0.1.4.2">流水示例</a>
+</ul>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<h3 id="toc_0.1.1">教程</h3>
+<ul>
+<li>
+维基百科中Verilog条目非常详细, 可以当作简单的入门教程: <a href="https://zh.wikipedia.org/wiki/Verilog" target="_blank">https://zh.wikipedia.org/wiki/Verilog</a>
+
+<li>
+&lt;&lt;Verilog 数字系统设计教程&gt;&gt;
+
+</ul>
+<h3 id="toc_0.1.2">语法</h3>
+<h4 id="toc_0.1.2.1">wire和reg</h4>
+<ul>
+<li>
+<code>reg</code>的值是上次被赋给的值, <code>wire</code>的值由激励源决定(自己并不是一个可以保存值的东西, 它的值完全由激励源决定, 用assign指定激励源). 所以<code>reg</code>在过程块中赋值, 而<code>wire</code>在过程块外赋值.(不过<code>reg</code>也可以在过程块外用assign持续赋值)
+
+<li>
+模块间交互时, 驱动源可以是<code>reg</code>/<code>wire</code>, 被驱动的只能是<code>wire</code>. 具体到模块: 模块的输入端口只能是<code>wire</code>, 但是输入端口的驱动源可以是<code>reg</code>/<code>wire</code>. 输出端口可以是<code>reg</code>/<code>wire</code>, 但是输出端口只能驱动<code>wire</code>变量.
+
+<li>
+更多详解: <a href="http://blog.sina.com.cn/s/blog_6c7b6f030101cpjx.html" target="_blank">http://blog.sina.com.cn/s/blog_6c7b6f030101cpjx.html</a>
+
+</ul>
+<h4 id="toc_0.1.2.2">其它语法</h4>
+<ul>
+<li>
+数组可以使用变量下标, 但是向量中的位置不能使用变量(宏和genvar算常量)
+
+<li>
+数组无法整个做为module参数
+
+<li>
+不建议在模块编写中使用<code>inout</code>端口, 会降低时序
+
+</ul>
+<h3 id="toc_0.1.3">技巧</h3>
+<ul>
+<li>
+如果对要移植的函数不是完全了解, 建议先用python将原函数用有助于fpga实现的方式实现一遍或几遍
+
+<li>
+要调用多个的子module如果输入输出复杂, 可以用generate来代替module. 这样相当于可以同时输入输出, 而且还节省传输资源
+
+</ul>
+<h3 id="toc_0.1.4">源码</h3>
+<h4 id="toc_0.1.4.1">负数比较</h4>
+<p>
+如果要比较的两个数中可能有负数, 或者要比较的运算结果中可能有负数, 不能简单的直接用<code>&gt;</code>之类的来比较. <code>if (a-b &gt;= c)</code> 假设是32位的可以写成<code>if (((a-b-c) &amp; 32'h80000000) == 0)</code>. <code>if (a-b &gt; c)</code> 假设是32位的可以写成<code>if (((a-b-c-1) &amp; 32'h80000000) == 0)</code>
+</p>
+<h4 id="toc_0.1.4.2">流水示例</h4>
+<p>
+<a href="http://www.cnblogs.com/shengansong/archive/2011/05/23/2054414.html" target="_blank">http://www.cnblogs.com/shengansong/archive/2011/05/23/2054414.html</a>
+</p>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="vivado.html" title="上一篇: Vivado">&larr; Vivado</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>

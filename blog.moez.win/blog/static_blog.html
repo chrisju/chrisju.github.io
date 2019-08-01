@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style0.css">
+<title>static_blog</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">伊谢尔伦的一角</a>
+          <ul class="nav">
+            <li><a href="Archive.html">Archive</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="Tags.html">Tags</a></li>
+            <li><a href="const_ILike.html">I♥like</a></li>
+            <li><a href="const_Links.html">Links</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/User:Chris_ju" target="_blank">About</a></li>
+          </ul>
+          <form method="get" target="_blank" action="http://www.google.com/search">
+            <p>
+            <input name="q" type="text">
+            <input name="btnG" value="站内搜索" type="submit">
+            <input name="ie" value="UTF-8" type="hidden">
+            <input name="oe" value="UTF-8" type="hidden">
+            <input name="hl" value="zh-CN" type="hidden">
+            <input name="domains" value="moez.win" type="hidden">
+            <input name="sitesearch" value="moez.win" type="hidden">
+            </p>
+          </form>
+        </div>
+      </div>
+</div>
+<div class="content">
+<div class="span8">
+    
+<h2 id="toc_0.1">静态博客相关</h2>
+<p>
+<ul class="tag_box inline">
+<li><a href="Archive.html">2013-08-25</a></li>
+<li><a href="Tags.html#blog">blog <span>1</span></a></li>
+</ul>
+
+<hr />
+<div class="toc">
+<ul>
+<li><a href="#toc_0.1">静态博客相关</a>
+<ul>
+<li><a href="#toc_0.1.1">评论</a>
+<ul>
+<li><a href="#toc_0.1.1.1">使用Disqus</a>
+<ul>
+<li><a href="#toc_0.1.1.1.1">评论区显示较少内容</a>
+<li><a href="#toc_0.1.1.1.2">设置中文</a>
+</ul>
+</ul>
+<li><a href="#toc_0.1.2">代码高亮</a>
+<ul>
+<li><a href="#toc_0.1.2.1">SyntaxHighlighter</a>
+</ul>
+<li><a href="#toc_0.1.3">Vimwiki</a>
+<ul>
+<li><a href="#toc_0.1.3.1">vimwiki网站</a>
+</ul>
+<li><a href="#toc_0.1.4">导出wordpress</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+<ul>
+<li>
+vimwikiblog相关资源: <a href="https://github.com/chrisju/vimwikiblog" target="_blank">https://github.com/chrisju/vimwikiblog</a>
+
+<li>
+会用到 评论, 代码高亮,vimwiki
+
+<li>
+布局和配色参考: <a href="http://calvinlee.github.io/" target="_blank">http://calvinlee.github.io/</a>
+
+</ul>
+<h3 id="toc_0.1.1">评论</h3>
+<ul>
+<li>
+<a href="http://www.sp8417.com/disqus/" target="_blank">Disqus教程</a>
+
+<li>
+<a href="http://blog.duoshuo.com/2012/03/custom-release-candidate/" target="_blank">多说教程</a>
+
+</ul>
+<h4 id="toc_0.1.1.1">使用Disqus</h4>
+<ol>
+<li>
+在 <a href="http://disqus.com/dashboard/" target="_blank">http://disqus.com/dashboard/</a> 添加一个站点
+
+<li>
+在Choose your platform时选Universal Code, 根据提示”Place the following code where you’d like Disqus to load:”
+
+<li>
+把对应代码填入想填入的部位
+
+</ol>
+<h5 id="toc_0.1.1.1.1">评论区显示较少内容</h5>
+<p>
+进网站的Settings, 选Discovery 第一项xxx level选最简单的
+</p>
+<h5 id="toc_0.1.1.1.2">设置中文</h5>
+<p>
+Settings-General, Language选chinese
+</p>
+<h3 id="toc_0.1.2">代码高亮</h3>
+<h4 id="toc_0.1.2.1">SyntaxHighlighter</h4>
+<ul>
+<li>
+<a href="http://alexgorbatchev.com/SyntaxHighlighter/" target="_blank">官网</a>
+
+<li>
+参考: <a href="http://www.cnblogs.com/heyuquan/archive/2012/09/28/2707632.html" target="_blank">http://www.cnblogs.com/heyuquan/archive/2012/09/28/2707632.html</a>
+
+</ul>
+<h3 id="toc_0.1.3">Vimwiki</h3>
+<ul>
+<li>
+评论和高亮可以用模板搞定
+
+<li>
+模板参考: <a href="http://kalxd.gitcafe.com/navi/2013/05/02/hello-vimwiki/" target="_blank">http://kalxd.gitcafe.com/navi/2013/05/02/hello-vimwiki/</a>
+
+<li>
+模板原理: ~/.vim/autoload/vimwiki/html.vim
+
+<li>
+我的模板: <a href="https://github.com/chrisju/vimwikiblog/blob/master/config/vimwiki.tpl" target="_blank">https://github.com/chrisju/vimwikiblog/blob/master/config/vimwiki.tpl</a>
+
+<li>
+参考: <a href="https://code.google.com/p/vim-script-cn/source/browse/trunk/doc/vimwiki.cnx" target="_blank">https://code.google.com/p/vim-script-cn/source/browse/trunk/doc/vimwiki.cnx</a>
+
+</ul>
+<h4 id="toc_0.1.3.1">vimwiki网站</h4>
+<ul>
+<li>
+<a href="http://www.ruchee.com/code/tools/vimwiki_primer.html" target="_blank">Ruchee的荒草园子</a>
+
+<li>
+<a href="http://wiki.ktmud.com/" target="_blank">丘迟的维基世界</a>
+
+<li>
+<a href="http://reverland.bitbucket.org/" target="_blank">reverland的wiki</a>
+
+<li>
+<a href="https://github.com/ruchee/backup2/blob/master/code/linux/vim/vimwiki_site.wiki" target="_blank">VimWiki站点收集</a>
+
+</ul>
+<h3 id="toc_0.1.4">导出wordpress</h3>
+<ul>
+<li>
+转为markdown: <a href="http://code.eoe.cn/15.html" target="_blank">http://code.eoe.cn/15.html</a>
+
+<li>
+到blogger: <a href="http://briian.com/?p=9052" target="_blank">http://briian.com/?p=9052</a>
+
+</ul>
+
+</div>
+
+    <hr style="clear:both">
+    <div class="pagination" style="float:left;">
+      <ul>
+        <li class="prev"><a href="vimwiki.html" title="上一篇: vimwiki">&larr; vimwiki</a></li>
+        <li><a href="Archive.html">Archive</a></li>
+        <li class="next"><a href="android_environment.html" title="下一篇: archlinux配置android开发环境">archlinux配置android开发环境 &rarr;</a></li>
+      </ul>
+    </div>
+    <hr>
+<script type="text/javascript" src="../site/js/disqus.js"></script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" target="_blank">comments powered by Disqus.</a></noscript>
+</div>
+<script type="text/javascript" src="../site/js/ga.js"></script>
+<script type="text/javascript" src="../site/sh/js/jquery-1.4.2.js"></script>
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../site/sh/src/shCore.js"></script>
+<script type="text/javascript" src="../site/sh/src/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="../site/sh/styles/shCore.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shCoreDefault.css" />
+<link type="text/css" rel="Stylesheet" href="../site/sh/styles/shThemeDefault.css" />
+<script type="text/javascript" src="../site/js/sh.js"></script>
+<footer>
+        <p>© chris zz 2013 powered by <a href="https://github.com/chrisju/vimwikiblog" target="_blank">vimwikiblog</a>
+        <a class="pos_right" rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"></a>
+        </p>
+</footer>
+</body>
+</html>
