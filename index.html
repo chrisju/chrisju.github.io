@@ -3,12 +3,6 @@ layout: page
 description: "人间不值得"
 ---
 
-<!-- oldblog -->
-<div class="post-preview">
-    <a href="blog.moez.win/blog/index.html">
-    </a>
-</div>
-<hr>
 
 {% for post in paginator.posts %}
 <div class="post-preview">
@@ -29,6 +23,10 @@ description: "人间不值得"
         Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
     </p>
 </div>
+<hr>
+    <a href="blog.moez.win/blog/index.html">
+旧博客入口
+    </a>
 <hr>
 {% endfor %}
 
