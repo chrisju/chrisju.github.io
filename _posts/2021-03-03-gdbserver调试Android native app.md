@@ -30,7 +30,7 @@ adb push /path/to/android/libs/arm64-v8a/* /data/z/tmp/
 编译native app时使用 `ndk-build NDK_DEBUG=1` 编译带调试符号的bin文件
 
 ## 调试
-1. 使用gdbserver执行native app，并绑定到1235端口。`LD_LIBRARY_PATH`是因为app需要依赖文件夹下的so，没有依赖可以去掉。此时app未启动，处于等待gdb连接状态。
+1. 使用gdbserver执行native app，并绑定到1235端口。`LD_LIBRARY_PATH`是因为app需要依赖文件夹下的so，没有依赖可以去掉。此时app被阻塞，处于等待gdb连接状态。
 
     ```shell
     LD_LIBRARY_PATH=. ./gdbserver :1235 ./app
@@ -61,8 +61,8 @@ adb push /path/to/android/libs/arm64-v8a/* /data/z/tmp/
     target remote 127.0.0.1:1235
     ```
 
-6. gdb中启动app
+6. gdb中开始运行app
 
     ```
-    r
+    c
     ```
