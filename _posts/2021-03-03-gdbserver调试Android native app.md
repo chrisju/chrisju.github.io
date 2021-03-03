@@ -45,7 +45,7 @@ adb push /path/to/android/libs/arm64-v8a/* /data/z/tmp/
 3. 主机端运行与gdbserver同一个NDK下的主机的gdb
 
     ```shell
-    /path/to/Android/SDK/ndk/17.2.4988734/prebuilt/linux-x86_64/bin/gdb
+    /path/to/Android/SDK/ndk/21.1.6352462/prebuilt/linux-x86_64/bin/gdb
     ```
 
 4. gdb中配置符号
