@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      gdbserver调试Android native app.md
+title:      gdbserver调试Android native app
 subtitle:   
 date:       2021-03-03
 author:     zz
