@@ -8,7 +8,7 @@ header-img: img/post-bg-younai.jpg
 catalog: true
 tags:
     - linux
-    - Android
+    - android
     - 编程
 ---
 

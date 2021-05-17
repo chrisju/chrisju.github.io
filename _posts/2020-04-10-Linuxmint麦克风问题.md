@@ -7,7 +7,7 @@ author:     zz
 header-img: img/post-bg-younai.jpg
 catalog: true
 tags:
-    - Linux
+    - linux
 ---
 
 麦克风异常，`killall pulseaudio; rm -r ~/.config/pulse/*`后正常了。
