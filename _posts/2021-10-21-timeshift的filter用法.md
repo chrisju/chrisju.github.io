@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      timeshift的filter用法
+title:      timeshift的filter的用法
 subtitle:   
 date:       2021-10-21
 author:     zz
@@ -11,6 +11,6 @@ tags:
 ---
 
 
-![timeshift-filter sample](img/post-timeshift-filter.png)
+![timeshift-filter sample](/img/post-timeshift-filter.png)
 
 如图，表示备份`/home/zz`和`/root`下的隐藏文件及文件夹，但是不备份`/home/zz/.gradle/`等文件夹下的内容。注意`- /home/zz/.gradle/***`等必须在`+ /home/zz/.**`之上。

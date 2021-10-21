@@ -2,7 +2,7 @@
 layout:     post
 title:      宏基aspire7安装linux
 subtitle:   
-date:       2021-10-21
+date:       2021-10-20
 author:     zz
 header-img: img/post-bg-younai.jpg
 catalog: true
